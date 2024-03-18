@@ -1,0 +1,871 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Fabulous">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="TOPSIS法简述TOPSIS法，又称理想解法。这种方法通过构造评价问题的正理想解和负理想解，即各指标的最优解和最劣解，通过计算每个方案到理想方案的相对贴进度，远离最劣解的程度来进行排序。 方法和原理设多属性决策方案集为 $D&#x3D;$ { $d_{i}|i&#x3D;1,2,\ldots,n$ } ，衡量方案优劣的属性变量为 $x_{i}$ ，这时方案集D中每个方案的n个属性值构成的向量是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TOPSIS">
+<meta property="og:url" content="https://fabulous1496.github.io/2024/01/28/TOPSIS/index.html">
+<meta property="og:site_name" content="Fabulous&#39;s little world">
+<meta property="og:description" content="TOPSIS法简述TOPSIS法，又称理想解法。这种方法通过构造评价问题的正理想解和负理想解，即各指标的最优解和最劣解，通过计算每个方案到理想方案的相对贴进度，远离最劣解的程度来进行排序。 方法和原理设多属性决策方案集为 $D&#x3D;$ { $d_{i}|i&#x3D;1,2,\ldots,n$ } ，衡量方案优劣的属性变量为 $x_{i}$ ，这时方案集D中每个方案的n个属性值构成的向量是">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fabulous1496.github.io/Pictures/MCM/TOPSIS/01.jpg">
+<meta property="article:published_time" content="2024-01-28T13:47:08.000Z">
+<meta property="article:modified_time" content="2024-03-10T13:34:17.477Z">
+<meta property="article:author" content="Fabulous">
+<meta property="article:tag" content="MCM">
+<meta property="article:tag" content="TOPSIS">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://fabulous1496.github.io/Pictures/MCM/TOPSIS/01.jpg">
+  
+  
+  
+  <title>TOPSIS - Fabulous&#39;s little world</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"fabulous1496.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"CjZvdepCB7OjY30a6oge7W6x-gzGzoHsz","app_key":"ErsGn5pjObFn129dKnLC8esg","server_url":"https://cjzvdepc.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fabulous&#39;s little world</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/Pictures/MCM/TOPSIS/01.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="TOPSIS"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-01-28 21:47" pubdate>
+          2024年1月28日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          9 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">TOPSIS</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="TOPSIS法简述"><a href="#TOPSIS法简述" class="headerlink" title="TOPSIS法简述"></a>TOPSIS法简述</h1><p>TOPSIS法，又称理想解法。这种方法通过构造评价问题的正理想解和负理想解，即各指标的最优解和最劣解，通过计算每个方案到理想方案的相对贴进度，远离最劣解的程度来进行排序。</p>
+<h2 id="方法和原理"><a href="#方法和原理" class="headerlink" title="方法和原理"></a>方法和原理</h2><p>设多属性决策方案集为 $D&#x3D;$ { $d_{i}|i&#x3D;1,2,\ldots,n$ } ，衡量方案优劣的属性变量为 $x_{i}$ ，这时方案集D中每个方案的n个属性值构成的向量是 $\left[ a_{i1},\ldots,a_{in} \right]$ ，它作为空间中的一个点，能唯一地表征方案 $d_{i}$ 。</p>
+<p>正理想解 $C^{*}$ 是一个方案集中并不存在的虚拟的最佳方案，它的每个属性值都是决策矩阵中该属性的最好值。</p>
+<p>而负理想解 $C^{0}$ 是虚拟的最差方案，它的每个属性值都是决策矩阵中该属性的最差值。</p>
+<p>在方案集中，尽可能靠近正理想解而原理负理想解的方案就是最佳方案。</p>
+<p>在实际操作中我们需要解决如下几个问题：</p>
+<ol>
+<li>数据的规律</li>
+<li>距离的计算方法和衡量方法</li>
+<li>消除量纲的影响</li>
+</ol>
+<h2 id="算法的步骤"><a href="#算法的步骤" class="headerlink" title="算法的步骤"></a>算法的步骤</h2><h3 id="用向量规划化的方法求得规范决策矩阵"><a href="#用向量规划化的方法求得规范决策矩阵" class="headerlink" title="用向量规划化的方法求得规范决策矩阵"></a>用向量规划化的方法求得规范决策矩阵</h3><p>设多属性决策问题的决策矩阵 $A&#x3D;(a_{ij})_{m*n}$</p>
+<p>规范化决策矩阵 $B&#x3D;(b_{ij})_{m*n}$ </p>
+<p>其中 $b_{ij}&#x3D; \frac{a_{ij}}{\sqrt {\sum_{i&#x3D;1}^{m} a_{ij}^{2}}}$  </p>
+<blockquote>
+<p>这一步用来消除量纲的影响</p>
+</blockquote>
+<p>对于每一项属性，其所占的评价权重也不尽相同，因此我们需要构造加权规范矩阵 $C&#x3D;(c_{ij})_{m*n}$</p>
+<p>设由决策人给定各属性的权重向量为 $w&#x3D;[w_{1},w_{2},\ldots,w_{n}]^{T}$ ，则</p>
+<p>$$<br>c_{ij}&#x3D;w_{j}*b_{ij}<br>$$</p>
+<h3 id="确定正理想解和负理想解"><a href="#确定正理想解和负理想解" class="headerlink" title="确定正理想解和负理想解"></a>确定正理想解和负理想解</h3><p>设正（负）理想解的第j个属性值为 $c_{j}^{*}$ ( $c_{j}^{0}$ ) ，则：</p>
+<p>$$<br>c_{j}^{\ast}&#x3D;<br>\begin{cases}<br>max\ c_{ij} , j 为效益性属性 \\<br> \\<br>min\ c_{ij} , j 为成本性属性 \\<br>\end{cases}<br>$$</p>
+<p>$$<br>c_{j}^{0}&#x3D;<br>\begin{cases}<br>max\ c_{ij} , j 为成本性属性 \\<br> \\<br>min\ c_{ij} , j 为效益性属性 \\<br>\end{cases}<br>$$</p>
+<h3 id="确定距离公式"><a href="#确定距离公式" class="headerlink" title="确定距离公式"></a>确定距离公式</h3><p>各方案到正（负）理想解的距离为：</p>
+<p>$$<br>s_{i}^{\ast}\ &#x3D; \ \sqrt{ \sum_{j&#x3D;1}^{n} (c_{ij}-c_{j}^{\ast})^{2}}<br>$$</p>
+<p>$$<br>s_{i}^{0}\ &#x3D; \ \sqrt{ \sum_{j&#x3D;1}^{n} (c_{ij}-c_{j}^{0})^{2}}<br>$$</p>
+<h3 id="计算综合评价指数"><a href="#计算综合评价指数" class="headerlink" title="计算综合评价指数"></a>计算综合评价指数</h3><p>$$<br>f_{i}^{\ast} \ &#x3D;\ \frac{s_{i}^{0}} {s_{i}^{0}+s_{i}^{\ast}}<br>$$</p>
+<p>根据综合评价指数便可得出方案的优劣次序。</p>
+<h2 id="数据的处理"><a href="#数据的处理" class="headerlink" title="数据的处理"></a>数据的处理</h2><h3 id="属性值比例化"><a href="#属性值比例化" class="headerlink" title="属性值比例化"></a>属性值比例化</h3><p>属性值不好直接从数值大小进行判断时，我们需要对数据进行预处理，使得表中任意属性下性能越优的方案变换后的属性值越大。</p>
+<h3 id="非量纲化"><a href="#非量纲化" class="headerlink" title="非量纲化"></a>非量纲化</h3><p>不同属性之间量纲的不同使属性具有不可公度性，我们需要在数据处理时消除量纲的影响。</p>
+<h3 id="归一化"><a href="#归一化" class="headerlink" title="归一化"></a>归一化</h3><p>属性之间数值大小差别较大，为了方便直观比较，我们需要对属性的数值进行归一化。</p>
+<h3 id="常见的处理方法"><a href="#常见的处理方法" class="headerlink" title="常见的处理方法"></a>常见的处理方法</h3><ol>
+<li>线性变换</li>
+</ol>
+<p>$$<br>b_{ij}&#x3D;\frac{a_{ij}}{a_{j}^{max}}<br>$$</p>
+<ol start="2">
+<li>标准0-1变换</li>
+</ol>
+<blockquote>
+<p>为了使最优为1，最差为0</p>
+</blockquote>
+<p>对效益性属性：<br>$$<br>b_{ij}=\ \frac{a_{ij}-a_{j}^{max}}{a_{j}^{max}-a_{j}^{min}}<br>$$</p>
+<p>对成本性属性：<br>$$<br>b_{ij}=\ \frac{a_{j}^{max}-a_{ij}}{a_{j}^{max}-a_{j}^{min}}<br>$$</p>
+<ol start="3">
+<li>区间属性的变换<br>属性在某一个区间范围内最优，我们设给出的最优区间为 $[a_{j}^{0},a_{j}^{\ast}]$ , $a_{j}^{‘}$ 为无法容忍下限， $a_{j}^{‘’}$ 为无法容忍上限，则</li>
+</ol>
+<p>$$<br>b_{ij}&#x3D;<br>\begin{cases}<br>1-\frac{a_{j}^{0}-a_{ij}}{a_{j}^{0}-a_{j}^{‘}} , a_{j}^{‘}\le a_{ij}\le a_{j}^{0}\\<br> \\<br>1 , a_{j}^{0}\le a_{ij}\le a_{j}^{\ast}\\<br> \\<br>1-\frac{a_{ij}-a_{j}^{\ast}}{a_{j}^{‘’}-a_{j}^{\ast}} , a_{j}^{\ast}\le a_{ij}\le a_{j}^{‘’}<br> \\<br>0<br>\end{cases}<br>$$</p>
+<p>变换后的属性值对应的函数图形为一般梯形。当最优区间的上下界相等，退化为三角形。</p>
+<ol start="4">
+<li>向量规范化</li>
+</ol>
+<p>$$<br>b_{ij}&#x3D; \frac{a_{ij}}{\sqrt {\sum_{i&#x3D;1}^{m} a_{ij}^{2}}}<br>$$</p>
+<p>经常用于计算欧氏距离的场合。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/MCM/" class="category-chain-item">MCM</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/MCM/" class="print-no-link">#MCM</a>
+      
+        <a href="/tags/TOPSIS/" class="print-no-link">#TOPSIS</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>TOPSIS</div>
+      <div>https://fabulous1496.github.io/2024/01/28/TOPSIS/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Fabulous</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年1月28日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/01/28/CA/" title="CA">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">CA</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/01/28/%E5%B1%82%E6%AC%A1%E5%88%86%E6%9E%90%E6%B3%95-AHP/" title="AHP">
+                        <span class="hidden-mobile">AHP</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"CjZvdepCB7OjY30a6oge7W6x-gzGzoHsz","appKey":"ErsGn5pjObFn129dKnLC8esg","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

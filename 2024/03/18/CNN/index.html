@@ -1,0 +1,1012 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Fabulous">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="卷积神经网络(CNN)概述整体架构分为：  输入层 卷积层 池化层 全连接层 激活函数  卷积神经网络由一个或多个卷积层、池化层以及全连接层等组成。与其他深度学习结构相比，卷积神经网络在图像等方面能够给出更好的结果。  卷积层卷积运算若一个 6*6的单通道图像与一个 3*3的卷积核进行卷积运算，那么从图像的左上角开始选取3*3的区域，将该区域的矩阵与卷积核的对应位置的元素相乘求和得到的结果便为输出">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CNN——卷积神经网络">
+<meta property="og:url" content="https://fabulous1496.github.io/2024/03/18/CNN/index.html">
+<meta property="og:site_name" content="Fabulous&#39;s little world">
+<meta property="og:description" content="卷积神经网络(CNN)概述整体架构分为：  输入层 卷积层 池化层 全连接层 激活函数  卷积神经网络由一个或多个卷积层、池化层以及全连接层等组成。与其他深度学习结构相比，卷积神经网络在图像等方面能够给出更好的结果。  卷积层卷积运算若一个 6*6的单通道图像与一个 3*3的卷积核进行卷积运算，那么从图像的左上角开始选取3*3的区域，将该区域的矩阵与卷积核的对应位置的元素相乘求和得到的结果便为输出">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fabulous1496.github.io/Pictures/DL/CNN/cover.jpg">
+<meta property="article:published_time" content="2024-03-18T14:44:05.524Z">
+<meta property="article:modified_time" content="2024-03-10T13:30:21.204Z">
+<meta property="article:author" content="Fabulous">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://fabulous1496.github.io/Pictures/DL/CNN/cover.jpg">
+  
+  
+  
+  <title>CNN——卷积神经网络 - Fabulous&#39;s little world</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"fabulous1496.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"CjZvdepCB7OjY30a6oge7W6x-gzGzoHsz","app_key":"ErsGn5pjObFn129dKnLC8esg","server_url":"https://cjzvdepc.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fabulous&#39;s little world</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/Pictures/DL/CNN/cover.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="CNN——卷积神经网络"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-03-18 22:44" pubdate>
+          2024年3月18日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          34 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">CNN——卷积神经网络</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="卷积神经网络-CNN-概述"><a href="#卷积神经网络-CNN-概述" class="headerlink" title="卷积神经网络(CNN)概述"></a>卷积神经网络(CNN)概述</h1><p>整体架构分为：</p>
+<ol>
+<li>输入层</li>
+<li>卷积层</li>
+<li>池化层</li>
+<li>全连接层</li>
+<li>激活函数</li>
+</ol>
+<p>卷积神经网络由一个或多个卷积层、池化层以及全连接层等组成。与其他深度学习结构相比，卷积神经网络在图像等方面能够给出更好的结果。</p>
+<p><img src="/Pictures/DL/CNN/plot01.svg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="卷积层"><a href="#卷积层" class="headerlink" title="卷积层"></a>卷积层</h2><h3 id="卷积运算"><a href="#卷积运算" class="headerlink" title="卷积运算"></a>卷积运算</h3><p>若一个 6*6的单通道图像与一个 3*3的卷积核进行卷积运算，那么从图像的左上角开始选取3*3的区域，将该区域的矩阵与卷积核的对应位置的元素相乘求和得到的结果便为输出矩阵的左上角元素。</p>
+<p>$$\begin{bmatrix}<br>  10&amp;  10&amp;  10&amp;  0&amp;  0&amp; 0\\<br>  10&amp;  10&amp;  10&amp;  0&amp;  0&amp; 0\\<br>  10&amp;  10&amp;  10&amp;  0&amp;  0&amp; 0 \\<br>  10&amp;  10&amp;  10&amp;  0&amp;  0&amp; 0\\<br>  10&amp;  10&amp;  10&amp;  0&amp;  0&amp; 0 \\<br>  10&amp;  10&amp;  10&amp;  0&amp;  0&amp; 0<br>\end{bmatrix}*\begin{bmatrix}<br>  1&amp; 0 &amp; -1\\<br>  1&amp; 0 &amp; -1\\<br>  1&amp; 0 &amp; -1<br>\end{bmatrix}&#x3D;\begin{bmatrix}<br>  0&amp;  30&amp;  30&amp; 0\\<br>  0&amp;  30&amp;  30&amp; 0\\<br>  0&amp;  30&amp;  30&amp; 0\\<br>  0&amp;  30&amp;  30&amp; 0<br>\end{bmatrix}$$</p>
+<p>卷积运算的目的是提取输入的不同特征，某些卷积层可能只能提取一些低级的特征，更多层的网络能从低级特征中迭代提取更复杂的特征。</p>
+<h3 id="卷积层的构成"><a href="#卷积层的构成" class="headerlink" title="卷积层的构成"></a>卷积层的构成</h3><p><strong>参数：</strong></p>
+<ul>
+<li><p>size：卷积核的大小，选择一般有 1*1, 3*3, 5*5</p>
+<blockquote>
+<p>对于卷积核大小，一般采取奇数，这样做的目的是便于指出中心。</p>
+</blockquote>
+</li>
+<li><p>padding：一般为零填充，有<em>Valid和Same</em>两种方式。</p>
+<p>  对于padding的解释：</p>
+<ul>
+<li><p>零填充：在图片像素的最外层加上若干层0值，若加1层，记为 <em>p&#x3D;1</em><br>  增加0是因为0在权重乘积运算中对最终结果不造成影响，也就避免了图片增加了额外的干扰信息。</p>
+</li>
+<li><p>Valid：不填充，保持原状，结果变小</p>
+</li>
+<li><p>Same：输出的大小与原图大小一致</p>
+</li>
+</ul>
+</li>
+<li><p>stride：步长，通常默认为1</p>
+</li>
+<li><p>bias：偏置</p>
+</li>
+</ul>
+<p>对于每个卷积核，都会有一个偏置参数 $b$。</p>
+<p>在卷积操作的计算中，偏置会与卷积核的加权和相加，并且会在整个输出图像上共享。具体地，输出图像中的每个像素值 $y$ 可以计算如下：</p>
+<p>$$y &#x3D; \sum_{i&#x3D;1}^{M} \sum_{j&#x3D;1}^{N} (w_{i,j} \cdot x_{i,j}) + b $$</p>
+<p>其中 $w_{i,j}$ 是卷积核的权重，$x_{i,j}$ 是输入数据的对应像素值，$b$ 是偏置参数。</p>
+<p><strong>多通道卷积：</strong></p>
+<p>当输入有多个通道（channel）时（例如图片可以有RGB三通道），卷积核需要拥有相同的channel数，每个卷积核channel与输入层对应的channel进行卷积，将每个channel的卷积结果按位相加得到最终的 Feature Map。</p>
+<p><strong>多卷积核卷积：</strong></p>
+<p>当有多个卷积核时，可以学习到多种不同的特征，对应产生包含多个channel的 Feature Map，例如当拥有两个kernel时，输出结果会有两个channel。</p>
+<p>得到的特征图大小不变，数量变多。</p>
+<p><strong>这里的多少个卷积核也可以理解为多少个神经元。</strong></p>
+<p><strong>例子：</strong></p>
+<p>假设我们有一张 $200\times 200$ 的图片，10个kernel，size&#x3D;3*3，channel&#x3D;3(计算RGB图片)，并且只有一层卷积，步长为1，那么参数的计算过程为：</p>
+<p>对于每个kernel，有 $3\times 3\times 3+1$ 个参数</p>
+<p>所以总共有 $28\times 10&#x3D;280$ 个参数。</p>
+<p>零填充的层数 $P&#x3D;\frac{(N-1)\times s+F-N}{2}&#x3D;\frac{199+3-200}{2}&#x3D;1$</p>
+<p>$N$ 为图片大小， $s$ 为stride， $F$ 为卷积核大小</p>
+<h2 id="池化层"><a href="#池化层" class="headerlink" title="池化层"></a>池化层</h2><p>池化层主要对卷积层学习到的特征图进行亚采样（subsampling），主要有两种：</p>
+<ol>
+<li>最大池化：Max Pooling，取窗口内的最大值作为输出</li>
+<li>平均池化：Avg Pooling，取窗口内所有值的均值作为输出</li>
+</ol>
+<p>意义在于：</p>
+<ul>
+<li>降低了后续网络层的输入维度，缩减模型大小，提高计算速度</li>
+<li>提高了Feature Map的鲁棒性，防止过拟合</li>
+</ul>
+<p>一般来说池化操作即为选取图片的一个固定大小的区域（窗口），在该区域中得到一个代表这个区域的数值，并总和输出结果。</p>
+<p>窗口设置：一般大小为 $2\times 2$, $stride&#x3D;2$ 。</p>
+<p>在处理多通道输入数据时，池化层对每个输入通道分别池化，而不是像卷积层那样将各个通道的输入相加。这意味着池化层的输出和输入的通道数是相等。</p>
+<h2 id="全连接层"><a href="#全连接层" class="headerlink" title="全连接层"></a>全连接层</h2><p>全连接层的目的是将卷积和池化层提取的特征进行整合，并输出到最终的输出层，以进行分类、回归或其他任务。</p>
+<p>卷积层＋激活层＋池化层可以看作是CNN的特征学习&#x2F;特征提取层，而学习到的特征最终运用于模型任务，一般来说分为分类或回归。</p>
+<ul>
+<li><p>先对所有 Feature Map 进行扁平化（flatten，即reshape成 $1\times N$ 的向量）</p>
+</li>
+<li><p>再接一个或多个全连接层，进行模型学习</p>
+</li>
+</ul>
+<p><img src="/Pictures/DL/CNN/plot02.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h1 id="构建CNN实现图片分类"><a href="#构建CNN实现图片分类" class="headerlink" title="构建CNN实现图片分类"></a>构建CNN实现图片分类</h1><h2 id="分类器任务和数据介绍"><a href="#分类器任务和数据介绍" class="headerlink" title="分类器任务和数据介绍"></a>分类器任务和数据介绍</h2><ul>
+<li>构造一个将不同图像进行分类的神经网络分类器，对输入的图片进行判别并完成分类</li>
+<li>采用 <strong>CIFAR10</strong> 数据集作为原始图片数据</li>
+</ul>
+<blockquote>
+<p>CIFAR10数据集介绍：数据集中每张图片的尺寸是 3*32*32 ，代表彩色三通道。<br>CIFAR10数据集总共有10种不同的分类，分别是 <em>“airplane”,”automobile”,”bird”,”cat”,”deer”,”dog”,”frog”,”horse”,”ship”,”truck”</em></p>
+</blockquote>
+<p><img src="/Pictures/DL/CNN/plot03.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="训练分类器的步骤"><a href="#训练分类器的步骤" class="headerlink" title="训练分类器的步骤"></a>训练分类器的步骤</h2><ol>
+<li>使用torchvision下载CIFAR10数据集</li>
+<li>定义卷积神经网络</li>
+<li>定义损失函数</li>
+<li>在训练集上训练模型</li>
+<li>在测试集上测试模型</li>
+</ol>
+<h2 id="构建神经网络的基本步骤"><a href="#构建神经网络的基本步骤" class="headerlink" title="构建神经网络的基本步骤"></a>构建神经网络的基本步骤</h2><ul>
+<li>使用PyTorch构建神经网络，主要的工具都在<strong>torch.nn</strong>包中</li>
+<li>nn依赖于autograd来定义模型，并对其自动求导</li>
+</ul>
+<p>主要步骤：</p>
+<ol>
+<li>定义一个拥有可学习参数的神经网络</li>
+<li>遍历训练数据集</li>
+<li>处理输入数据使其流向神经网络</li>
+<li>计算损失值</li>
+<li>将网络参数的梯度进行反向传递</li>
+<li>以一定的规则更新网络的权重</li>
+</ol>
+<h2 id="下载数据集"><a href="#下载数据集" class="headerlink" title="下载数据集"></a>下载数据集</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">import</span> torchvision<br><span class="hljs-keyword">import</span> torchvision.transforms <span class="hljs-keyword">as</span> transforms<br><br><span class="hljs-comment"># 下载数据集并对图片进行调整，因为torchvision数据集的输出是PILImage格式，数据域在[0, 1]。</span><br><span class="hljs-comment"># 我们将其转换为标准数据域[-1, 1]的张量格式</span><br>transform = transforms.Compose(<br>    [transforms.ToTensor(),<br>     transforms.Normalize((<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>), (<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>))])<br>trainset = torchvision.datasets.CIFAR10(root=<span class="hljs-string">&#x27;./data&#x27;</span>, train=<span class="hljs-literal">True</span>, download=<span class="hljs-literal">True</span>, transform=transform)<br><br>trainloader = torch.utils.data.DataLoader(trainset, batch_size=<span class="hljs-number">4</span>, shuffle=<span class="hljs-literal">True</span>, num_workers=<span class="hljs-number">2</span>)<br><br>testset = torchvision.datasets.CIFAR10(root=<span class="hljs-string">&#x27;./data&#x27;</span>, train=<span class="hljs-literal">False</span>, download=<span class="hljs-literal">True</span>, transform=transform)<br><br>testloader = torch.utils.data.DataLoader(testset, batch_size=<span class="hljs-number">4</span>, shuffle=<span class="hljs-literal">False</span>, num_workers=<span class="hljs-number">2</span>)<br><br>classes = (<span class="hljs-string">&#x27;plane&#x27;</span>, <span class="hljs-string">&#x27;automobile&#x27;</span>, <span class="hljs-string">&#x27;bird&#x27;</span>, <span class="hljs-string">&#x27;cat&#x27;</span>, <span class="hljs-string">&#x27;deer&#x27;</span>, <span class="hljs-string">&#x27;dog&#x27;</span>, <span class="hljs-string">&#x27;frog&#x27;</span>, <span class="hljs-string">&#x27;horse&#x27;</span>, <span class="hljs-string">&#x27;ship&#x27;</span>, <span class="hljs-string">&#x27;truck&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
+<p>对这段代码的解释：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">transform = transforms.Compose(<br>    [transforms.ToTensor(),<br>     transforms.Normalize((<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>), (<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>))])<br></code></pre></td></tr></table></figure>
+
+<p>创建一个数据转换管道，使用 <em>transforms.Compose()。</em></p>
+<p>它按顺序应用两个转换到输入图像：</p>
+<ul>
+<li>transforms.ToTensor(): 将PIL图像或numpy.ndarray转换为PyTorch张量。图像数据被转换为张量并标准化到范围[0, 1]。</li>
+<li>transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)): 使用均值和标准差对张量图像进行归一化。这将使用每个通道（R、G、B）的均值和标准差值（0.5、0.5、0.5）对图像张量进行归一化。归一化公式为 $\frac{(input - mean)}{std}$</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">trainset = torchvision.datasets.CIFAR10(root=<span class="hljs-string">&#x27;./data&#x27;</span>, train=<span class="hljs-literal">True</span>, download=<span class="hljs-literal">True</span>, transform=transform)<br></code></pre></td></tr></table></figure>
+
+<p>使用torchvision中的CIFAR-10数据集创建一个训练数据集对象（trainset）。它指定了以下参数：</p>
+<ul>
+<li>root&#x3D;’.&#x2F;data’: 指定数据集将被存储的目录。</li>
+<li>train&#x3D;True: 表示这是训练集。</li>
+<li>download&#x3D;True: 如果数据集尚未下载，则下载数据集。</li>
+<li>transform&#x3D;transform: 对数据集应用前面定义的转换。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">trainloader = torch.utils.data.DataLoader(trainset, batch_size=<span class="hljs-number">4</span>, shuffle=<span class="hljs-literal">True</span>, num_workers=<span class="hljs-number">2</span>)<br></code></pre></td></tr></table></figure>
+
+<p>创建一个用于训练数据集的数据加载器（trainloader）。它指定了以下参数：</p>
+<ul>
+<li>trainset: 要加载的数据集对象。</li>
+<li>batch_size&#x3D;4: 将批次大小设置为4，这意味着在训练期间每次加载4张图像。</li>
+<li>shuffle&#x3D;True: 在每个epoch之前对数据进行洗牌，以引入随机性并避免模型学习数据的顺序。</li>
+<li>num_workers&#x3D;2: 用于数据加载的<strong>子进程数</strong>。在这里，将使用2个子进程加载数据。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">classes = (<span class="hljs-string">&#x27;plane&#x27;</span>, <span class="hljs-string">&#x27;automobile&#x27;</span>, <span class="hljs-string">&#x27;bird&#x27;</span>, <span class="hljs-string">&#x27;cat&#x27;</span>, <span class="hljs-string">&#x27;deer&#x27;</span>, <span class="hljs-string">&#x27;dog&#x27;</span>, <span class="hljs-string">&#x27;frog&#x27;</span>, <span class="hljs-string">&#x27;horse&#x27;</span>, <span class="hljs-string">&#x27;ship&#x27;</span>, <span class="hljs-string">&#x27;truck&#x27;</span>)<br></code></pre></td></tr></table></figure>
+<p>此行定义了与CIFAR-10数据集中的10个类别相对应的类标签。稍后将使用这些标签进行预测和评估。</p>
+<h2 id="定义卷积神经网络"><a href="#定义卷积神经网络" class="headerlink" title="定义卷积神经网络"></a>定义卷积神经网络</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">import</span> torch.nn <span class="hljs-keyword">as</span> nn<br><span class="hljs-keyword">import</span> torch.nn.functional <span class="hljs-keyword">as</span> F<br><br><span class="hljs-comment"># 定义卷积神经网络</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Net</span>(nn.Module):<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self</span>):<br>        <span class="hljs-built_in">super</span>(Net, self).__init__()<br>        self.conv1 = nn.Conv2d(<span class="hljs-number">3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">5</span>)<br>        self.pool = nn.MaxPool2d(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>)<br>        self.conv2 = nn.Conv2d(<span class="hljs-number">6</span>, <span class="hljs-number">16</span>, <span class="hljs-number">5</span>)<br>        self.fc1 = nn.Linear(<span class="hljs-number">16</span>*<span class="hljs-number">5</span>*<span class="hljs-number">5</span>, <span class="hljs-number">120</span>)<br>        self.fc2 = nn.Linear(<span class="hljs-number">120</span>, <span class="hljs-number">84</span>)<br>        self.fc3 = nn.Linear(<span class="hljs-number">84</span>, <span class="hljs-number">10</span>)<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, x</span>):<br>        x = self.pool(F.relu(self.conv1(x)))<br>        x = self.pool(F.relu(self.conv2(x)))<br>        x = self.view(-<span class="hljs-number">1</span>, <span class="hljs-number">16</span>*<span class="hljs-number">5</span>*<span class="hljs-number">5</span>)<br>        x = F.relu(self.fc1(x))<br>        x = F.relu(self.fc2(x))<br>        x = self.fc3(x)<br>        <span class="hljs-keyword">return</span> x<br></code></pre></td></tr></table></figure>
+
+<h3 id="一些注释"><a href="#一些注释" class="headerlink" title="一些注释"></a>一些注释</h3><p>对于 <strong>init</strong> 函数：</p>
+<ul>
+<li>第一个卷积层 self.conv1 输入通道数为3（因为输入图像有3个通道，通常为RGB），输出通道数为6，卷积核大小为5x5。</li>
+<li>第一个最大池化层 self.pool 使用2x2的池化窗口进行池化操作，步长为2。</li>
+<li>第二个卷积层 self.conv2 输入通道数为6（即第一个卷积层的输出通道数），输出通道数为16，卷积核大小为5x5。</li>
+<li>第一个全连接层 self.fc1 的输入大小为16x5x5，输出大小为120。</li>
+<li>第二个全连接层 self.fc2 的输入大小为120，输出大小为84。</li>
+<li>第三个全连接层 self.fc3 的输入大小为84，输出大小为10（因为通常在分类问题中，输出层的大小对应着类别的数量）。</li>
+</ul>
+<p>对于 forward 函数：</p>
+<ul>
+<li>首先将输入张量 x 传递给第一个卷积层 self.conv1，然后应用 ReLU 激活函数，并通过最大池化层 self.pool 进行池化操作。</li>
+<li>接着将经过第一个池化层处理后的数据传递给第二个卷积层 self.conv2，然后再次应用 ReLU 激活函数，并再次通过最大池化层进行池化操作。</li>
+<li>将经过两个卷积层和池化层处理后的数据 x 展平为一维张量。</li>
+<li>将展平后的数据传递给第一个全连接层 self.fc1，并应用 ReLU 激活函数。</li>
+<li>将第一个全连接层的输出传递给第二个全连接层 self.fc2，再次应用 ReLU 激活函数。</li>
+<li>最后将第二个全连接层的输出传递给输出层</li>
+</ul>
+<h2 id="定义损失函数"><a href="#定义损失函数" class="headerlink" title="定义损失函数"></a>定义损失函数</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 定义损失函数</span><br>criterion = nn.CrossEntropyLoss()<br>optimizer = optim.SGD(net.parameters(), lr=<span class="hljs-number">0.001</span>, momentum=<span class="hljs-number">0.9</span>)<br></code></pre></td></tr></table></figure>
+
+<p>采用交叉熵损失函数和梯度下降算法。</p>
+<h2 id="训练模型"><a href="#训练模型" class="headerlink" title="训练模型"></a>训练模型</h2><ul>
+<li>采用梯度下降的优化算法，都需要很多个轮次的迭代训练</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 在训练集上训练模型</span><br>    <span class="hljs-keyword">for</span> epoch <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">2</span>):    <span class="hljs-comment"># 遍历两遍数据集</span><br>        running_loss = <span class="hljs-number">0.0</span><br>        <span class="hljs-keyword">for</span> i, data <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(trainloader, <span class="hljs-number">0</span>):<br>            <span class="hljs-comment"># data中包含输入图像张量inputs，标签张量labels</span><br>            inputs, labels = data<br>            <span class="hljs-comment"># 梯度归零</span><br>            optimizer.zero_grad()<br>            <span class="hljs-comment"># 输入图像张量进网络，得到输出张量outputs</span><br>            outputs = net(inputs)<br>            <span class="hljs-comment"># 利用网络的输出output和标签labels计算损失值</span><br>            loss = criterion(outputs, labels)<br>            <span class="hljs-comment"># 反向传播+参数更新</span><br>            loss.backward()<br>            optimizer.step()<br>            <span class="hljs-comment"># 打印轮次和损失值</span><br>            running_loss += loss.item()<br>            <span class="hljs-keyword">if</span> (i + <span class="hljs-number">1</span>) % <span class="hljs-number">2000</span> == <span class="hljs-number">0</span>:<br>                <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;[%d, %5d] loss: %.3f&#x27;</span> % (epoch + <span class="hljs-number">1</span>, i + <span class="hljs-number">1</span>, running_loss / <span class="hljs-number">2000</span>))<br>                running_loss = <span class="hljs-number">0.0</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;Finished Training&#x27;</span>)<br>    <span class="hljs-comment"># 保存模型</span><br>    PATH = <span class="hljs-string">&#x27;./cifar10_net.pth&#x27;</span><br>    torch.save(net.state_dict(), PATH)<br></code></pre></td></tr></table></figure>
+
+<p>训练结果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-string">&#x27;&#x27;&#x27;</span><br><span class="hljs-string">[1,  2000] loss: 2.235</span><br><span class="hljs-string">[1,  4000] loss: 1.860</span><br><span class="hljs-string">[1,  6000] loss: 1.651</span><br><span class="hljs-string">[1,  8000] loss: 1.573</span><br><span class="hljs-string">[1, 10000] loss: 1.513</span><br><span class="hljs-string">[1, 12000] loss: 1.477</span><br><span class="hljs-string">[2,  2000] loss: 1.395</span><br><span class="hljs-string">[2,  4000] loss: 1.369</span><br><span class="hljs-string">[2,  6000] loss: 1.333</span><br><span class="hljs-string">[2,  8000] loss: 1.325</span><br><span class="hljs-string">[2, 10000] loss: 1.311</span><br><span class="hljs-string">[2, 12000] loss: 1.295</span><br><span class="hljs-string">Finished Training</span><br><span class="hljs-string">&#x27;&#x27;&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="在测试集上测试模型"><a href="#在测试集上测试模型" class="headerlink" title="在测试集上测试模型"></a>在测试集上测试模型</h2><h3 id="第一步，展示测试集中的若干图片"><a href="#第一步，展示测试集中的若干图片" class="headerlink" title="第一步，展示测试集中的若干图片"></a>第一步，展示测试集中的若干图片</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 展示图片</span><br>dataiter = <span class="hljs-built_in">iter</span>(testloader)<br>images, labels = dataiter.<span class="hljs-built_in">next</span>()<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">imshow</span>(<span class="hljs-params">img</span>):<br>    img = img / <span class="hljs-number">2</span> + <span class="hljs-number">0.5</span><br>    npimg = img.numpy()<br>    plt.imshow(np.transpose(npimg, (<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">0</span>)))<br>    plt.show()<br><br><span class="hljs-comment"># 打印原始图片</span><br>imshow(torchvision.utils.make_grid(images))<br><span class="hljs-comment"># 打印真实标签</span><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;GroundTruth: &#x27;</span>, <span class="hljs-string">&#x27; &#x27;</span>.join(<span class="hljs-string">&#x27;%5s&#x27;</span> % classes[labels[j]] <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">4</span>)))<br></code></pre></td></tr></table></figure>
+
+<p>代码解读：</p>
+<ul>
+<li><p>dataiter &#x3D; iter(testloader): 创建了一个迭代器 dataiter，用于迭代测试数据加载器 testloader，以便逐批获取测试数据。</p>
+</li>
+<li><p>images, labels &#x3D; next(dataiter): 使用 next() 函数从 dataiter 中获取下一批测试数据，其中 images 是一个包含了一批图像的张量，labels 是这批图像对应的真实标签。</p>
+</li>
+<li><p>def imshow(img): 定义了一个函数 imshow，用于展示图像。</p>
+</li>
+<li><p>img &#x3D; img &#x2F; 2 + 0.5: 对输入的图像数据进行处理，将其从标准化后的张量格式转换回原始图像的像素值范围，即从 [-1, 1] 转换为 [0, 1]。</p>
+</li>
+<li><p>npimg &#x3D; img.numpy(): 将张量类型的图像数据转换为 NumPy 数组，因为 matplotlib 库接受的是 NumPy 数组格式的图像数据。</p>
+</li>
+<li><p>plt.imshow(np.transpose(npimg, (1, 2, 0))): 使用 imshow 函数展示图像。</p>
+</li>
+</ul>
+<p>(1, 2, 0): 这是一个元组，指定了数组的维度顺序。在这个元组中，每个数字表示了原始数组的一个维度在新数组中的位置。因此，(1, 2, 0) 意味着将原始数组的第 1 维移动到新数组的第 0 个位置，第 2 维移动到新数组的第 1 个位置，原始数组的第 0 维移动到新数组的第 2 个位置。</p>
+<p>在图像处理中，一般图像数组的维度顺序是 (通道数, 高度, 宽度)，即 (channels, height, width)，其中 channels 表示图像的通道数，比如 RGB 图像中通常是 3。而 imshow 函数默认会将最后一个维度视为通道维度，所以需要用 np.transpose() 来调整数组的维度顺序以匹配 imshow 的预期输入格式，即 (height, width, channels)。</p>
+<ul>
+<li><p>plt.show(): 显示图像。</p>
+</li>
+<li><p>imshow(torchvision.utils.make_grid(images)): 调用 imshow 函数，将一批图像组合成一个网格并展示出来。</p>
+</li>
+<li><p>print(‘GroundTruth: ‘, ‘ ‘.join(‘%5s’ % classes[labels[j]] for j in range(4))): 打印出这批图像对应的真实标签。使用了列表推导式，将每个图像的真实标签转换为对应的类别名称，并使用空格连接起来，最后打印出来。</p>
+</li>
+</ul>
+<p>输出结果：<br><img src="/Pictures/DL/CNN/plot04.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">GroundTruth:    cat  ship  ship plane<br></code></pre></td></tr></table></figure>
+
+<h3 id="第二步，加载模型对测试图片进行预测"><a href="#第二步，加载模型对测试图片进行预测" class="headerlink" title="第二步，加载模型对测试图片进行预测"></a>第二步，加载模型对测试图片进行预测</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python">net = Net()<br><span class="hljs-comment"># 加载保存的状态字典</span><br>net.load_state_dict(torch.load(PATH))<br><span class="hljs-comment"># 进行预测</span><br>outputs = net(images)<br><span class="hljs-comment"># 采用计算出概率最大的为类别</span><br>_, predicted = torch.<span class="hljs-built_in">max</span>(outputs, <span class="hljs-number">1</span>)<br><span class="hljs-comment"># 打印结果</span><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;Prediced: &#x27;</span>, <span class="hljs-string">&#x27; &#x27;</span>.join(<span class="hljs-string">&#x27;%5s&#x27;</span> % classes[predicted[j]] <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">4</span>)))<br></code></pre></td></tr></table></figure>
+
+<p>运行结果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">GroundTruth:    cat  ship  ship plane<br>Prediced:    cat automobile plane plane<br></code></pre></td></tr></table></figure>
+
+<p>稍有误差。。。加大epoch！</p>
+<p>全部测试集结果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 跑一遍全部测试集</span><br>correct = <span class="hljs-number">0</span><br>total = <span class="hljs-number">0</span><br><span class="hljs-keyword">with</span> torch.no_grad():<br>    <span class="hljs-keyword">for</span> data <span class="hljs-keyword">in</span> testloader:<br>        images, labels = data<br>        outputs = net(images)<br>        _, predicted = torch.<span class="hljs-built_in">max</span>(outputs.data, <span class="hljs-number">1</span>)<br>        total += labels.size(<span class="hljs-number">0</span>)<br>        correct += (predicted == labels).<span class="hljs-built_in">sum</span>().item()<br><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;Accuracy: %d %%&#x27;</span> % (<span class="hljs-number">100</span> * correct / total))<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">Accuracy</span>: <span class="hljs-number">54</span> %<br></code></pre></td></tr></table></figure>
+
+<p>准确率为54%，说明模型初步具备分类能力，还有较大提升空间。</p>
+<p>我们可以计算模型在哪些类别上表现更好，在哪些类别上表现更差，也可以分类别进行准确率计算，此处不再演示。</p>
+<p>把学习率由 1e-3 修改为 1e-4, 并网络参数量增加如下代码所示:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">ImageClassification</span>(nn.Module):<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self</span>):<br>        <span class="hljs-built_in">super</span>(ImageClassification, self).__init__()<br>        self.conv1 = nn.Conv2d(<span class="hljs-number">3</span>, <span class="hljs-number">32</span>, stride=<span class="hljs-number">1</span>, kernel_size=<span class="hljs-number">3</span>)<br>        self.pool1 = nn.MaxPool2d(kernel_size=<span class="hljs-number">2</span>, stride=<span class="hljs-number">2</span>)<br>        self.conv2 = nn.Conv2d(<span class="hljs-number">32</span>, <span class="hljs-number">128</span>, stride=<span class="hljs-number">1</span>, kernel_size=<span class="hljs-number">3</span>)<br>        self.pool2 = nn.MaxPool2d(kernel_size=<span class="hljs-number">2</span>, stride=<span class="hljs-number">2</span>)<br>        self.linear1 = nn.Linear(<span class="hljs-number">128</span> * <span class="hljs-number">6</span> * <span class="hljs-number">6</span>, <span class="hljs-number">2048</span>)<br>        self.linear2 = nn.Linear(<span class="hljs-number">2048</span>, <span class="hljs-number">2048</span>)<br>        self.out = nn.Linear(<span class="hljs-number">2048</span>, <span class="hljs-number">10</span>)<br><br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, x</span>):<br>        x = F.relu(self.conv1(x))<br>        x = self.pool1(x)<br>        x = F.relu(self.conv2(x))<br>        x = self.pool2(x)<br>        <span class="hljs-comment"># 由于最后一个批次可能不够 32，所以需要根据批次数量来 flatten</span><br>        x = x.reshape(x.size(<span class="hljs-number">0</span>), -<span class="hljs-number">1</span>)<br>        x = F.relu(self.linear1(x))<br>        x = F.dropout(x, p=<span class="hljs-number">0.5</span>)<br>        x = F.relu(self.linear2(x))<br>        x = F.dropout(x, p=<span class="hljs-number">0.5</span>)<br>        <span class="hljs-keyword">return</span> self.out(x)<br></code></pre></td></tr></table></figure>
+
+<p>经过训练，模型在测试集的准确率由 0.57，提升到了 0.93。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Deep-Learning/" class="category-chain-item">Deep Learning</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>CNN——卷积神经网络</div>
+      <div>https://fabulous1496.github.io/2024/03/18/CNN/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Fabulous</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年3月18日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/03/18/BERT/" title="BERT">
+                        <span class="hidden-mobile">BERT</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"CjZvdepCB7OjY30a6oge7W6x-gzGzoHsz","appKey":"ErsGn5pjObFn129dKnLC8esg","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

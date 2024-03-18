@@ -1,0 +1,1080 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Fabulous">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="文本预处理以及其作用文本语料在输送给模型前一般需要一系列的预处理工作，才能符合模型输入的要求，如：将文本转化成模型需要的张量，规范张量的尺寸等，而且科学的文本预处理环节还将有效指导模型超参数的选择，提升模型的评估指标。 文本预处理中包含的主要环节 文本预处理的基本方法 文本张量表示方法 文本语料的数据分析 文本特征处理 数据增强方法  我们主要针对中文和英文进行处理 1.文本预处理的基本方法分词h">
+<meta property="og:type" content="article">
+<meta property="og:title" content="文本预处理">
+<meta property="og:url" content="https://fabulous1496.github.io/2024/02/24/NLP%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/index.html">
+<meta property="og:site_name" content="Fabulous&#39;s little world">
+<meta property="og:description" content="文本预处理以及其作用文本语料在输送给模型前一般需要一系列的预处理工作，才能符合模型输入的要求，如：将文本转化成模型需要的张量，规范张量的尺寸等，而且科学的文本预处理环节还将有效指导模型超参数的选择，提升模型的评估指标。 文本预处理中包含的主要环节 文本预处理的基本方法 文本张量表示方法 文本语料的数据分析 文本特征处理 数据增强方法  我们主要针对中文和英文进行处理 1.文本预处理的基本方法分词h">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fabulous1496.github.io/Pictures/DL/03/cover.jpg">
+<meta property="article:published_time" content="2024-02-24T13:11:00.000Z">
+<meta property="article:modified_time" content="2024-03-10T13:31:52.068Z">
+<meta property="article:author" content="Fabulous">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://fabulous1496.github.io/Pictures/DL/03/cover.jpg">
+  
+  
+  
+  <title>文本预处理 - Fabulous&#39;s little world</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"fabulous1496.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"CjZvdepCB7OjY30a6oge7W6x-gzGzoHsz","app_key":"ErsGn5pjObFn129dKnLC8esg","server_url":"https://cjzvdepc.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fabulous&#39;s little world</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/Pictures/DL/03/cover.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="文本预处理"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-02-24 21:11" pubdate>
+          2024年2月24日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          34 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">文本预处理</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="文本预处理以及其作用"><a href="#文本预处理以及其作用" class="headerlink" title="文本预处理以及其作用"></a>文本预处理以及其作用</h1><p>文本语料在输送给模型前一般需要一系列的预处理工作，才能符合模型输入的要求，如：将文本转化成模型需要的张量，规范张量的尺寸等，而且科学的文本预处理环节还将有效指导模型超参数的选择，提升模型的评估指标。</p>
+<h1 id="文本预处理中包含的主要环节"><a href="#文本预处理中包含的主要环节" class="headerlink" title="文本预处理中包含的主要环节"></a>文本预处理中包含的主要环节</h1><ul>
+<li>文本预处理的基本方法</li>
+<li>文本张量表示方法</li>
+<li>文本语料的数据分析</li>
+<li>文本特征处理</li>
+<li>数据增强方法</li>
+</ul>
+<p>我们主要针对中文和英文进行处理</p>
+<h1 id="1-文本预处理的基本方法"><a href="#1-文本预处理的基本方法" class="headerlink" title="1.文本预处理的基本方法"></a>1.文本预处理的基本方法</h1><h2 id="分词"><a href="#分词" class="headerlink" title="分词"></a>分词</h2><p><a target="_blank" rel="noopener" href="https://github.com/fxsjy/jieba">https://github.com/fxsjy/jieba</a></p>
+<p>jieba库可以帮助我们对句子进行切分，作为Tokenizer使用。</p>
+<ol>
+<li>精确模式：将句子最精确的切开（cut_all &#x3D; False）</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> jieba<br>content = <span class="hljs-string">&quot;坚决维护习近平总书记党中央的核心、全党的核心地位，坚决维护党中央权威和集中统一领导。&quot;</span><br>jieba.cut(content, cut_all=<span class="hljs-literal">False</span>)    <span class="hljs-comment">#cut_all默认为False</span><br><br><span class="hljs-comment"># 将返回一个生成器对象</span><br><span class="hljs-comment"># &lt;generator object Tokenizer.cut at ......&gt;</span><br><br><span class="hljs-comment"># 也可直接返回列表内容</span><br>out = jieba.lcut(content, cut_all=<span class="hljs-literal">False</span>)<br><span class="hljs-built_in">print</span>(out)<br></code></pre></td></tr></table></figure>
+
+<p>输出结果如下：</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs scheme">[<span class="hljs-symbol">&#x27;坚决</span>&#x27;, <span class="hljs-symbol">&#x27;维护</span>&#x27;, <span class="hljs-symbol">&#x27;习近平</span>&#x27;, <span class="hljs-symbol">&#x27;总书记</span>&#x27;, <span class="hljs-symbol">&#x27;党中央</span>&#x27;, <span class="hljs-symbol">&#x27;的</span>&#x27;, <span class="hljs-symbol">&#x27;核心</span>&#x27;, <span class="hljs-symbol">&#x27;、</span>&#x27;, <span class="hljs-symbol">&#x27;全党</span>&#x27;, <span class="hljs-symbol">&#x27;的</span>&#x27;, <span class="hljs-symbol">&#x27;核心</span>&#x27;, <span class="hljs-symbol">&#x27;地位</span>&#x27;, <span class="hljs-symbol">&#x27;，</span>&#x27;, <span class="hljs-symbol">&#x27;坚决</span>&#x27;, <span class="hljs-symbol">&#x27;维护</span>&#x27;, <span class="hljs-symbol">&#x27;党中央</span>&#x27;, <span class="hljs-symbol">&#x27;权威</span>&#x27;, <span class="hljs-symbol">&#x27;和</span>&#x27;, <span class="hljs-symbol">&#x27;集中统一</span>&#x27;, <span class="hljs-symbol">&#x27;领导</span>&#x27;, <span class="hljs-symbol">&#x27;。</span>&#x27;]<br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>全模式分词：把句子中所有可以成词的词语都扫描出来，速度快但会产生歧义。</li>
+</ol>
+<p>将变量 <em>cut_all &#x3D; Ture</em> ,输出下面结果：</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs scheme">[<span class="hljs-symbol">&#x27;坚决</span>&#x27;, <span class="hljs-symbol">&#x27;维护</span>&#x27;, <span class="hljs-symbol">&#x27;习近平</span>&#x27;, <span class="hljs-symbol">&#x27;总书记</span>&#x27;, <span class="hljs-symbol">&#x27;书记</span>&#x27;, <span class="hljs-symbol">&#x27;党中央</span>&#x27;, <span class="hljs-symbol">&#x27;中央</span>&#x27;, <span class="hljs-symbol">&#x27;的</span>&#x27;, <span class="hljs-symbol">&#x27;核心</span>&#x27;, <span class="hljs-symbol">&#x27;、</span>&#x27;, <span class="hljs-symbol">&#x27;全党</span>&#x27;, <span class="hljs-symbol">&#x27;的</span>&#x27;, <span class="hljs-symbol">&#x27;核心</span>&#x27;, <span class="hljs-symbol">&#x27;心地</span>&#x27;, <span class="hljs-symbol">&#x27;地位</span>&#x27;, <span class="hljs-symbol">&#x27;，</span>&#x27;, <span class="hljs-symbol">&#x27;坚决</span>&#x27;, <span class="hljs-symbol">&#x27;维护</span>&#x27;, <span class="hljs-symbol">&#x27;党中央</span>&#x27;, <span class="hljs-symbol">&#x27;中央</span>&#x27;, <span class="hljs-symbol">&#x27;权威</span>&#x27;, <span class="hljs-symbol">&#x27;和</span>&#x27;, <span class="hljs-symbol">&#x27;集中</span>&#x27;, <span class="hljs-symbol">&#x27;集中统一</span>&#x27;, <span class="hljs-symbol">&#x27;中统</span>&#x27;, <span class="hljs-symbol">&#x27;统一</span>&#x27;, <span class="hljs-symbol">&#x27;领导</span>&#x27;, <span class="hljs-symbol">&#x27;。</span>&#x27;]<br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>搜索引擎模式分词：对长词再次切分，提高召回率。</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">out = jieba.lcut_for_search(content)<br><span class="hljs-built_in">print</span>(out)<br></code></pre></td></tr></table></figure>
+
+<p>输出结果如下：</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs scheme">[<span class="hljs-symbol">&#x27;坚决</span>&#x27;, <span class="hljs-symbol">&#x27;维护</span>&#x27;, <span class="hljs-symbol">&#x27;习近平</span>&#x27;, <span class="hljs-symbol">&#x27;书记</span>&#x27;, <span class="hljs-symbol">&#x27;总书记</span>&#x27;, <span class="hljs-symbol">&#x27;中央</span>&#x27;, <span class="hljs-symbol">&#x27;党中央</span>&#x27;, <span class="hljs-symbol">&#x27;的</span>&#x27;, <span class="hljs-symbol">&#x27;核心</span>&#x27;, <span class="hljs-symbol">&#x27;、</span>&#x27;, <span class="hljs-symbol">&#x27;全党</span>&#x27;, <span class="hljs-symbol">&#x27;的</span>&#x27;, <span class="hljs-symbol">&#x27;核心</span>&#x27;, <span class="hljs-symbol">&#x27;地位</span>&#x27;, <span class="hljs-symbol">&#x27;，</span>&#x27;, <span class="hljs-symbol">&#x27;坚决</span>&#x27;, <span class="hljs-symbol">&#x27;维护</span>&#x27;, <span class="hljs-symbol">&#x27;中央</span>&#x27;, <span class="hljs-symbol">&#x27;党中央</span>&#x27;, <span class="hljs-symbol">&#x27;权威</span>&#x27;, <span class="hljs-symbol">&#x27;和</span>&#x27;, <span class="hljs-symbol">&#x27;集中</span>&#x27;, <span class="hljs-symbol">&#x27;中统</span>&#x27;, <span class="hljs-symbol">&#x27;统一</span>&#x27;, <span class="hljs-symbol">&#x27;集中统一</span>&#x27;, <span class="hljs-symbol">&#x27;领导</span>&#x27;, <span class="hljs-symbol">&#x27;。</span>&#x27;]<br></code></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>使用用户自定义词典：</li>
+</ol>
+<ul>
+<li>添加自定义词典后，jieba能够准确识别词典中出现的词汇，提升整体的识别准确率</li>
+<li>词典格式：每一行分为三部分（词语，词频，词性，用空格隔开，顺序不可换）</li>
+</ul>
+<h2 id="流行中英文分词器hanlp"><a href="#流行中英文分词器hanlp" class="headerlink" title="流行中英文分词器hanlp"></a>流行中英文分词器hanlp</h2><ul>
+<li>中英文NLP处理工具包，基于tensorflow2.0，使用在学术和行业中推广最先进的深度学习技术</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> hanlp<br>tokenizer = hanlp.load(<span class="hljs-string">&#x27;CTB6_CONVSEG&#x27;</span>)<br><span class="hljs-built_in">input</span> = <span class="hljs-string">&#x27;学历不但是敲门砖，也是我下不来的高台，更是孔乙己脱不下的长衫。&#x27;</span><br>tokenizer(<span class="hljs-built_in">input</span>)<br></code></pre></td></tr></table></figure>
+
+<h2 id="命名实体的识别"><a href="#命名实体的识别" class="headerlink" title="命名实体的识别"></a>命名实体的识别</h2><p>对句子进行切分之后，我们可以进行命名实体的识别</p>
+<ul>
+<li><p>命名实体：通常我们将人名、地名、机构名等专有名词统称为命名实体。命名实体识别（Named Entity Recognition）就是识别出一段文本中可能的命名实体。</p>
+</li>
+<li><p>命名实体是人类理解文本的基础单元，也是AI解决NLP领域高阶任务的重要基础环节。</p>
+</li>
+</ul>
+<p>我们可以使用hanlp进行中文命名实体的识别。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> hanlp<br>recognizer = hanlp.load(hanlp.pretrained.ner.MSRA_NER_BERT_BASE_ZH)<br></code></pre></td></tr></table></figure>
+
+<h2 id="词性标注（Part-Of-Speech-tagging）"><a href="#词性标注（Part-Of-Speech-tagging）" class="headerlink" title="词性标注（Part-Of-Speech tagging）"></a>词性标注（Part-Of-Speech tagging）</h2><ul>
+<li>词性标注以分词为基础，是对文本语言的另一个角度的理解，也常常称为AI解决NLP领域的高阶任务的重要基础环节。</li>
+</ul>
+<p>使用jieba进行中文词性标注：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> jieba.posseg <span class="hljs-keyword">as</span> posseg<br><span class="hljs-built_in">print</span>(posseg.lcut(<span class="hljs-string">&#x27;我是小明，我爱上海交通大学&#x27;</span>))<br></code></pre></td></tr></table></figure>
+
+<p>输出结果：</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs scheme">[<span class="hljs-name">pair</span>(<span class="hljs-symbol">&#x27;我</span>&#x27;, <span class="hljs-symbol">&#x27;r</span>&#x27;), pair(<span class="hljs-symbol">&#x27;是</span>&#x27;, <span class="hljs-symbol">&#x27;v</span>&#x27;), pair(<span class="hljs-symbol">&#x27;小明</span>&#x27;, <span class="hljs-symbol">&#x27;nr</span>&#x27;), pair(<span class="hljs-symbol">&#x27;，</span>&#x27;, <span class="hljs-symbol">&#x27;x</span>&#x27;), pair(<span class="hljs-symbol">&#x27;我</span>&#x27;, <span class="hljs-symbol">&#x27;r</span>&#x27;), pair(<span class="hljs-symbol">&#x27;爱</span>&#x27;, <span class="hljs-symbol">&#x27;v</span>&#x27;), pair(<span class="hljs-symbol">&#x27;上海交通大学</span>&#x27;, <span class="hljs-symbol">&#x27;nt</span>&#x27;)]<br></code></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>标签</th>
+<th>含义</th>
+<th>标签</th>
+<th>含义</th>
+<th>标签</th>
+<th>含义</th>
+<th>标签</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>n</td>
+<td>普通名词</td>
+<td>f</td>
+<td>方位名词</td>
+<td>s</td>
+<td>处所名词</td>
+<td>t</td>
+<td>时间</td>
+</tr>
+<tr>
+<td>nr</td>
+<td>人名</td>
+<td>ns</td>
+<td>地名</td>
+<td>nt</td>
+<td>机构名</td>
+<td>nw</td>
+<td>作品名</td>
+</tr>
+<tr>
+<td>nz</td>
+<td>其他专名</td>
+<td>v</td>
+<td>普通动词</td>
+<td>vd</td>
+<td>动副词</td>
+<td>vn</td>
+<td>名动词</td>
+</tr>
+<tr>
+<td>a</td>
+<td>形容词</td>
+<td>ad</td>
+<td>副形词</td>
+<td>an</td>
+<td>名形词</td>
+<td>d</td>
+<td>副词</td>
+</tr>
+<tr>
+<td>m</td>
+<td>数量词</td>
+<td>q</td>
+<td>量词</td>
+<td>r</td>
+<td>代词</td>
+<td>p</td>
+<td>介词</td>
+</tr>
+<tr>
+<td>c</td>
+<td>连词</td>
+<td>u</td>
+<td>助词</td>
+<td>xc</td>
+<td>其他虚词</td>
+<td>w</td>
+<td>标点符号</td>
+</tr>
+<tr>
+<td>PER</td>
+<td>人名</td>
+<td>LOC</td>
+<td>地名</td>
+<td>ORG</td>
+<td>机构名</td>
+<td>TIME</td>
+<td>时间</td>
+</tr>
+</tbody></table>
+<h1 id="2-文本张量表示方法"><a href="#2-文本张量表示方法" class="headerlink" title="2.文本张量表示方法"></a>2.文本张量表示方法</h1><p>文本张量表示：讲一段文本使用张量进行表示，其中一般词汇表示成向量，称为词向量，再由各个词向量按顺序组成矩阵形成文本表示。</p>
+<p>例子：[“学历”,”是”,”我”,”下不来的”,”高台”]<br>&#x3D;&#x3D;&gt;    [[1.32, 4.11, 2.33],<br>        [5.32, 6.11, 2.53],<br>        [1.22, 4.16, 2.83],<br>        [8.32, 6.61, 2.83],<br>        [8.62, 4.71, 2.73]]</p>
+<h2 id="文本张量表示的方法"><a href="#文本张量表示的方法" class="headerlink" title="文本张量表示的方法"></a>文本张量表示的方法</h2><ul>
+<li>one-hot编码</li>
+</ul>
+<p>One-hot编码是将每个词或字符映射到一个唯一的整数索引，然后创建一个向量，长度与词汇表大小相同，所有元素为0，除了对应索引处的元素为1。例如，假设我们有一个词汇表包含4个词：[“apple”, “banana”, “orange”, “grape”]，则每个词可以被编码为：</p>
+<p>apple: [1, 0, 0, 0]<br>banana: [0, 1, 0, 0]<br>orange: [0, 0, 1, 0]<br>grape: [0, 0, 0, 1]<br>One-hot编码的优点是简单直观，并且不会引入任何语义相关性。然而，它也存在一些缺点，比如编码的向量维度很大，且无法捕捉词汇之间的语义相似性。</p>
+<ul>
+<li><p>one-hot编码实现</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python">form sklearn.externals <span class="hljs-keyword">import</span> joblib<br>form keras.preprocessing.text <span class="hljs-keyword">import</span> Tokenizer<br>vocab = &#123;&#125;<br>t = Tokenizer(num_words = <span class="hljs-literal">None</span>, char_level=<span class="hljs-literal">False</span>)<br>t.fit_on_texts(vocab)<br><br><span class="hljs-keyword">for</span> token <span class="hljs-keyword">in</span> vocab:<br>    zero_list = [<span class="hljs-number">0</span>]*<span class="hljs-built_in">len</span>(vocab)<br>    token_index = t.texts_to_sequences([token])[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>] - <span class="hljs-number">1</span><br>    zero_list[token_index] = <span class="hljs-number">1</span><br><span class="hljs-comment"># 保存</span><br>tokenizer_path = <span class="hljs-string">&quot;./Tokenizer&quot;</span><br>joblib.dump(t, tokenizer_path)<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>one-hot编码使用</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 使用</span><br>t = joblib.load(tokenizer_path)<br>token = <span class="hljs-string">&quot;词&quot;</span><br>token_index = t.texts_to_sequences([token])[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>] - <span class="hljs-number">1</span><br>zero_list = [<span class="hljs-number">0</span>]*<span class="hljs-built_in">len</span>(vocab)<br>zero_list[token_index] = <span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>Word2vec</li>
+</ul>
+<p>Word2Vec是一种词嵌入技术，它能够将词汇映射到一个连续的低维向量空间。</p>
+<p>Word2Vec模型通过学习大量文本语料库中的上下文信息来产生这些向量。其核心思想是：在一个窗口内，一个词的上下文可以帮助我们理解这个词的含义。</p>
+<p>Word2Vec生成的词向量具有一定的语义关系，即在向量空间中相似的词在语义上也是相似的。例如，通过Word2Vec训练得到的词向量，可以通过计算向量之间的距离来找出语义上相似的词。</p>
+<p>Word2Vec模型有两种主要的架构：连续词袋（CBOW）和Skip-gram。</p>
+<ul>
+<li>CBOW（Continuous Bag of Words）：通过上下文词预测目标词。</li>
+</ul>
+<p>CBOW在给定的一段文本语料中选调某段长度 <p style="color: #FF0000;">（窗口）</p> 作为研究对象，使用上下文词汇进行预测.</p>
+<p><img src="/Pictures/DL/03/plot01.jpg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>分析：图中窗口大小为9，使用前后4个词汇预测中心词。</p>
+<p>CBOW模型的工作原理：</p>
+<ol>
+<li><p>输入层：CBOW模型的输入层接收由上下文词汇表示的One-hot编码。假设我们使用窗口大小为2的上下文，对于给定的目标词汇，上下文词汇包括其左右两个词汇。</p>
+</li>
+<li><p>投影层：输入的One-hot编码经过一个投影层，将每个One-hot编码映射到一个连续的低维向量空间，即词向量空间。</p>
+</li>
+<li><p>合并层：合并层将所有上下文词汇的词向量进行平均或求和，得到一个表示上下文信息的向量。</p>
+</li>
+<li><p>输出层：合并后的上下文向量通过输出层进行预测，输出层是一个softmax分类器，用于预测词汇表中每个词汇的概率分布。最终，模型选择概率最高的词汇作为预测的目标词汇</p>
+</li>
+</ol>
+<p>假设我们有一个简单的语料库：”The cat sat on the mat.”</p>
+<ol>
+<li><p>输入：“The”、“sat”、“the”、“on” 的One-hot编码。</p>
+</li>
+<li><p>投影层：将上述词汇的One-hot编码映射到词向量空间。假设我们的词向量维度为3，每个词汇的向量表示如下：</p>
+</li>
+</ol>
+<p>“The”：[0.2, 0.3, 0.1]<br>“sat”：[-0.1, 0.2, 0.4]<br>“the”：[0.3, -0.1, 0.2]<br>“on”：[0.4, 0.1, -0.3]</p>
+<ol start="3">
+<li><p>合并层：将所有上下文词汇的词向量进行平均或求和。假设我们将它们求和，得到合并后的上下文向量为：[0.8, 0.5, 0.4]。</p>
+</li>
+<li><p>输出层：利用合并后的上下文向量，通过softmax分类器预测目标词汇的概率分布。例如，预测 “cat” 的概率为0.6，”dog” 的概率为0.3，”apple” 的概率为0.1。则模型将选择概率最高的词汇 “cat” 作为预测的目标词汇。</p>
+</li>
+</ol>
+<ul>
+<li>Skip-gram：通过目标词预测上下文词。<br>Skip-gram模型是Word2Vec中的一种模型，与CBOW模型相反，它的核心思想是根据目标词来预测上下文词，通过学习到的词向量来捕捉词汇之间的语义关系。</li>
+</ul>
+<p>结构模型：</p>
+<ol>
+<li><p>输入层：Skip-gram模型的输入是目标词的One-hot编码。</p>
+</li>
+<li><p>投影层：输入的One-hot编码经过一个投影层，将每个One-hot编码映射到一个连续的低维向量空间，即词向量空间。</p>
+</li>
+<li><p>输出层：投影后的目标词汇向量通过输出层，输出的是上下文词汇的概率分布。对于给定的目标词汇，Skip-gram模型试图学习到一个概率分布，使得给定目标词汇的情况下，其周围上下文词汇出现的概率最大化。输出层是一个softmax分类器，用于预测词汇表中每个词汇的概率分布。</p>
+</li>
+</ol>
+<p>假设我们有一个简单的语料库：”The cat sat on the mat.”</p>
+<ol>
+<li><p>输入：“cat” 的One-hot编码。</p>
+</li>
+<li><p>投影层：将目标词汇的One-hot编码映射到词向量空间。假设我们的词向量维度为3，每个词汇的向量表示如下：</p>
+</li>
+</ol>
+<p>“cat”：[0.2, 0.5, -0.1]</p>
+<ol start="3">
+<li>输出层：利用投影后的目标词汇向量，通过softmax分类器预测周围上下文词汇的概率分布。例如，预测 “The” 的概率为0.6，”sat” 的概率为0.3，”mat” 的概率为0.1。则模型将选择概率最高的词汇作为上下文词汇的预测结果。</li>
+</ol>
+<ul>
+<li>Word Embedding<br>Word Embedding是一种将词汇映射到实数向量的技术.</li>
+</ul>
+<p>广义的word embedding包括所有密集词汇向量的表示方法，狭义的word embedding指在神经网络中加入embedding层，对整个网络进行训练的同时产生的embedding矩阵。</p>
+<h2 id="使用fasttext工具实现word2vec的训练和使用"><a href="#使用fasttext工具实现word2vec的训练和使用" class="headerlink" title="使用fasttext工具实现word2vec的训练和使用"></a>使用fasttext工具实现word2vec的训练和使用</h2><ol>
+<li>获取训练数据</li>
+<li>训练词向量</li>
+<li>模型超参数设定</li>
+<li>模型效果检验</li>
+<li>模型的保存与重加载</li>
+</ol>
+<h3 id="获取训练数据"><a href="#获取训练数据" class="headerlink" title="获取训练数据"></a>获取训练数据</h3><p>在这里，我们研究 <em>Wikipedia</em> 的部分网页信息。<br>下载数据：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs powershell"><span class="hljs-variable">$</span> mkdir <span class="hljs-keyword">data</span><br><span class="hljs-variable">$</span> <span class="hljs-built_in">wget</span> <span class="hljs-literal">-c</span> http://mattmahoney.net/dc/enwik9.zip <span class="hljs-literal">-P</span> <span class="hljs-keyword">data</span><br><span class="hljs-variable">$</span> unzip <span class="hljs-keyword">data</span>/enwik9.zip <span class="hljs-literal">-d</span> <span class="hljs-keyword">data</span><br></code></pre></td></tr></table></figure>
+
+<p>原始数据处理：我们需要将html语言中无用的符号去除。</p>
+<p>这里我们使用fasttext中的Perl脚本Wikifil.pl</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><code class="hljs perl"><span class="hljs-comment">#!/usr/bin/perl</span><br><br><span class="hljs-comment"># Program to filter Wikipedia XML dumps to &quot;clean&quot; text consisting only of lowercase</span><br><span class="hljs-comment"># letters (a-z, converted from A-Z), and spaces (never consecutive).  </span><br><span class="hljs-comment"># All other characters are converted to spaces.  Only text which normally appears </span><br><span class="hljs-comment"># in the web browser is displayed.  Tables are removed.  Image captions are </span><br><span class="hljs-comment"># preserved.  Links are converted to normal text.  Digits are spelled out.</span><br><br><span class="hljs-comment"># Written by Matt Mahoney, June 10, 2006.  This program is released to the public domain.</span><br><br>$/=<span class="hljs-string">&quot;&gt;&quot;</span>;                     <span class="hljs-comment"># input record separator</span><br><span class="hljs-keyword">while</span> (&lt;&gt;) &#123;<br>  <span class="hljs-keyword">if</span> (<span class="hljs-regexp">/&lt;text /</span>) &#123;$text=<span class="hljs-number">1</span>;&#125;  <span class="hljs-comment"># remove all but between &lt;text&gt; ... &lt;/text&gt;</span><br>  <span class="hljs-keyword">if</span> (<span class="hljs-regexp">/#redirect/i</span>) &#123;$text=<span class="hljs-number">0</span>;&#125;  <span class="hljs-comment"># remove #REDIRECT</span><br>  <span class="hljs-keyword">if</span> ($text) &#123;<br><br>    <span class="hljs-comment"># Remove any text not normally visible</span><br>    <span class="hljs-keyword">if</span> (<span class="hljs-regexp">/&lt;\/text&gt;/</span>) &#123;$text=<span class="hljs-number">0</span>;&#125;<br>    s/&lt;.*&gt;<span class="hljs-regexp">//</span>;               <span class="hljs-comment"># remove xml tags</span><br>    s/&amp;amp;<span class="hljs-regexp">/&amp;/g</span>;            <span class="hljs-comment"># decode URL encoded chars</span><br>    s/&amp;<span class="hljs-keyword">lt</span>;<span class="hljs-regexp">/&lt;/g</span>;<br>    <span class="hljs-regexp">s/&amp;gt;/&gt;/g</span>;<br>    <span class="hljs-regexp">s/&lt;ref[^&lt;]*&lt;\/ref&gt;//g</span>;  <span class="hljs-comment"># remove references &lt;ref...&gt; ... &lt;/ref&gt;</span><br>    s/&lt;[^&gt;]*&gt;<span class="hljs-regexp">//g</span>;           <span class="hljs-comment"># remove xhtml tags</span><br>    s/\[http:[^] ]*<span class="hljs-regexp">/[/g</span>;    <span class="hljs-comment"># remove normal url, preserve visible text</span><br>    s/\|thumb//ig;          <span class="hljs-comment"># remove images links, preserve caption</span><br>    s/\|left//ig;<br>    <span class="hljs-regexp">s/\|right//ig</span>;<br>    <span class="hljs-regexp">s/\|\d+px//ig</span>;<br>    <span class="hljs-regexp">s/\[\[image:[^\[\]]*\|//ig</span>;<br>    <span class="hljs-regexp">s/\[\[category:([^|\]]*)[^]]*\]\]/[[$1]]/ig</span>;  <span class="hljs-comment"># show categories without markup</span><br>    s/\[\[[a-z\-]*:[^\]]*\]\]//g;  <span class="hljs-comment"># remove links to other languages</span><br>    s/\[\[[^\|\]]*\|<span class="hljs-regexp">/[[/g</span>;  <span class="hljs-comment"># remove wiki url, preserve visible text</span><br>    s/\&#123;\&#123;[^\&#125;]*\&#125;\&#125;//g;         <span class="hljs-comment"># remove &#123;&#123;icons&#125;&#125; and &#123;tables&#125;</span><br>    s/\&#123;[^\&#125;]*\&#125;//g;<br>    <span class="hljs-regexp">s/\[//g</span>;                <span class="hljs-comment"># remove [ and ]</span><br>    s/\]//g;<br>    <span class="hljs-regexp">s/&amp;[^;]*;/ /g</span>;          <span class="hljs-comment"># remove URL encoded chars</span><br><br>    <span class="hljs-comment"># convert to lowercase letters and spaces, spell digits</span><br>    $_=<span class="hljs-string">&quot; $_ &quot;</span>;<br>    <span class="hljs-regexp">tr/A-Z/a-z/</span>;<br>    <span class="hljs-regexp">s/0/ zero /g</span>;<br>    <span class="hljs-regexp">s/1/ one /g</span>;<br>    <span class="hljs-regexp">s/2/ two /g</span>;<br>    <span class="hljs-regexp">s/3/ three /g</span>;<br>    <span class="hljs-regexp">s/4/ four /g</span>;<br>    <span class="hljs-regexp">s/5/ five /g</span>;<br>    <span class="hljs-regexp">s/6/ six /g</span>;<br>    <span class="hljs-regexp">s/7/ seven /g</span>;<br>    <span class="hljs-regexp">s/8/ eight /g</span>;<br>    <span class="hljs-regexp">s/9/ nine /g</span>;<br>    <span class="hljs-regexp">tr/a-z/ /</span>cs;<br>    <span class="hljs-keyword">chop</span>;<br>    <span class="hljs-keyword">print</span> $_;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="训练词向量"><a href="#训练词向量" class="headerlink" title="训练词向量"></a>训练词向量</h3><p>代码直接在解释器中运行。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">import</span> fasttext<br><span class="hljs-meta">&gt;&gt;&gt; </span>model = fasttext.train_unsupervised(<span class="hljs-string">&#x27;data/fil9&#x27;</span>)<br>Read 124M words<br>Number of words:  <span class="hljs-number">218316</span><br>Number of labels: <span class="hljs-number">0</span><br>Progress: <span class="hljs-number">100.0</span>% words/sec/thread:   <span class="hljs-number">48200</span> lr:  <span class="hljs-number">0.000000</span> avg.loss:  <span class="hljs-number">0.746600</span> ETA:   0h 0m 0s<br><br><span class="hljs-meta">&gt;&gt;&gt; </span>model.get_word_vector(<span class="hljs-string">&quot;the&quot;</span>)<br>array([ <span class="hljs-number">0.21138486</span>, -<span class="hljs-number">0.12589064</span>, -<span class="hljs-number">0.19342858</span>, -<span class="hljs-number">0.19221118</span>, -<span class="hljs-number">0.01785146</span>,<br>        <span class="hljs-number">0.01988586</span>, -<span class="hljs-number">0.31821433</span>, -<span class="hljs-number">0.02154824</span>, -<span class="hljs-number">0.03422537</span>, -<span class="hljs-number">0.13752697</span>,<br>        <span class="hljs-number">0.28236884</span>,  <span class="hljs-number">0.47459602</span>, -<span class="hljs-number">0.1452173</span> ,  <span class="hljs-number">0.08719557</span>,  <span class="hljs-number">0.11245055</span>,<br>       -<span class="hljs-number">0.01942564</span>, -<span class="hljs-number">0.38417512</span>, -<span class="hljs-number">0.10941568</span>,  <span class="hljs-number">0.04246465</span>, -<span class="hljs-number">0.11036458</span>,<br>        <span class="hljs-number">0.2774673</span> ,  <span class="hljs-number">0.20110597</span>,  <span class="hljs-number">0.3259078</span> , -<span class="hljs-number">0.12203481</span>,  <span class="hljs-number">0.12826309</span>,<br>       -<span class="hljs-number">0.11036057</span>,  <span class="hljs-number">0.39044794</span>, -<span class="hljs-number">0.04462426</span>, -<span class="hljs-number">0.02714067</span>,  <span class="hljs-number">0.11053375</span>,<br>       -<span class="hljs-number">0.15136002</span>,  <span class="hljs-number">0.22139746</span>,  <span class="hljs-number">0.24734512</span>,  <span class="hljs-number">0.06377611</span>,  <span class="hljs-number">0.02416253</span>,<br>        <span class="hljs-number">0.17551999</span>, -<span class="hljs-number">0.23311079</span>,  <span class="hljs-number">0.06661322</span>,  <span class="hljs-number">0.32424128</span>,  <span class="hljs-number">0.2101823</span> ,<br>        <span class="hljs-number">0.25691697</span>,  <span class="hljs-number">0.25832957</span>,  <span class="hljs-number">0.1729201</span> ,  <span class="hljs-number">0.13627136</span>,  <span class="hljs-number">0.02371691</span>,<br>       -<span class="hljs-number">0.43661168</span>, -<span class="hljs-number">0.04388802</span>, -<span class="hljs-number">0.045301</span>  , -<span class="hljs-number">0.00119099</span>, -<span class="hljs-number">0.10205071</span>,<br>        <span class="hljs-number">0.18704088</span>, -<span class="hljs-number">0.2600936</span> ,  <span class="hljs-number">0.2387853</span> , -<span class="hljs-number">0.29954398</span>,  <span class="hljs-number">0.08725815</span>,<br>       -<span class="hljs-number">0.23276895</span>,  <span class="hljs-number">0.00449505</span>, -<span class="hljs-number">0.19258054</span>,  <span class="hljs-number">0.05162204</span>, -<span class="hljs-number">0.06285881</span>,<br>       -<span class="hljs-number">0.08242426</span>,  <span class="hljs-number">0.25470343</span>,  <span class="hljs-number">0.03506103</span>, -<span class="hljs-number">0.18733846</span>, -<span class="hljs-number">0.11046141</span>,<br>        <span class="hljs-number">0.05378657</span>,  <span class="hljs-number">0.21005692</span>,  <span class="hljs-number">0.14785953</span>,  <span class="hljs-number">0.24190894</span>,  <span class="hljs-number">0.01004618</span>,<br>       -<span class="hljs-number">0.1438988</span> ,  <span class="hljs-number">0.04277115</span>,  <span class="hljs-number">0.27179587</span>, -<span class="hljs-number">0.04454158</span>,  <span class="hljs-number">0.11442478</span>,<br>        <span class="hljs-number">0.09336581</span>, -<span class="hljs-number">0.02072855</span>,  <span class="hljs-number">0.1449741</span> , -<span class="hljs-number">0.05423071</span>, -<span class="hljs-number">0.02627472</span>,<br>        <span class="hljs-number">0.0190267</span> , -<span class="hljs-number">0.03677283</span>, -<span class="hljs-number">0.3188731</span> ,  <span class="hljs-number">0.29706222</span>,  <span class="hljs-number">0.3178355</span> ,<br>       -<span class="hljs-number">0.18600275</span>,  <span class="hljs-number">0.17816757</span>, -<span class="hljs-number">0.12264849</span>, -<span class="hljs-number">0.08815578</span>,  <span class="hljs-number">0.04992864</span>,<br>       -<span class="hljs-number">0.07476765</span>,  <span class="hljs-number">0.2927304</span> ,  <span class="hljs-number">0.29114792</span>,  <span class="hljs-number">0.2975045</span> ,  <span class="hljs-number">0.02667597</span>,<br>       -<span class="hljs-number">0.41576225</span>,  <span class="hljs-number">0.05530886</span>, -<span class="hljs-number">0.01657987</span>,  <span class="hljs-number">0.17934221</span>,  <span class="hljs-number">0.09024961</span>],<br>      dtype=float32)<br></code></pre></td></tr></table></figure>
+
+<h3 id="模型超参数设定"><a href="#模型超参数设定" class="headerlink" title="模型超参数设定"></a>模型超参数设定</h3><ol>
+<li>训练模式：无监督训练分为’skipgram’和’chow’，默认为前者</li>
+<li>词嵌入维度dim：默认为100</li>
+<li>数据循环次数epoch：默认为5</li>
+<li>学习率lr：默认为0.05</li>
+<li>线程数thread：默认为12个线程，建议与CPU核数相同</li>
+</ol>
+<h3 id="模型效果检验"><a href="#模型效果检验" class="headerlink" title="模型效果检验"></a>模型效果检验</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span>model.get_nearest_neighbors(<span class="hljs-string">&#x27;sports&#x27;</span>)<br><br>[(<span class="hljs-number">0.8495004773139954</span>, <span class="hljs-string">&#x27;sport&#x27;</span>), (<span class="hljs-number">0.8420268893241882</span>, <span class="hljs-string">&#x27;sporting&#x27;</span>), (<span class="hljs-number">0.80378657579422</span>, <span class="hljs-string">&#x27;sportsnet&#x27;</span>), (<span class="hljs-number">0.8021653294563293</span>, <span class="hljs-string">&#x27;sportsplex&#x27;</span>), (<span class="hljs-number">0.7963152527809143</span>, <span class="hljs-string">&#x27;sportsground&#x27;</span>), (<span class="hljs-number">0.7816479802131653</span>, <span class="hljs-string">&#x27;sportswomen&#x27;</span>), (<span class="hljs-number">0.7815326452255249</span>, <span class="hljs-string">&#x27;sportsman&#x27;</span>), (<span class="hljs-number">0.7743322253227234</span>, <span class="hljs-string">&#x27;sportscars&#x27;</span>), (<span class="hljs-number">0.7705729007720947</span>, <span class="hljs-string">&#x27;sportscar&#x27;</span>), (<span class="hljs-number">0.7693472504615784</span>, <span class="hljs-string">&#x27;athletics&#x27;</span>)]<br></code></pre></td></tr></table></figure>
+
+<h3 id="模型的保存与重加载"><a href="#模型的保存与重加载" class="headerlink" title="模型的保存与重加载"></a>模型的保存与重加载</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span>model.save_model(<span class="hljs-string">&quot;fil9.bin&quot;</span>)<br><br><span class="hljs-comment"># load</span><br><span class="hljs-meta">&gt;&gt;&gt; </span>model = fasttext.load_model(<span class="hljs-string">&quot;fil9.bin&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+<h1 id="3-文本数据分析"><a href="#3-文本数据分析" class="headerlink" title="3.文本数据分析"></a>3.文本数据分析</h1><p>文本数据分析的作用：文本数据分析能够有效帮助我们理解数据语料，快速检查出语料可能存在的问题，并指导之后模型训练过程中一些超参数的选择。</p>
+<p>常用的几种文本数据分析方法：</p>
+<ul>
+<li>标签数量分布</li>
+<li>句子长度分布</li>
+<li>词频统计与关键词词云</li>
+</ul>
+<h1 id="4-文本特征处理"><a href="#4-文本特征处理" class="headerlink" title="4.文本特征处理"></a>4.文本特征处理</h1><p>文本特征处理的作用：为语料添加具有普适性的文本特征，如n-gram特征，以及对加入特征之后的文本语料进行必要的处理，如长度规范。这些特征处理工作能够有效的将重要的文本特征加入模型训练当中，增强模型评估指标。</p>
+<ul>
+<li>n-gram特征：给定一段文本序列，其中n个词或字的相邻共现特征即n-gram特征。</li>
+</ul>
+<p>常用的n-gram特征是bi-gram和tri-gram，对应n为2和3</p>
+<ul>
+<li>文本长度规范：一般模型的输入需要等尺寸大小的矩阵，因此在进入模型前需要对每条文本数值映射后的长度进行规范，此时将根据句子长度分布分析出覆盖绝大多数文本的合理长度，对超长文本进行截断，对不足文本进行补齐。</li>
+</ul>
+<h1 id="5-文本数据增强"><a href="#5-文本数据增强" class="headerlink" title="5.文本数据增强"></a>5.文本数据增强</h1><p>关于回译数据增强法：回译数据增强指将文本数据翻译成另外一种语言，之后再翻译回原语言，就得到了同标签的新语料，将这个新语料加入原数据集中即可认为是数据增强。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> googletrans <span class="hljs-keyword">import</span> Translator<br>translator = Translator()<br>translations_ko = translator.translate([sample1, sample2, sample3], dest = <span class="hljs-string">&#x27;ko&#x27;</span>)<br>ko_res = <span class="hljs-built_in">list</span>(<span class="hljs-built_in">map</span>(<span class="hljs-keyword">lambda</span> x : x.text, translations_ko))<br>translations_cn = translator.translate(ko_res, dest = <span class="hljs-string">&#x27;zh-cn&#x27;</span>)<br>cn_res = <span class="hljs-built_in">list</span>(<span class="hljs-built_in">map</span>(<span class="hljs-keyword">lambda</span> x : x.text, translations_cn))<br></code></pre></td></tr></table></figure>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Deep-Learning/" class="category-chain-item">Deep Learning</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>文本预处理</div>
+      <div>https://fabulous1496.github.io/2024/02/24/NLP基础知识/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Fabulous</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年2月24日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/02/25/06-%E6%96%B0%E9%97%BB%E4%B8%BB%E9%A2%98%E5%88%86%E7%B1%BB/" title="新闻主题分类">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">新闻主题分类</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/02/11/Autograd/" title="Autograd">
+                        <span class="hidden-mobile">Autograd</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"CjZvdepCB7OjY30a6oge7W6x-gzGzoHsz","appKey":"ErsGn5pjObFn129dKnLC8esg","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

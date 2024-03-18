@@ -1,0 +1,953 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Fabulous">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="层次分析法(AHP)基本模型层次分析法旨在对于复杂的决策问题的本质、影响因素及其内在关系等进行深入分析的基础上，利用较少的定量信息使决策的思维过程数学化，从而为多目标、多准则或无结构特性的复杂决策问题提供简便的决策方法。 层次分析法概述AHP的基本内容：  将定量分析和定性分析结合起来 用决策者的经验判断各衡量目标能否实现的标准之间的相对重要程度 给出每个决策方案的每个标准的权数，利用权数求出各方">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AHP">
+<meta property="og:url" content="https://fabulous1496.github.io/2024/01/28/%E5%B1%82%E6%AC%A1%E5%88%86%E6%9E%90%E6%B3%95-AHP/index.html">
+<meta property="og:site_name" content="Fabulous&#39;s little world">
+<meta property="og:description" content="层次分析法(AHP)基本模型层次分析法旨在对于复杂的决策问题的本质、影响因素及其内在关系等进行深入分析的基础上，利用较少的定量信息使决策的思维过程数学化，从而为多目标、多准则或无结构特性的复杂决策问题提供简便的决策方法。 层次分析法概述AHP的基本内容：  将定量分析和定性分析结合起来 用决策者的经验判断各衡量目标能否实现的标准之间的相对重要程度 给出每个决策方案的每个标准的权数，利用权数求出各方">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fabulous1496.github.io/Pictures/MCM/AHP/01.jpg">
+<meta property="article:published_time" content="2024-01-28T10:46:19.000Z">
+<meta property="article:modified_time" content="2024-03-10T13:34:37.916Z">
+<meta property="article:author" content="Fabulous">
+<meta property="article:tag" content="MCM">
+<meta property="article:tag" content="AHP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://fabulous1496.github.io/Pictures/MCM/AHP/01.jpg">
+  
+  
+  
+  <title>AHP - Fabulous&#39;s little world</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"fabulous1496.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"CjZvdepCB7OjY30a6oge7W6x-gzGzoHsz","app_key":"ErsGn5pjObFn129dKnLC8esg","server_url":"https://cjzvdepc.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fabulous&#39;s little world</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/Pictures/MCM/AHP/01.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="AHP"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-01-28 18:46" pubdate>
+          2024年1月28日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          13 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">AHP</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="层次分析法-AHP-基本模型"><a href="#层次分析法-AHP-基本模型" class="headerlink" title="层次分析法(AHP)基本模型"></a>层次分析法(AHP)基本模型</h1><p>层次分析法旨在对于复杂的决策问题的本质、影响因素及其内在关系等进行深入分析的基础上，利用较少的定量信息使决策的思维过程数学化，从而为多目标、多准则或无结构特性的复杂决策问题提供简便的决策方法。</p>
+<h2 id="层次分析法概述"><a href="#层次分析法概述" class="headerlink" title="层次分析法概述"></a>层次分析法概述</h2><p>AHP的基本内容：</p>
+<ul>
+<li>将定量分析和定性分析结合起来</li>
+<li>用决策者的<strong>经验判断</strong>各衡量目标能否实现的标准之间的<strong>相对重要程度</strong></li>
+<li>给出每个决策方案的每个标准的权数，利用权数求出各方案的优劣次序</li>
+</ul>
+<h2 id="层次分析法的典型应用"><a href="#层次分析法的典型应用" class="headerlink" title="层次分析法的典型应用"></a>层次分析法的典型应用</h2><ul>
+<li>用于最佳方案的选取</li>
+<li>用于评价类问题</li>
+<li>用于指标体系的优选</li>
+</ul>
+<h2 id="层次分析法的步骤和方法"><a href="#层次分析法的步骤和方法" class="headerlink" title="层次分析法的步骤和方法"></a>层次分析法的步骤和方法</h2><h3 id="建立层次结构模型"><a href="#建立层次结构模型" class="headerlink" title="建立层次结构模型"></a>建立层次结构模型</h3><blockquote>
+<p>将决策的目标、考虑的因素（决策准则）和决策对象按他们之间的相互关系分为最高层、中间层和最底层，绘出层次结构图。</p>
+</blockquote>
+<ul>
+<li>最高层：决策的目的、要解决的问题</li>
+<li>最底层：决策时的备选方案</li>
+<li>中间层：考虑的因素、决策的准则</li>
+</ul>
+<blockquote>
+<p>对于相邻的两层，称高层为目标层，低层为因素层。</p>
+</blockquote>
+<p>例子：对于大学毕业生，在选择就业岗位时，一般会考虑以下因素（不完全）：</p>
+<ol>
+<li>能发挥自己的才干做出贡献</li>
+<li>收入较好</li>
+<li>生活环境好</li>
+<li>单位名声好</li>
+<li>工作环境好</li>
+<li>发展前景好</li>
+</ol>
+<p>根据这些因素，我们可以建立以下的层次结构模型：</p>
+<p><img src="/Pictures/MCM/AHP/plot01.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>每层之间的若干元素用直线连接。</p>
+<h3 id="构造判断（成对比较）矩阵"><a href="#构造判断（成对比较）矩阵" class="headerlink" title="构造判断（成对比较）矩阵"></a>构造判断（成对比较）矩阵</h3><p>在确定各层次各因素之间的权重时，如果只是定性的结果，则常常不容易被别人接受。故我们采用<strong>一致矩阵法</strong>，将因素之间两两比较，采用相对尺度，提高准确度。</p>
+<p>判断矩阵时表示本层所有因素针对上一层某一个因素的相对重要性的比较。</p>
+<p>判断矩阵的元素 $a_{ij}$ （第i项因素相对于第j项元素的标度）由Santy的1-9标度方法给出。</p>
+<blockquote>
+<p>在选取比较的因素时，建议不要超过9个。</p>
+</blockquote>
+<p>判断矩阵元素 $a_{ij}$ 的标度方法</p>
+<table>
+<thead>
+<tr>
+<th align="center">标度</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">表示两个因素相比,具有同等重要性</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">表示两个因素相比，一个因素比另一个稍微重要</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center">一个因素比另一个明显重要</td>
+</tr>
+<tr>
+<td align="center">7</td>
+<td align="center">一个因素比另一个强烈重要</td>
+</tr>
+<tr>
+<td align="center">9</td>
+<td align="center">一个因素比另一个极端重要</td>
+</tr>
+<tr>
+<td align="center">2,4,6,8</td>
+<td align="center">相邻的中值</td>
+</tr>
+<tr>
+<td align="center">倒数</td>
+<td align="center">因素 $i,j$ 之间一方标度为 $a_{ij}$ ,则另一方为倒数</td>
+</tr>
+</tbody></table>
+<p>构造出来的矩阵 $A&#x3D;(a_{ij})_{n*n}$ 为正互反矩阵</p>
+<p>下面是一个例子：</p>
+<p>$$\begin{bmatrix}<br>  1&amp;  \frac{1}{2}&amp;  4&amp;  3&amp;3 \\<br>  2&amp;  1&amp;  7&amp;  5&amp;5 \\<br>  \frac{1}{4}&amp;  \frac{1}{7}&amp;  1&amp;  \frac{1}{2}&amp;\frac{1}{3} \\<br>  \frac{1}{3}&amp;  \frac{1}{5}&amp;  2&amp;  1&amp;1 \\<br>  \frac{1}{3}&amp;  \frac{1}{5}&amp;  3&amp;  1&amp;1<br>\end{bmatrix}$$</p>
+<h3 id="层次单排序及其一致性检验"><a href="#层次单排序及其一致性检验" class="headerlink" title="层次单排序及其一致性检验"></a>层次单排序及其一致性检验</h3><p>实际上，上述矩阵存在问题。</p>
+<p>我们假设因素用 $C_{i}\ (i&#x3D;1,2,3,4,5)$ 来表示，则 $a_{ij}&#x3D;C_{i}:C_{j}$</p>
+<p>我们发现: $\frac{C_{1}}{C_{2}}&#x3D;\frac{1}{2}$ , $\frac{C_{1}}{C_{3}}&#x3D;4$ ,然而 $\frac{C_{2}}{C_{3}}&#x3D;7$ ，这显然和我们的评价不一致。</p>
+<p>考虑到实际情况中存在的<strong>边际效应</strong>和<strong>评价的相对性</strong>，我们允许不一致的出现，但要确定不一致的允许范围。</p>
+<p>如果我们得出的矩阵完全一致，即 $rank(A)&#x3D;1$ ，我们称这样的矩阵为一致阵，其中非零特征值为 $tr(A)&#x3D;n$ 。</p>
+<p>对于不一致的比较矩阵，我们可以将对大的特征值 $\lambda_{max}$ 对应的特征向量作为权向量，记为 $w$ 。</p>
+<p>权向量为同一层次因素对于上一层次因素某因素相对重要性的排序权值，这一过程称为层次单排序。</p>
+<p>一致性检验的工作正是确定偏移值A的范围。</p>
+<p>定义一致性指标如下： </p>
+<p>$$CI\ &#x3D;\ \frac{\lambda -n}{n-1}$$</p>
+<p><strong>CI越接近于0，一致性越高。</strong></p>
+<p>为衡量CI的大小，引入<em>随机一致性指标RI</em>。方法为随即构造500个成对比较矩阵 $A_{n}$ ，可得一致性指标 $CT_{n}$ 。取算术平均数即为RI大小。</p>
+<p>对于不同的n，RI的值由下表给出：</p>
+<table>
+<thead>
+<tr>
+<th>n</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RI</td>
+<td>0</td>
+<td>0</td>
+<td>0.58</td>
+<td>0.90</td>
+<td>1.12</td>
+<td>1.24</td>
+<td>1.32</td>
+<td>1.41</td>
+<td>1.45</td>
+<td>1.49</td>
+<td>1.51</td>
+</tr>
+</tbody></table>
+<p>定义一致性比率：</p>
+<p>$CR\ &#x3D;\ \frac{CI}{RI}$ ，当CR&lt;0.1时，认为A的不一致程度在容许范围之内，有满意的一致性，通过一致性检验。可用其归一化 <em>（列和为1）</em> 特征向量作为权向量，否则需要重新构造比较矩阵A进行调整。</p>
+<p><img src="/Pictures/MCM/AHP/plot02.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h3 id="层次总排序及其一致性检验"><a href="#层次总排序及其一致性检验" class="headerlink" title="层次总排序及其一致性检验"></a>层次总排序及其一致性检验</h3><p>计算某一层次所有因素对于最高层（总目标）相对重要性的权值，称为层次总排序，这一过程是从最高层次到最低层次依次进行的。</p>
+<p><img src="/Pictures/MCM/AHP/plot03.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/Pictures/MCM/AHP/plot04.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>层次总排序的一致性比率为：</p>
+<p>$$CR\ &#x3D;\ \frac{a_{1}CI_{1}+a_{2}CI_{2}+\ldots+a_{m}CI_{m}}{a_{1}RI_{1}+a_{2}RI_{2}+\ldots+a_{m}RI_{m}}$$</p>
+<p>当CR&lt;0.1是，认为层次总排序通过一致性检验。层次总排序具有满意度一致性，根据最下层（决策层）的层次总排序做出最后决策。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/MCM/" class="category-chain-item">MCM</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/MCM/" class="print-no-link">#MCM</a>
+      
+        <a href="/tags/AHP/" class="print-no-link">#AHP</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>AHP</div>
+      <div>https://fabulous1496.github.io/2024/01/28/层次分析法-AHP/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Fabulous</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年1月28日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/01/28/TOPSIS/" title="TOPSIS">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">TOPSIS</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/01/26/%E8%A7%84%E5%88%92%E7%B1%BB%E9%97%AE%E9%A2%98/" title="规划类问题">
+                        <span class="hidden-mobile">规划类问题</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"CjZvdepCB7OjY30a6oge7W6x-gzGzoHsz","appKey":"ErsGn5pjObFn129dKnLC8esg","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

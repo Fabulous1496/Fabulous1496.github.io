@@ -1,0 +1,1161 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Fabulous">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="线性规划问题在人们的生产实践中，经常会遇到如何利用现有资源来安排生产以取得最大效益的问题。 此类问题构成了运筹学的一个重要分支——数学规划，而LP（Linear Programming）则是其中的一个重要分支。 线性规划的基本形式\begin{cases}maxS &#x3D; c_{1}x_{1}+c_{2}x_{2}+\ldots+c_{n}x_{n} &#x3D; CX \ldots (1.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="规划类问题">
+<meta property="og:url" content="https://fabulous1496.github.io/2024/01/26/%E8%A7%84%E5%88%92%E7%B1%BB%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="Fabulous&#39;s little world">
+<meta property="og:description" content="线性规划问题在人们的生产实践中，经常会遇到如何利用现有资源来安排生产以取得最大效益的问题。 此类问题构成了运筹学的一个重要分支——数学规划，而LP（Linear Programming）则是其中的一个重要分支。 线性规划的基本形式\begin{cases}maxS &#x3D; c_{1}x_{1}+c_{2}x_{2}+\ldots+c_{n}x_{n} &#x3D; CX \ldots (1.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fabulous1496.github.io/Pictures/MCM/01/01.jpg">
+<meta property="article:published_time" content="2024-01-26T15:27:03.000Z">
+<meta property="article:modified_time" content="2024-03-10T13:35:14.595Z">
+<meta property="article:author" content="Fabulous">
+<meta property="article:tag" content="MCM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://fabulous1496.github.io/Pictures/MCM/01/01.jpg">
+  
+  
+  
+  <title>规划类问题 - Fabulous&#39;s little world</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"fabulous1496.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"CjZvdepCB7OjY30a6oge7W6x-gzGzoHsz","app_key":"ErsGn5pjObFn129dKnLC8esg","server_url":"https://cjzvdepc.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fabulous&#39;s little world</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/Pictures/MCM/01/01.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="规划类问题"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-01-26 23:27" pubdate>
+          2024年1月26日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          38 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">规划类问题</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="线性规划问题"><a href="#线性规划问题" class="headerlink" title="线性规划问题"></a>线性规划问题</h1><p>在人们的生产实践中，经常会遇到如何利用现有资源来安排生产以取得最大效益的问题。</p>
+<p>此类问题构成了运筹学的一个重要分支——数学规划，而LP（Linear Programming）则是其中的一个重要分支。</p>
+<h2 id="线性规划的基本形式"><a href="#线性规划的基本形式" class="headerlink" title="线性规划的基本形式"></a>线性规划的基本形式</h2><p>\begin{cases}<br>maxS &#x3D; c_{1}x_{1}+c_{2}x_{2}+\ldots+c_{n}x_{n} &#x3D; CX \ldots (1.1)\\<br>a_{11}x_{1}+a_{12}x_{2}+\ldots+a_{1n}x_{n} &#x3D; b_{1} \\<br>a_{21}x_{1}+a_{22}x_{2}+\ldots+a_{2n}x_{n} &#x3D; b_{2}  \ldots (1.2)\\<br>\ldots \\<br>a_{n1}x_{1}+a_{n2}x_{2}+\ldots+a_{nn}x_{n} &#x3D; b_{n}\\<br>\end{cases}</p>
+<p>其中，$x_{i}\ge0$ , $b_{j}\ge0$ , $(i,j)\in(1,2,\ldots,n)^2$ , $C$ , $X$表示矩阵</p>
+<p>变量 $X$ 称为决策变量，式(1.1)称为问题的目标函数，(1.2)中的几个不等式称为约束条件，记为s.t.</p>
+<p>如果目标函数是求最小值 $minZ &#x3D; CX$ ，令 $S&#x3D;-Z$，则$maxS&#x3D;-CX$。</p>
+<h2 id="线性规划问题的MATLAB求解"><a href="#线性规划问题的MATLAB求解" class="headerlink" title="线性规划问题的MATLAB求解"></a>线性规划问题的MATLAB求解</h2><p>在MATLAB中，线性规划的目标函数默认为最小值，其规范形式为：</p>
+<p>$$s.t.<br>\begin{cases}<br>Ax\le b\\<br>Aeq.x&#x3D;beq\\<br>lb\le x \le ub\\<br>\end{cases}$$</p>
+<p>其中， $c,x,b,beq,lb,ub$ 为列向量， $f$ 称为价值向量， $b$ 称为资源向量， $A,Aeq$ 为矩阵</p>
+<p>MATLAB内置函数支持三种模式的线性规划问题的求解:</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs MATLAB">[x,fval] = linprog(c,A,b)<br>[x,fval] = linprog(c,A,b,Aeq,beq)<br>[x,fval] = linprog(c,A,b,Aeq,beq,lb,ub)<br></code></pre></td></tr></table></figure>
+
+<p>其中x返回的是决策变量的取值，fval返回的是目标函数的最优值，c为价值向量，A，b对应的是线性不等式约束，Aeq，beq对应的是线性等式约束，lb和ub对应决策向量的下界和上界。</p>
+<h2 id="一道例题"><a href="#一道例题" class="headerlink" title="一道例题"></a>一道例题</h2><p>$$<br>max\ z&#x3D;2x_{1}+3x_{2}-5x_{3}<br>$$</p>
+<p>$$s.t.<br>\begin{cases}<br>x_{1}+x_{2}+x_{3}&#x3D;7\\<br>2x_{1}-5x_{2}+x_{3}\ge 10\\<br>x_{1}+3x_{2}+x_{3}\le 12\\<br>x_{1},x_{2},x_{3}\ge 0<br>\end{cases}$$</p>
+<p><strong>MATLAB代码如下：</strong></p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs MATLAB">f=[<span class="hljs-number">-2</span>;<span class="hljs-number">-3</span>;<span class="hljs-number">5</span>];<br>a=[<span class="hljs-number">-2</span>,<span class="hljs-number">5</span>,<span class="hljs-number">-1</span>;<span class="hljs-number">1</span>,<span class="hljs-number">3</span>,<span class="hljs-number">1</span>];<br>b=[<span class="hljs-number">-10</span>;<span class="hljs-number">12</span>];<br>aeq=[<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,<span class="hljs-number">1</span>];<br>beq=<span class="hljs-number">7</span>;<br>[x,y]=linprog(f,a,b,aeq,beq,<span class="hljs-built_in">zeros</span>(<span class="hljs-number">3</span>,<span class="hljs-number">1</span>));<br>x,y=-y<br></code></pre></td></tr></table></figure>
+
+
+<h2 id="可转化为线性规划的问题"><a href="#可转化为线性规划的问题" class="headerlink" title="可转化为线性规划的问题"></a>可转化为线性规划的问题</h2><p>规划问题为</p>
+<p>$$min\ \left| x_{1} \right|+\left| x_{2} \right|+ \ldots + \left| x_{n} \right|\\<br>s.t.\ Ax\le b$$</p>
+<p>其中 $x&#x3D;\begin{bmatrix}x_{1}&amp;\ldots&amp;x_{n} \end{bmatrix}^{T}$ </p>
+<p>事实上，我们可以进行如下处理：</p>
+<p>取 $$u_{i}&#x3D;\frac{x_{i}+\left| x_{i} \right|}{2}$$</p>
+<p>$$v_{i}&#x3D;\frac{-x_{i}+\left| x_{i} \right|}{2}$$</p>
+<p>这样就把上面的问题转化为了：</p>
+<p>$$<br>min\ \sum_{i&#x3D;1}^{n}(u_{i}+v_{i})<br>$$</p>
+<p>$$s.t.<br>\begin{cases}<br>A(u-v)\le b\\<br>u,v\ge 0\\<br>\end{cases}$$</p>
+<h2 id="审题到建模全过程分析"><a href="#审题到建模全过程分析" class="headerlink" title="审题到建模全过程分析"></a>审题到建模全过程分析</h2><p>市场上有n种资产 $s_{i}$ （i&#x3D;1,2,L,n） 可供选择，现用数额为M的相当大的资金作为一个时期的投资。这种n资产在这一时期内购买 $s_{i}$ 的平均收益为 $r_{i}$ ，风险损失率为 $q_{i}$ ，投资越分散，总的风险越少，总体风险可用投资的 $s_{i}$ 最大的一个风险来度量。</p>
+<p>购买 $s_{i}$ 时需要交付交易费，费率为 $p_{i}$ ，当购买额不超过给定值 $u_{i}$ 时，交易费按购买 $u_{i}$ 计算。另外，假定同期银行存款利率时 $r_{0}$ ，既无交易费又无风险。（$r_{0}$&#x3D;5%）。n&#x3D;4时，相关数据如下表：</p>
+<table>
+<thead>
+<tr>
+<th>$s_{i}$</th>
+<th>$r_{i}$(%)</th>
+<th>$q_{i}$(%)</th>
+<th>$p_{i}$(%)</th>
+<th>$u_{i}$(元)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$u_{i}$</td>
+<td>28</td>
+<td>2.5</td>
+<td>1</td>
+<td>103</td>
+</tr>
+<tr>
+<td>$s_{2}$</td>
+<td>21</td>
+<td>1.5</td>
+<td>2</td>
+<td>198</td>
+</tr>
+<tr>
+<td>$s_{3}$</td>
+<td>23</td>
+<td>5.5</td>
+<td>4.5</td>
+<td>52</td>
+</tr>
+<tr>
+<td>$s_{4}$</td>
+<td>25</td>
+<td>2.6</td>
+<td>6.5</td>
+<td>40</td>
+</tr>
+</tbody></table>
+<p>试给该公司设计一种投资组合方案，即给定资金M，有选择地购买若干种资产或存银行生息，使净收益尽可能大，使总体风险尽可能小。</p>
+<h3 id="符号规定"><a href="#符号规定" class="headerlink" title="符号规定"></a>符号规定</h3><p>$s_{i}$ 表示第i种投资项目，如股票，债券等，$i&#x3D;0,1,L,n$,其中 $s_{0}$ 指存入银行；$r_{i},p_{i},q_{i}$ 分别表示 $s_{i}$ 的平均收益率、交易费率、风险损失率，$i&#x3D;0,L,n$,其中 $p_{0}&#x3D;0,q_{0}&#x3D;0$，<br>$u_{i}$ 表示 $s_{i}$ 的交易定额，$i&#x3D;1,L,n;x_{i}$ 表示投资项目 $s_{i}$ 的资金，$i&#x3D;0,1,L,n$ ; $a$ 表示投资风险度，$Q$ 表示总体收益。</p>
+<h3 id="基本假设"><a href="#基本假设" class="headerlink" title="基本假设"></a>基本假设</h3><ol>
+<li>投资数额M相当大，假设M&#x3D;1</li>
+<li>投资越分散，总风险越小</li>
+<li>总体风险用投资项目 $s_{i}$ 中最大的一个来衡量</li>
+<li>n+1种资产之间相互独立</li>
+<li>投资期间各项利率为定值</li>
+<li>净收益和总体风险不受其他因素影响</li>
+</ol>
+<h3 id="基于假设抽象出数学模型"><a href="#基于假设抽象出数学模型" class="headerlink" title="基于假设抽象出数学模型"></a>基于假设抽象出数学模型</h3><p>1.总体风险用最大的一个来衡量，即：</p>
+<p>$$max{q_{i}x_{i}|i&#x3D;1,2,L,n}$$</p>
+<p>2.购买 $s_{i}$ 所附的交易费是一个与 $x_{i}$ 相关的函数，即：</p>
+<p>$$f(x)&#x3D;<br>\begin{cases}<br>p_{i}x_{i},x_{i}\ge u_{i} \\<br> \\<br>p_{i}u_{i},x_{i}\le u_{i} \\<br>\end{cases}$$</p>
+<p>而题目所给的定值 $u_{i}$ 相对总投资很小，所以购买 $s_{i}$ 都收益可以简化为 $(r_{i}-p_{i})x_{i}$。</p>
+<p>3.要使净收益尽可能打，总体风险尽可能小，这是一个多目标规划模型，需要转化。</p>
+<p>目标函数为：</p>
+<p>$$\begin{cases}<br>max\ \sum_{i&#x3D;0}^{n}(r_{i}-p_{i})x_{i} \\<br> \\<br>min{max{q_{i}x_{i}}}<br>\end{cases}$$</p>
+<p>约束条件为：</p>
+<p>$$\begin{cases}<br>\sum_{i&#x3D;0}^{n}(1+p_{i})x_{i}&#x3D;M \\<br> \\<br>x_{i}\ge 0,  i&#x3D;0,1,\ldots n\\<br>\end{cases}$$</p>
+<p><strong>模型一：</strong>固定风险水平，最大化优化收益</p>
+<p>给定一个风险界限a，使最大的一个风险满足条件，这样就可以找到相应的投资方案。</p>
+<p>$$<br>max\ \sum_{i&#x3D;0}^{n}(r_{i}-p_{i})x_{i}<br>$$</p>
+<p>$$s.t.<br>\begin{cases}<br>\frac{q_{i}x_{i}}{M} \le a \\<br> \\<br>\sum_{i&#x3D;0}^{n}(1+p_{i})x_{i}&#x3D;M \\<br>\end{cases}$$</p>
+<p>代入数据可得到以下公式：</p>
+<p>$$<br>min\ f&#x3D;(-0.05,-0.27,-0.19,-0.185,-0,185)(x_{0},x_{1},x_{2},x_{3},x_{4})^{T}<br>$$</p>
+<p>$$s.t.<br>\begin{cases}<br>x_{0}+1.01x_{1}+1.02x_{2}+1.045x_{3}+1.065x_{4}&#x3D;1\\<br>0.025x_{1}\le a\\<br>0.015x_{2}\le a\\<br>0.055x_{3}\le a\\<br>0.026x_{4}\le a\\<br>x_{i}\ge 0<br>\end{cases}$$</p>
+<p>由于a是任意给定的风险度，我们可以从a&#x3D;0开始，以步长 $\Delta a&#x3D;0.001$ 进行循环搜索,程序如下：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs MATLAB">clc,clear<br>a=<span class="hljs-number">0</span>;<br><span class="hljs-built_in">hold</span> on<br><span class="hljs-keyword">while</span> a&lt;<span class="hljs-number">0.05</span><br>    c=[<span class="hljs-number">-0.05</span>,<span class="hljs-number">-0.27</span>,<span class="hljs-number">-0.19</span>,<span class="hljs-number">-0.185</span>,<span class="hljs-number">-0.185</span>];<br>    A=[<span class="hljs-built_in">zeros</span>(<span class="hljs-number">4</span>,<span class="hljs-number">1</span>),<span class="hljs-built_in">diag</span>([<span class="hljs-number">0.025</span>,<span class="hljs-number">0.015</span>,<span class="hljs-number">0.055</span>,<span class="hljs-number">0.026</span>])]<br>    b=a*<span class="hljs-built_in">ones</span>(<span class="hljs-number">4</span>,<span class="hljs-number">1</span>);<br>    Aeq=[<span class="hljs-number">1</span>,<span class="hljs-number">1.01</span>,<span class="hljs-number">1.02</span>,<span class="hljs-number">1.045</span>,<span class="hljs-number">1.065</span>];<br>    beq=<span class="hljs-number">1</span>;<br>    LB=<span class="hljs-built_in">zeros</span>(<span class="hljs-number">5</span>,<span class="hljs-number">1</span>);<br>    [x,Q]=linprog(c,A,b,Aeq,beq,LB);<br>    Q=-Q;<span class="hljs-built_in">plot</span>(a,Q,<span class="hljs-string">&#x27;*k&#x27;</span>);<br>    a=a+<span class="hljs-number">0.001</span>;<br><span class="hljs-keyword">end</span><br>xlabel(<span class="hljs-string">&#x27;a&#x27;</span>),ylabel(<span class="hljs-string">&#x27;Q&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
+<p>得到如下图形<br><img src="/Pictures/MCM/01/plot01.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>分析图形可知，随着风险度提升，收益上升。其中有两个拐点我们可以重点关注：<br>a&#x3D;0.006和a&#x3D;0.025<br>可以结合接下来的模型进一步分析。</p>
+<p><strong>模型二：</strong>固定盈利水平，极小化风险</p>
+<p>$$<br>min (max {q_{i}x_{i}})<br>$$</p>
+<p>$$s.t<br>\begin{cases}<br>\sum_{i&#x3D;0}^{n}(r_{i}-p_{i})x_{i} \ge k\\<br> \\<br>\sum_{i&#x3D;0}^{n}(1+p_{i})x_{i}&#x3D;M \\<br>\end{cases}$$</p>
+<p><strong>模型三：</strong>对风险和收益赋给权重s和（1-s），s称为投资偏好系数。</p>
+<p>$$<br>min\ (s*{max{q_{i}x_{i}}}) -(1-s) \sum_{i&#x3D;0}^{n}(r_{i}-p_{i})x_{i}<br>$$</p>
+<p>$$<br>s.t.\ \sum_{i&#x3D;0}^{n}(1+p_{i})x_{i}&#x3D;M<br>$$</p>
+<h1 id="整数规划模型"><a href="#整数规划模型" class="headerlink" title="整数规划模型"></a>整数规划模型</h1><p>若数学规划中的变量（部分或全部）限制为整数时，称为整数规划。若在线性规划模型中，变量限制为整数，则称为整数线性规划（IP）。目前话没有一种方法能有效地求解一切整数规划。</p>
+<p>整数规划有下面一些特点：</p>
+<ol>
+<li>原线性规划最优解全是整数，则整数规划与线性规划最优解一致。</li>
+<li>整数规划无可行解。</li>
+<li>有可行解，但最优解变差。</li>
+<li>整数规划求最优解不能按照实数最优解简单取整所得。</li>
+</ol>
+<p>依照决策变量取证要求的不同，整数规划可分为<strong>纯整数规划、全整数规划、混合整数规划、0-1整数规划。</strong></p>
+<ul>
+<li><p>纯整数规划</p>
+<blockquote>
+<p>所有决策变量要求取非负整数。</p>
+</blockquote>
+</li>
+<li><p>全整数规划</p>
+<blockquote>
+<p>除了所有决策变量要求非负整数外，系数 $a_{ij}$ 和常数 $b_{i}$ 也要求取整数。</p>
+</blockquote>
+</li>
+<li><p>混合整数规划</p>
+<blockquote>
+<p>只有一部分决策变量要求取非负整数。</p>
+</blockquote>
+</li>
+<li><p>0-1整数规划</p>
+<blockquote>
+<p>所有决策变量只能取0或1两个整数。</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="整数线性规划的求解方法"><a href="#整数线性规划的求解方法" class="headerlink" title="整数线性规划的求解方法"></a>整数线性规划的求解方法</h2><p>设整数规划问题如下：</p>
+<p>$$<br>max\ z &#x3D; x_{1}+x_{2}<br>$$</p>
+<p>$$\begin{cases}<br>14x_{1}+9x_{2}\le 51 \\<br>-6x_{1}+3x_{2}\le 1 \\<br>x_{1},x_{2}\ge 0 且为整数 \\<br>\end{cases}$$</p>
+<p>首先不考虑整数约束，得到线性规划问题（一般称为<strong>松弛问题</strong>或<strong>伴随问题</strong>）</p>
+<p>得出图像如下：<br><img src="/Pictures/MCM/02/plot01.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>在解集内的所有整数点找出，一一带入，求出最优解，此法为完全枚举法，适用于约束条件较小的情况。</p>
+<p>目前，常用的求解整数规划的方法：<em>分枝定界法、割平面法</em>；对于特殊的0-1规划问题采用<em>隐枚举法和匈牙利算法</em>。</p>
+<h3 id="分枝定界法"><a href="#分枝定界法" class="headerlink" title="分枝定界法"></a>分枝定界法</h3><p>首先不考虑整数限制求出相应的松弛问题的最优解，若松弛问题无可行解，则ILP无可行解。</p>
+<p>若求得的松弛问题最优解符合证书要求，则是ILP的最优解。</p>
+<p>若不满足整数条件，则任选一个不满足整数条件的变量 $x_{i}^{0}$ 来构造新的约束条件添加到松弛问题中形成两个子问题（分别添加）：</p>
+<p>$$<br>x_{i}\le \left [ x_{i}^{0} \right ] ; x_{i} \ge \left [ x_{i}^{0} \right ]+1<br>$$</p>
+<p>依次在缩小的可行域中求解新构造线性规划的最优解，并重复上述过程直到子问题无解或有整数最优解。</p>
+<h3 id="割平面算法"><a href="#割平面算法" class="headerlink" title="割平面算法"></a>割平面算法</h3><p>割平面算法的基本思想：</p>
+<ul>
+<li>如果松弛问题无解，则整数规划无解</li>
+<li>如果松弛问题的最优解为整数向量，则其也是整数规划的最优解</li>
+<li>如果解含有非整数分量，则对松弛问题添加线性约束条件来进行“割平面”操作，重复操作直到求出解或无解。</li>
+</ul>
+<p>$$<br>max\ z&#x3D;x_{1}+x_{2}<br>$$</p>
+<p>$$\begin{cases}<br>-x_{1}+x_{2}\le 1 \\<br>3x_{1}+x_{2}\le 4 \\<br>x_{1},x_{2} \ge 0 且为整数<br>\end{cases}$$</p>
+<p><img src="/Pictures/MCM/02/plot02.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>此时松弛问题的最优解不是整数，故我们分析图像可知：y轴截距做平行线上面的部分无法满足整数解，故舍去，体现在约束条件为 $x_{2}\le 1$ 。</p>
+<p>对于一些问题，我们也可以利用引入松弛变量来将不等式的约束条件转化为等式约束条件。</p>
+<p>在上题，我们可以引入松弛变量 $x_{3},x_{4}$ 来将不等约束转化为等式约束：</p>
+<p>$$<br>max\ z&#x3D;x_{1}+x_{2}+0x_{3}+0x_{4}<br>$$</p>
+<p>$$\begin{cases}<br>-x_{1}+x_{2}+x_{3}&#x3D;1 \\<br>3x_{1}+x_{2}+x_{4}&#x3D;4 \\<br>x_{1},x_{2},x_{3},x_{4} \ge 0 且为整数<br>\end{cases}$$</p>
+<p>这样我们可以得到一个等式，<strong>将各变量的系数拆分为整数部分和小数部分</strong>。可以取 $x_{3},x_{4}$ 为自由变量，考虑利用线性代数的知识得出基础解系，再在基础解系中找出整数解。</p>
+<p><img src="/Pictures/MCM/02/plot03.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h3 id="匈牙利算法解决0-1规划问题"><a href="#匈牙利算法解决0-1规划问题" class="headerlink" title="匈牙利算法解决0-1规划问题"></a>匈牙利算法解决0-1规划问题</h3><p>$e.g.1$ 现有如下投资问题：</p>
+<p>有600万元投资五个项目，收益如表，求利润最大的方案</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>投资额</th>
+<th>项目收益</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>I</td>
+<td>210</td>
+<td>160</td>
+</tr>
+<tr>
+<td>II</td>
+<td>300</td>
+<td>210</td>
+</tr>
+<tr>
+<td>III</td>
+<td>150</td>
+<td>60</td>
+</tr>
+<tr>
+<td>IV</td>
+<td>130</td>
+<td>80</td>
+</tr>
+<tr>
+<td>V</td>
+<td>260</td>
+<td>180</td>
+</tr>
+</tbody></table>
+<p>约束条件：项目I、II、III中选一项；项目III、IV中选一项；项目V以项目I为先验条件。</p>
+<p>我们假设 $x_{i}&#x3D; \begin{cases} 1 ,选中第i项 \\ 0 不选第i项 \end{cases}$</p>
+<p>则可以抽象出下列模型：</p>
+<p>$$<br>max\ Z&#x3D;160x_{1}+210x_{2}+60x_{3}+80x_{4}+180x_{5}<br>$$</p>
+<p>$$s.t.<br>\begin{cases}<br>210x_{1}+300x_{2}+150x_{3}+130x_{4}+260x_{5}\le 600 \\<br>x_{1}+x_{2}+x_{3}&#x3D;1 \\<br>x_{3}+x_{4}&#x3D;1 \\<br>x_{5}\le x_{1} \\<br>x_{1},x_{2},x_{3},x_{4},x_{5}&#x3D;0 or 1\\<br>\end{cases}$$</p>
+<p>$e.g.2$ 指派问题</p>
+<p>甲乙丙丁四个人，ABCD四项工作，要求每人只能做一项工作，每项工作只由一人完成，问如何让指派总时间最短？</p>
+<table>
+<thead>
+<tr>
+<th>人员&#x2F;时间&#x2F;任务</th>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>甲</td>
+<td>3</td>
+<td>5</td>
+<td>8</td>
+<td>4</td>
+</tr>
+<tr>
+<td>乙</td>
+<td>6</td>
+<td>8</td>
+<td>5</td>
+<td>4</td>
+</tr>
+<tr>
+<td>丙</td>
+<td>2</td>
+<td>5</td>
+<td>8</td>
+<td>5</td>
+</tr>
+<tr>
+<td>丁</td>
+<td>9</td>
+<td>2</td>
+<td>5</td>
+<td>2</td>
+</tr>
+</tbody></table>
+<p>引入0-1变量 $x_{ij}$<br>$x_{ij}&#x3D;1 : 第 i 人做第 j 项工作$<br>$x_{ij}&#x3D;0 ：第 i 人不做第 j 项工作$</p>
+<p>$$<br>min\ Z&#x3D;3x_{11}+5x_{12}+8x_{13}+4x_{14}+6x_{21}+8x_{22}+5x_{23}+4x_{24}+2x_{31}+5x_{32}+8x_{33}+5x_{34}+9x_{41}+2x_{42}+5x_{43}+2x_{44}<br>$$</p>
+<p>每项任务只由一个人完成、每人只完成一项任务：每行每列之和均为1，即：<br>$$s.t.<br>\begin{cases}<br>\sum_{i&#x3D;1}^{n}x_{ij}&#x3D;1 \\<br> \\<br>\sum_{j&#x3D;1}^{n}x_{ij}&#x3D;1 \\<br> \\<br>x_{ij}&#x3D;0 or 1 \\<br>\end{cases}$$</p>
+<p>一些特殊情况的处理：</p>
+<ul>
+<li>人少工作多：添加虚拟的“人”，代价都为0</li>
+<li>人多工作少：添加虚拟的工作，代价都为0</li>
+<li>一个人可做多件工作：该人变为几个相同的“人”</li>
+<li>某工作一定不能有某人做：该人做该工作的相应代价取足够大M</li>
+</ul>
+<p><strong>指派问题的匈牙利解法的一般步骤：</strong></p>
+<ol>
+<li><p>第一步：变换指派问题的系数矩阵 $(c_{ij})$ 为 $(b_{ij})$ ，使在 $(b_{ij})$ 的各行各列中都出现0元素，即：</p>
+<ul>
+<li>从 $(c_{ij})$ 的每行元素中都减去该行的最小元素</li>
+<li>再从所得新系数矩阵的每列元素中减去该列的最小元素<blockquote>
+<p>其中， $(c_{ij})$ 为每行每列仅有一个1的矩阵</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>进行试指派，以寻求最优解</p>
+<ul>
+<li>在 $(b_{ij})$ 中尽可能寻找多的独立0元素，若能找出n个独立0元素，就以这n个独立0元素对应解矩阵 $(x_{ij})$ 中的元素为1，其余为0，这就得到最优解。</li>
+<li>从只有一个0元素的行（列）开始，给这个0元素加圈，记作 O 。然后划去 O 所在列（行）的其它0元素，记作 X ，这表示这列所代表的任务已经指派完，不需要考虑他人。</li>
+<li>给只有一个0元素的列（行）中的0元素加圈，划去所在行的0元素。</li>
+<li>重复上述步骤直到尽可能多的0元素都被圈出和划掉。</li>
+</ul>
+</li>
+<li><p>若仍有没有画圈的0元素，且同行（列）的0元素至少有两个，则从剩下0元素最少的行（列）开始，比较他们列中0元素的数量，选择0元素少的那个0元素。</p>
+</li>
+</ol>
+<p>$$\begin{bmatrix}<br>  3&amp;  8&amp;  2&amp;  10&amp;3 \\<br>  8&amp;  7&amp;  2&amp;  9&amp;7 \\<br>  6&amp;  4&amp;  2&amp;  7&amp;5 \\<br>  8&amp;  4&amp;  2&amp;  3&amp;5 \\<br>  9&amp;  10&amp;  6&amp;  9&amp;10<br>\end{bmatrix}$$</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs MATLAB">c=[<span class="hljs-number">3</span>,<span class="hljs-number">8</span>,<span class="hljs-number">2</span>,<span class="hljs-number">10</span>,<span class="hljs-number">3</span>;<span class="hljs-number">8</span>,<span class="hljs-number">7</span>,<span class="hljs-number">2</span>,<span class="hljs-number">9</span>,<span class="hljs-number">7</span>;<span class="hljs-number">6</span>,<span class="hljs-number">4</span>,<span class="hljs-number">2</span>,<span class="hljs-number">7</span>,<span class="hljs-number">5</span>;<span class="hljs-number">8</span>,<span class="hljs-number">4</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">5</span>;<span class="hljs-number">9</span>,<span class="hljs-number">10</span>,<span class="hljs-number">6</span>,<span class="hljs-number">9</span>,<span class="hljs-number">10</span>]<br>c=c(:) <span class="hljs-comment">%将矩阵转化为向量</span><br>a=<span class="hljs-built_in">zeros</span>(<span class="hljs-number">10</span>,<span class="hljs-number">25</span>);<br><span class="hljs-keyword">for</span> <span class="hljs-built_in">i</span>=<span class="hljs-number">1</span>:<span class="hljs-number">5</span><br>    a(<span class="hljs-built_in">i</span>,(<span class="hljs-built_in">i</span><span class="hljs-number">-1</span>)*<span class="hljs-number">5</span>+<span class="hljs-number">1</span>:<span class="hljs-number">5</span>*<span class="hljs-built_in">i</span>)=<span class="hljs-number">1</span>;<br>    a(<span class="hljs-number">5</span>+<span class="hljs-built_in">i</span>,<span class="hljs-built_in">i</span>:<span class="hljs-number">5</span>:<span class="hljs-number">25</span>)=<span class="hljs-number">1</span>;<br><span class="hljs-keyword">end</span>  <span class="hljs-comment">%循环将指派问题转化为线性规划问题</span><br>b=<span class="hljs-built_in">ones</span>(<span class="hljs-number">10</span>,<span class="hljs-number">1</span>);<br>[x,y]=linprog(c,[],[],a,b,<span class="hljs-built_in">zeros</span>(<span class="hljs-number">25</span>,<span class="hljs-number">1</span>),<span class="hljs-built_in">ones</span>(<span class="hljs-number">25</span>,<span class="hljs-number">1</span>));<br>X=<span class="hljs-built_in">reshape</span>(x,<span class="hljs-number">5</span>,<span class="hljs-number">5</span>)<br>opt=y<br></code></pre></td></tr></table></figure>
+
+<p>求得最优指派方案为 $x_{15}&#x3D;x_{23}&#x3D;x_{32}&#x3D;x_{44}&#x3D;x_{51}&#x3D;1$，最优值为21.</p>
+<h1 id="非线性规划"><a href="#非线性规划" class="headerlink" title="非线性规划"></a>非线性规划</h1><p>一般形式：<br>$$<br>min\ f(x)<br>$$</p>
+<p>$$s.t.<br>\begin{cases}<br>h_{j}(x)\le 0\ j&#x3D;1,2,\ldots q \\<br> \\<br>g_{i}(x) &#x3D; 0\ i&#x3D;1,2,\ldots p<br>\end{cases}$$</p>
+<p>在一组等式或不等式的约束下，求一个函数的最大值（或最小值）问题，其中至少有一个非线性函数，这类问题称之为非线性规划问题。</p>
+<h2 id="MATLAB中非线性规划的数学模型写成以下形式："><a href="#MATLAB中非线性规划的数学模型写成以下形式：" class="headerlink" title="MATLAB中非线性规划的数学模型写成以下形式："></a>MATLAB中非线性规划的数学模型写成以下形式：</h2><p>$$<br>min\ f(x)<br>$$</p>
+<p>$$s.t.<br>\begin{cases}<br>A.x\le b \\<br>Aeq.x &#x3D; beq \\<br>c(x) \le 0 \\<br>ceq(x) &#x3D; 0 \\<br>lb\le x \le ub<br>\end{cases}$$</p>
+<p>其中 $f(x)$ 是标量函数， $c(x),ceq(x)$ 是非线性向量函数。</p>
+<h2 id="二次规划"><a href="#二次规划" class="headerlink" title="二次规划"></a>二次规划</h2><p>若某非线性规划的目标函数为自变量的二次函数，约束条件又全是线性的，就称这种规划为二次规划。<br>MATLAB中二次规划的数学模型可以表述如下：<br>$$<br>min\ \frac{1}{2}x^{T}Hx+f^{T}x<br>$$</p>
+<p>$$s.t.<br>\begin{cases}<br>Ax\le b \\<br>Aeq.x&#x3D;beq \\<br>lb \le x \le ub<br>\end{cases}$$</p>
+<p>这里的H是实对称矩阵（二次型），f，b，beq，lb，ub是列向量，A，Aeq是相应维数的矩阵</p>
+<p>MATLAB中二次规划的命令是<br>[x,fval]&#x3D;quadprog(H,f,A,b,Aeq,beq,lb,ub,x0,options)</p>
+<h2 id="一道例题-1"><a href="#一道例题-1" class="headerlink" title="一道例题"></a>一道例题</h2><p>某公司有6个建筑工地要开工，每个工地的位置（用平面坐标系a，b表示，距离单位：KM）及水泥日用量d（吨）由下表给出。目前有两个临时料场位于A（5，1），B（2，7），日储量各有20吨。假设从料场导工地之间均有直线道路相连。</p>
+<ol>
+<li>试制定每天的供应计划，即从A，B两料场分别向各工地运送多少吨水泥，使总的吨千米数最小</li>
+<li>为了进一步减少吨千米数，打算舍弃两个临时料场，改建两个新的，日储量各为20吨，问应建在何处，使得节省的吨千米数最大？</li>
+</ol>
+<p>工地位置(a,b)坐标参数以及水泥日用量d</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>a</td>
+<td>1.25</td>
+<td>8.75</td>
+<td>0.5</td>
+<td>5.75</td>
+<td>3</td>
+<td>7.25</td>
+</tr>
+<tr>
+<td>b</td>
+<td>1.25</td>
+<td>0.75</td>
+<td>4.75</td>
+<td>5</td>
+<td>6.5</td>
+<td>7.25</td>
+</tr>
+<tr>
+<td>d</td>
+<td>3</td>
+<td>5</td>
+<td>4</td>
+<td>7</td>
+<td>6</td>
+<td>11</td>
+</tr>
+</tbody></table>
+<h3 id="建立模型"><a href="#建立模型" class="headerlink" title="建立模型"></a>建立模型</h3><p>我们可以记工地的位置为 $(a_{i},b_{i})$ ，水泥日用量为 $d_{i}$ ，料场的坐标为 $(x_{j},y_{j})$ 日储量为 $e_{j}$ ，从料场j向工地i的运送量为 $X_{ij}$ 。</p>
+<p>目标函数为： $min\ f&#x3D;\sum_{j&#x3D;1}^{2} \sum_{i&#x3D;1}^{6} X_{ij} \sqrt{(x_{j}-a_{i})^{2}+(y_{j}-b_{i})^{2}}$</p>
+<p>$$s.t.<br>\begin{cases}<br>\sum_{j&#x3D;1}^{2}X_{ij}&#x3D;d_{i} \\<br> \\<br>\sum_{i&#x3D;1}^{6}X_{ij}\le e_{j}<br>\end{cases}$$</p>
+<p>当启用临时料场时决策变量为 $X_{ij}$ ，<br>不用临时料场时决策变量为： $X_{ij},x_{j},y_{j}$</p>
+<hr>
+<p>来源：b站数模老哥，SJTU数模资料库。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/MCM/" class="category-chain-item">MCM</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/MCM/" class="print-no-link">#MCM</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>规划类问题</div>
+      <div>https://fabulous1496.github.io/2024/01/26/规划类问题/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Fabulous</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年1月26日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/01/28/%E5%B1%82%E6%AC%A1%E5%88%86%E6%9E%90%E6%B3%95-AHP/" title="AHP">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">AHP</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/01/26/MCM%E6%A8%A1%E5%9E%8B%E4%B8%8E%E7%AE%97%E6%B3%95/" title="MCM绪论">
+                        <span class="hidden-mobile">MCM绪论</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"CjZvdepCB7OjY30a6oge7W6x-gzGzoHsz","appKey":"ErsGn5pjObFn129dKnLC8esg","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

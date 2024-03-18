@@ -1,0 +1,990 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Fabulous">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="神经网络的构成 人工神经网络（ANN）具有自学习、自组织、较好的容错性和优良的非线性逼近能力。 在实际应用中，80%~90%的人工神经网络模型是采用误差反传算法或其变化形式的网络模型。 ANN通过数学近似映射（函数逼近）完成拟合——&gt;预测，分类——&gt;聚类分析的工作 从模型上进行拆分，神经网络包括：  神经元模型 激活函数 网络结构 工作状态 学习方式  建立和应用神经网络的步骤 网络结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BP神经网络">
+<meta property="og:url" content="https://fabulous1496.github.io/2024/01/31/BP/index.html">
+<meta property="og:site_name" content="Fabulous&#39;s little world">
+<meta property="og:description" content="神经网络的构成 人工神经网络（ANN）具有自学习、自组织、较好的容错性和优良的非线性逼近能力。 在实际应用中，80%~90%的人工神经网络模型是采用误差反传算法或其变化形式的网络模型。 ANN通过数学近似映射（函数逼近）完成拟合——&gt;预测，分类——&gt;聚类分析的工作 从模型上进行拆分，神经网络包括：  神经元模型 激活函数 网络结构 工作状态 学习方式  建立和应用神经网络的步骤 网络结">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fabulous1496.github.io/Pictures/MCM/BP/01.jpg">
+<meta property="article:published_time" content="2024-01-31T08:44:05.000Z">
+<meta property="article:modified_time" content="2024-03-10T13:29:41.300Z">
+<meta property="article:author" content="Fabulous">
+<meta property="article:tag" content="MCM">
+<meta property="article:tag" content="BP神经网络">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://fabulous1496.github.io/Pictures/MCM/BP/01.jpg">
+  
+  
+  
+  <title>BP神经网络 - Fabulous&#39;s little world</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"fabulous1496.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"CjZvdepCB7OjY30a6oge7W6x-gzGzoHsz","app_key":"ErsGn5pjObFn129dKnLC8esg","server_url":"https://cjzvdepc.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fabulous&#39;s little world</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/Pictures/MCM/BP/01.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="BP神经网络"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-01-31 16:44" pubdate>
+          2024年1月31日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          10 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">BP神经网络</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="神经网络的构成"><a href="#神经网络的构成" class="headerlink" title="神经网络的构成"></a>神经网络的构成</h1><p><img src="/Pictures/MCM/BP/plot01.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>人工神经网络（ANN）具有自学习、自组织、较好的容错性和优良的非线性逼近能力。</p>
+<p>在实际应用中，80%~90%的人工神经网络模型是采用误差反传算法或其变化形式的网络模型。</p>
+<p>ANN通过数学近似映射（函数逼近）完成拟合——&gt;预测，分类——&gt;聚类分析的工作</p>
+<p>从模型上进行拆分，神经网络包括：</p>
+<ol>
+<li>神经元模型</li>
+<li>激活函数</li>
+<li>网络结构</li>
+<li>工作状态</li>
+<li>学习方式</li>
+</ol>
+<h2 id="建立和应用神经网络的步骤"><a href="#建立和应用神经网络的步骤" class="headerlink" title="建立和应用神经网络的步骤"></a>建立和应用神经网络的步骤</h2><ol>
+<li><p>网络结构的确定</p>
+<blockquote>
+<p>包含网络的拓扑结构和每个神经元相应函数的选取。</p>
+</blockquote>
+</li>
+<li><p>权值和阈值的确定</p>
+<blockquote>
+<p>通过学习得到，利用已知的一组正确的输入输出，调整权值和阈值使得网络输出与理想输出偏差尽量小。</p>
+</blockquote>
+</li>
+<li><p>工作阶段</p>
+<blockquote>
+<p>用带有确定权重值和阈值的神经网络解决问题的过程，也叫模拟。</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="人工神经元的模型"><a href="#人工神经元的模型" class="headerlink" title="人工神经元的模型"></a>人工神经元的模型</h2><p><img src="/Pictures/MCM/BP/plot02.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<ul>
+<li>神经元输入与输出的关系为：</li>
+</ul>
+<p>$$<br>net_{i}&#x3D;\sum_{j&#x3D;1}^{n}w_{ij}x_{j}-\theta &#x3D;\sum_{j&#x3D;0}^{n}w_{ij}x_{j} \\<br>y_{i}&#x3D;f(net_{i})<br>$$</p>
+<ul>
+<li>若用X表示输入向量，W表示权重向量</li>
+</ul>
+<p>$$net_{i}&#x3D;XW,y_{i}&#x3D;f(XW)$$</p>
+<ul>
+<li>常用激活函数</li>
+</ul>
+<ol>
+<li><p>线性函数<br>$$f(x)&#x3D;kx+c$$</p>
+</li>
+<li><p>S函数<br>$$f(x)&#x3D;\frac{1}{1+e^{-ax}}$$</p>
+</li>
+<li><p>阈值函数<br>$$f(x)&#x3D;\begin{cases} T,x&gt;c\\ kx,-c\le x\le c \\ -T,x&lt;-c \end{cases}$$</p>
+</li>
+<li><p>双极S函数<br>$$f(x)&#x3D;\frac{2}{1+e^{-ax}}-1$$</p>
+</li>
+</ol>
+<h2 id="网络模型"><a href="#网络模型" class="headerlink" title="网络模型"></a>网络模型</h2><ol>
+<li><p>前馈神经网络</p>
+<blockquote>
+<p>只在训练过程会有反馈信号，而在分类过程中数据只能向前传送，直到到达输出层</p>
+</blockquote>
+</li>
+<li><p>反馈神经网络</p>
+<blockquote>
+<p>从输出到输入过程具有反馈链接的神经网络</p>
+</blockquote>
+</li>
+<li><p>自组织神经网络</p>
+<blockquote>
+<p>通过自动寻找样本中的内在规律和本质属性，自组织、自适应地改变网络参数与结构。</p>
+</blockquote>
+</li>
+</ol>
+<p><img src="/Pictures/MCM/BP/plot03.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="学习方式"><a href="#学习方式" class="headerlink" title="学习方式"></a>学习方式</h2><ol>
+<li>有监督学习</li>
+</ol>
+<p>将一组训练集送入网络，根据网络的实际输出与期望输出之间的差别来调整连接权</p>
+<ol start="2">
+<li>无监督学习</li>
+</ol>
+<p>抽取样本中蕴含的统计特征，并以神经元之间的连接权的方式存于网络中。</p>
+<p><strong>采用BP学习算法的前馈神经网络称为BP神经网络</strong></p>
+<h1 id="BP算法"><a href="#BP算法" class="headerlink" title="BP算法"></a>BP算法</h1><h2 id="BP-Back-Propagation-算法的基本原理"><a href="#BP-Back-Propagation-算法的基本原理" class="headerlink" title="BP(Back Propagation)算法的基本原理"></a>BP(Back Propagation)算法的基本原理</h2><p>利用输出后的误差来估计输出层的直接前导层的误差，再用这个误差估计更前一层的误差，获得各层的误差估计。</p>
+<p>总结来说，就是<strong>信号的正向传播&amp;误差的反向传播</strong></p>
+<h1 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h1><p>1981年生物学家发现了两类蚊子，他们测量的数据如下</p>
+<table>
+<thead>
+<tr>
+<th>翼长</th>
+<th>触角长</th>
+<th>类别</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1.78</td>
+<td>1.14</td>
+<td>Apf</td>
+</tr>
+<tr>
+<td>1.96</td>
+<td>1.18</td>
+<td>Apf</td>
+</tr>
+<tr>
+<td>1.86</td>
+<td>1.20</td>
+<td>Apf</td>
+</tr>
+<tr>
+<td>1.72</td>
+<td>1.24</td>
+<td>Af</td>
+</tr>
+<tr>
+<td>2.00</td>
+<td>1.26</td>
+<td>Apf</td>
+</tr>
+<tr>
+<td>2.00</td>
+<td>1.28</td>
+<td>Apf</td>
+</tr>
+<tr>
+<td>1.96</td>
+<td>1.30</td>
+<td>Apf</td>
+</tr>
+<tr>
+<td>1.74</td>
+<td>1.36</td>
+<td>Af</td>
+</tr>
+<tr>
+<td>1.64</td>
+<td>1.38</td>
+<td>Af</td>
+</tr>
+<tr>
+<td>1.82</td>
+<td>1.38</td>
+<td>Af</td>
+</tr>
+<tr>
+<td>1.90</td>
+<td>1.38</td>
+<td>Af</td>
+</tr>
+<tr>
+<td>1.70</td>
+<td>1.40</td>
+<td>Af</td>
+</tr>
+<tr>
+<td>1.82</td>
+<td>1.48</td>
+<td>Af</td>
+</tr>
+<tr>
+<td>1.82</td>
+<td>1.54</td>
+<td>Af</td>
+</tr>
+<tr>
+<td>2.08</td>
+<td>1.56</td>
+<td>Af</td>
+</tr>
+</tbody></table>
+<p>构建模型区分两种蚊子。</p>
+<h2 id="以触角和翼长为坐标轴作图"><a href="#以触角和翼长为坐标轴作图" class="headerlink" title="以触角和翼长为坐标轴作图"></a>以触角和翼长为坐标轴作图</h2><p>x为触角长，y为翼长</p>
+<p><img src="/Pictures/MCM/BP/plot04.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><strong>思路一：做一条直线将两类蚊子区分开</strong></p>
+<p>$$y&#x3D;1.47x-0.017$$</p>
+<p>分类规则：在直线一侧的便归为那一类。</p>
+<p><strong>思路二：将问题看为一个系统，构建一个神经网络训练模型</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd<br><span class="hljs-keyword">from</span> sklearn.model_selection <span class="hljs-keyword">import</span> train_test_split<br><span class="hljs-keyword">from</span> sklearn.tree <span class="hljs-keyword">import</span> DecisionTreeClassifier<br><span class="hljs-keyword">from</span> sklearn.metrics <span class="hljs-keyword">import</span> accuracy_score<br><br><span class="hljs-comment"># 创建数据框</span><br>data = &#123;<br>    <span class="hljs-string">&#x27;翼长&#x27;</span>: [<span class="hljs-number">1.78</span>, <span class="hljs-number">1.96</span>, <span class="hljs-number">1.86</span>, <span class="hljs-number">1.72</span>, <span class="hljs-number">2.00</span>, <span class="hljs-number">2.00</span>, <span class="hljs-number">1.96</span>, <span class="hljs-number">1.74</span>, <span class="hljs-number">1.64</span>, <span class="hljs-number">1.82</span>, <span class="hljs-number">1.90</span>, <span class="hljs-number">1.70</span>, <span class="hljs-number">1.82</span>, <span class="hljs-number">1.82</span>, <span class="hljs-number">2.08</span>],<br>    <span class="hljs-string">&#x27;触角长&#x27;</span>: [<span class="hljs-number">1.14</span>, <span class="hljs-number">1.18</span>, <span class="hljs-number">1.20</span>, <span class="hljs-number">1.24</span>, <span class="hljs-number">1.26</span>, <span class="hljs-number">1.28</span>, <span class="hljs-number">1.30</span>, <span class="hljs-number">1.36</span>, <span class="hljs-number">1.38</span>, <span class="hljs-number">1.38</span>, <span class="hljs-number">1.38</span>, <span class="hljs-number">1.40</span>, <span class="hljs-number">1.48</span>, <span class="hljs-number">1.54</span>, <span class="hljs-number">1.56</span>],<br>    <span class="hljs-string">&#x27;类别&#x27;</span>: [<span class="hljs-string">&#x27;Apf&#x27;</span>, <span class="hljs-string">&#x27;Apf&#x27;</span>, <span class="hljs-string">&#x27;Apf&#x27;</span>, <span class="hljs-string">&#x27;Af&#x27;</span>, <span class="hljs-string">&#x27;Apf&#x27;</span>, <span class="hljs-string">&#x27;Apf&#x27;</span>, <span class="hljs-string">&#x27;Apf&#x27;</span>, <span class="hljs-string">&#x27;Af&#x27;</span>, <span class="hljs-string">&#x27;Af&#x27;</span>, <span class="hljs-string">&#x27;Af&#x27;</span>, <span class="hljs-string">&#x27;Af&#x27;</span>, <span class="hljs-string">&#x27;Af&#x27;</span>, <span class="hljs-string">&#x27;Af&#x27;</span>, <span class="hljs-string">&#x27;Af&#x27;</span>, <span class="hljs-string">&#x27;Af&#x27;</span>]<br>&#125;<br>df = pd.DataFrame(data)<br><br><span class="hljs-comment"># 将类别转换为数值编码</span><br>df[<span class="hljs-string">&#x27;类别&#x27;</span>] = df[<span class="hljs-string">&#x27;类别&#x27;</span>].<span class="hljs-built_in">map</span>(&#123;<span class="hljs-string">&#x27;Apf&#x27;</span>: <span class="hljs-number">0</span>, <span class="hljs-string">&#x27;Af&#x27;</span>: <span class="hljs-number">1</span>&#125;)<br><br><span class="hljs-comment"># 准备训练集和测试集</span><br>X = df[[<span class="hljs-string">&#x27;翼长&#x27;</span>, <span class="hljs-string">&#x27;触角长&#x27;</span>]]<br>y = df[<span class="hljs-string">&#x27;类别&#x27;</span>]<br>X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="hljs-number">0.2</span>, random_state=<span class="hljs-number">42</span>)<br><br><span class="hljs-comment"># 创建并训练决策树模型</span><br>clf = DecisionTreeClassifier(random_state=<span class="hljs-number">42</span>)<br>clf.fit(X_train, y_train)<br><br><span class="hljs-comment"># 在测试集上进行预测</span><br>y_pred = clf.predict(X_test)<br><br><span class="hljs-comment"># 计算准确率</span><br>accuracy = accuracy_score(y_test, y_pred)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;准确率：&quot;</span>, accuracy)<br><br></code></pre></td></tr></table></figure>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/MCM/" class="category-chain-item">MCM</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/MCM/" class="print-no-link">#MCM</a>
+      
+        <a href="/tags/BP%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" class="print-no-link">#BP神经网络</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>BP神经网络</div>
+      <div>https://fabulous1496.github.io/2024/01/31/BP/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Fabulous</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年1月31日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/02/09/PyTorch%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" title="Pytorch基本语法">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Pytorch基本语法</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/01/31/%E5%85%83%E8%83%9E%E8%87%AA%E5%8A%A8%E6%9C%BA/" title="元胞自动机">
+                        <span class="hidden-mobile">元胞自动机</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"CjZvdepCB7OjY30a6oge7W6x-gzGzoHsz","appKey":"ErsGn5pjObFn129dKnLC8esg","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
