@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://fabulous1496.github.io/Pictures/CS61b/01/cover.jpg">
 <meta property="article:published_time" content="2024-03-15T08:34:51.000Z">
-<meta property="article:modified_time" content="2024-03-17T08:05:02.100Z">
+<meta property="article:modified_time" content="2024-03-19T13:52:24.329Z">
 <meta property="article:author" content="Fabulous">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://fabulous1496.github.io/Pictures/CS61b/01/cover.jpg">
@@ -262,7 +262,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          474 字
+          902 字
         
       </span>
     
@@ -273,7 +273,7 @@
         
         
         
-          4 分钟
+          8 分钟
         
       </span>
     
@@ -353,7 +353,26 @@
 <li>运行时间：恒定运行时间</li>
 <li>错误情况：已经 <em>init</em> 后再次执行该指令，打印错误消息：A Gitlet version-control system already exists in the current directory.</li>
 </ul>
+<h3 id="add"><a href="#add" class="headerlink" title="add"></a>add</h3><ul>
+<li>作用：将当前存在的文件副本添加到暂存区域(staging area)。如果文件的当前工作版本与当前提交中的版本相同，则不要将其暂存以进行添加。</li>
+<li>错误情况：如果文件不存在，则打印错误消息 File does not exist. 并退出而不进行任何更改。</li>
+</ul>
+<h3 id="commit"><a href="#commit" class="headerlink" title="commit"></a>commit</h3><ul>
+<li>作用：创建新的commit，并将暂存区域的文件保存为该commit的tracked，同时更新整个commit List。在完成之后清空缓存区。刚刚进行的提交成为“当前提交”，头指针现在指向它。前一个头提交是此提交的父提交。</li>
+<li>错误情况：如果没有文件已暂存，则中止。打印消息 No changes added to the commit. 每次提交都必须有一条非空消息。如果没有，则打印错误消息 Please enter a commit message.</li>
+</ul>
+<h3 id="rm"><a href="#rm" class="headerlink" title="rm"></a>rm</h3><ul>
+<li>作用：删除文件，并产生一个指示该文件已被删除的信息，传递到staging area。</li>
+<li>错误情况：如果文件既没有被暂存，也没有被头提交跟踪，则打印错误消息 No reason to remove the file.</li>
+</ul>
+<h2 id="log"><a href="#log" class="headerlink" title="log"></a>log</h2><ul>
+<li>作用：从当前头提交开始，沿着提交树向后显示每个提交的信息，直到初始提交，遵循第一个父提交链接，忽略在合并提交中找到的任何第二个父提交，最新的提交位于顶部，对于合并提交（具有两个父提交的提交），在第一个提交的正下方添加一行。格式如下：<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-operator">=</span><span class="hljs-operator">=</span><span class="hljs-operator">=</span><br><span class="hljs-keyword">commit</span> a0da1ea5a15ab613bf9961fd86f010cf74c7ee48<br><span class="hljs-type">Date</span>: Thu Nov <span class="hljs-number">9</span> <span class="hljs-number">20</span>:<span class="hljs-number">00</span>:<span class="hljs-number">05</span> <span class="hljs-number">2017</span> <span class="hljs-number">-0800</span><br>A <span class="hljs-keyword">commit</span> message.<br><br><span class="hljs-operator">=</span><span class="hljs-operator">=</span><span class="hljs-operator">=</span><br><span class="hljs-keyword">commit</span> <span class="hljs-number">3e8</span>bf1d794ca2e9ef8a4007275acf3751c7170ff<br><span class="hljs-type">Date</span>: Thu Nov <span class="hljs-number">9</span> <span class="hljs-number">17</span>:<span class="hljs-number">01</span>:<span class="hljs-number">33</span> <span class="hljs-number">2017</span> <span class="hljs-number">-0800</span><br>Another <span class="hljs-keyword">commit</span> message.<br><br><span class="hljs-operator">=</span><span class="hljs-operator">=</span><span class="hljs-operator">=</span><br><span class="hljs-keyword">commit</span> e881c9575d180a215d1a636545b8fd9abfb1d2bb<br><span class="hljs-type">Date</span>: Wed <span class="hljs-type">Dec</span> <span class="hljs-number">31</span> <span class="hljs-number">16</span>:<span class="hljs-number">00</span>:<span class="hljs-number">00</span> <span class="hljs-number">1969</span> <span class="hljs-number">-0800</span><br><span class="hljs-keyword">initial</span> <span class="hljs-keyword">commit</span><br><br><span class="hljs-operator">=</span><span class="hljs-operator">=</span><span class="hljs-operator">=</span><br><span class="hljs-keyword">commit</span> <span class="hljs-number">3e8</span>bf1d794ca2e9ef8a4007275acf3751c7170ff<br><span class="hljs-keyword">Merge</span>: <span class="hljs-number">4975</span>af1 <span class="hljs-number">2</span>c1ead1<br><span class="hljs-type">Date</span>: Sat Nov <span class="hljs-number">11</span> <span class="hljs-number">12</span>:<span class="hljs-number">30</span>:<span class="hljs-number">00</span> <span class="hljs-number">2017</span> <span class="hljs-number">-0800</span><br>Merged development <span class="hljs-keyword">into</span> master.<br></code></pre></td></tr></table></figure></li>
+</ul>
 <h1 id="My-approach"><a href="#My-approach" class="headerlink" title="My approach"></a>My approach</h1><p><img src="/Pictures/CS61b/01/Gitlet.png" srcset="/img/loading.gif" lazyload alt="Gitlet"></p>
+<p>可以看到，整个大体框架由四个部分组成。</p>
+<p>文件结构：</p>
+<p>.gitlet<br>|—commits<br>|   |—3d421e(use SHA-1)<br>|   |—4fa13b<br>|—blobs<br>|   |—2f341a<br>|—branches<br>|   |—master<br>|   |—HEAD<br>|   |—other_branch<br>|—Staging_area<br>    |—adds</p>
+<p><img src="/Pictures/CS61b/01/class_commit.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 
                 
               </div>
