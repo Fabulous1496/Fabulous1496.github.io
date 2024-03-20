@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://fabulous1496.github.io/Pictures/DL/GNN/cover.jpg">
 <meta property="article:published_time" content="2024-03-20T12:12:21.000Z">
-<meta property="article:modified_time" content="2024-03-20T15:41:36.776Z">
+<meta property="article:modified_time" content="2024-03-20T15:44:00.598Z">
 <meta property="article:author" content="Fabulous">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://fabulous1496.github.io/Pictures/DL/GNN/cover.jpg">
@@ -405,7 +405,7 @@
 <h3 id="Adding-global-representations"><a href="#Adding-global-representations" class="headerlink" title="Adding global representations"></a>Adding global representations</h3><p>到目前为止，我们描述的网络存在一个缺陷：即使我们多次应用消息传递，图中彼此相距较远的节点也可能永远无法有效地相互传输信息。</p>
 <p>对于一个节点，如果我们有 k 层，信息将最多传播 k 步。</p>
 <p>一种解决方案是让所有节点都能够相互传递信息。不幸的是，对于大型图，这很快就会变得计算成本高昂。此问题的一种解决方案是使用图 (U) 的全局表示，有时称为主节点或上下文向量，这个全局上下文向量连接到网络中的所有其他节点和边，并且可以充当它们之间传递信息的桥梁，构建整个图的表示。</p>
-<p><img src="/Pictures/DL/GNN/Gloaballayer.png" srcset="/img/loading.gif" lazyload alt="Gloaballayer"></p>
+<p><img src="/Pictures/DL/GNN/Globallayer.png" srcset="/img/loading.gif" lazyload alt="Globallayer"></p>
 <p>在这个图中，所有图属性都已经学习了表示，因此我们可以在池化期间通过调节我们感兴趣的属性相对于其余属性的信息来利用它们。例如，对于一个节点，我们可以考虑来自相邻节点的信息、连接的边和全局信息。为了使新节点嵌入所有这些可能的信息源，我们可以简单地将它们连接起来。此外，我们还可以通过线性映射将它们映射到同一空间并添加它们或应用特征调制层,这可以被认为是一种特征化注意力机制。</p>
 <h1 id="其他类型的图"><a href="#其他类型的图" class="headerlink" title="其他类型的图"></a>其他类型的图</h1><ul>
 <li>多边图：一对节点可以共享多种类型的边，当我们想要根据节点的类型对节点之间的交互进行不同的建模时，就会发生这种情况。</li>
