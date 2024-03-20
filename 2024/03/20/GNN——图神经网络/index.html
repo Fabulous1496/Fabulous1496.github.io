@@ -16,23 +16,23 @@
   <meta name="author" content="Fabulous">
   <meta name="keywords" content="">
   
-    <meta name="description" content="IntroductionT5 的基本思想是将每个 NLP 问题都视为“text-to-text”问题，即将文本作为输入并生成新的文本作为输出，这允许将相同的模型、目标、训练步骤和解码过程，直接应用于每个任务。 模型和框架称为 “Text-to-Text Transfer Transformer”——T5。 EmbeddingT5模型的结构基于传统Transformer模型。但Transformer">
+    <meta name="description" content="Graph首先，我们来了解一下什么是Graph。一般而言，图由三部分组成：  V  Vertex(or node) attributes，节点   子属性包括节点标识，节点邻居数  E Edge(or link) attributes and directions，边   子属性包括边标识，边权重。边可以包括有向边和无向边，有向边表示信息单方向流入，即从源节点流向目标节点；而无向边可以看为两个有向">
 <meta property="og:type" content="article">
-<meta property="og:title" content="T5">
-<meta property="og:url" content="https://fabulous1496.github.io/2024/03/19/T5/index.html">
+<meta property="og:title" content="GNN——图神经网络">
+<meta property="og:url" content="https://fabulous1496.github.io/2024/03/20/GNN%E2%80%94%E2%80%94%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/index.html">
 <meta property="og:site_name" content="Fabulous&#39;s little world">
-<meta property="og:description" content="IntroductionT5 的基本思想是将每个 NLP 问题都视为“text-to-text”问题，即将文本作为输入并生成新的文本作为输出，这允许将相同的模型、目标、训练步骤和解码过程，直接应用于每个任务。 模型和框架称为 “Text-to-Text Transfer Transformer”——T5。 EmbeddingT5模型的结构基于传统Transformer模型。但Transformer">
+<meta property="og:description" content="Graph首先，我们来了解一下什么是Graph。一般而言，图由三部分组成：  V  Vertex(or node) attributes，节点   子属性包括节点标识，节点邻居数  E Edge(or link) attributes and directions，边   子属性包括边标识，边权重。边可以包括有向边和无向边，有向边表示信息单方向流入，即从源节点流向目标节点；而无向边可以看为两个有向">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://fabulous1496.github.io/Pictures/DL/T5/cover.jpg">
-<meta property="article:published_time" content="2024-03-19T12:09:40.000Z">
-<meta property="article:modified_time" content="2024-03-19T12:53:06.220Z">
+<meta property="og:image" content="https://fabulous1496.github.io/Pictures/DL/GNN/cover.jpg">
+<meta property="article:published_time" content="2024-03-20T12:12:21.000Z">
+<meta property="article:modified_time" content="2024-03-20T14:17:26.597Z">
 <meta property="article:author" content="Fabulous">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://fabulous1496.github.io/Pictures/DL/T5/cover.jpg">
+<meta name="twitter:image" content="https://fabulous1496.github.io/Pictures/DL/GNN/cover.jpg">
   
   
   
-  <title>T5 - Fabulous&#39;s little world</title>
+  <title>GNN——图神经网络 - Fabulous&#39;s little world</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -233,13 +233,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/Pictures/DL/T5/cover.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('/Pictures/DL/GNN/cover.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="T5"></span>
+            <span id="subtitle" data-typed-text="GNN——图神经网络"></span>
           
         </div>
 
@@ -250,8 +250,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-03-19 20:09" pubdate>
-          2024年3月19日 晚上
+        <time datetime="2024-03-20 20:12" pubdate>
+          2024年3月20日 晚上
         </time>
       </span>
     
@@ -262,7 +262,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          844 字
+          2.4k 字
         
       </span>
     
@@ -273,7 +273,7 @@
         
         
         
-          8 分钟
+          20 分钟
         
       </span>
     
@@ -318,67 +318,85 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">T5</h1>
+            <h1 id="seo-header">GNN——图神经网络</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>T5 的基本思想是将每个 NLP 问题都视为“text-to-text”问题，即将文本作为输入并生成新的文本作为输出，这允许将相同的模型、目标、训练步骤和解码过程，直接应用于每个任务。</p>
-<p>模型和框架称为 “<strong>T</strong>ext-<strong>t</strong>o-<strong>T</strong>ext <strong>T</strong>ransfer <strong>T</strong>ransformer”——T5。</p>
-<h1 id="Embedding"><a href="#Embedding" class="headerlink" title="Embedding"></a>Embedding</h1><p>T5模型的结构基于传统Transformer模型。<br>但Transformer 使用正余弦函数的位置编码，BERT 使用的是学习到的位置嵌入，而本文使用的是相对位置嵌入。</p>
-<p>相对位置嵌入不是对每个位置使用固定的嵌入，而是根据 self-attention 机制中的“key”和“query”之间的偏移量生成不同的学习嵌入。T5将(key和query)相对位置的数值加在attention softmax之前的logits上，每个head的有自己的position embeddings，所有的层共享一套position embeddings，每一层都计算一次，让模型对位置更加敏感。</p>
-<h1 id="预训练过程"><a href="#预训练过程" class="headerlink" title="预训练过程"></a>预训练过程</h1><p><img src="/Pictures/DL/T5/4.png" srcset="/img/loading.gif" lazyload alt="tasks"></p>
-<h2 id="高层次方法（自监督的预训练方法）对比"><a href="#高层次方法（自监督的预训练方法）对比" class="headerlink" title="高层次方法（自监督的预训练方法）对比"></a>高层次方法（自监督的预训练方法）对比</h2><ol>
-<li><p>语言模型式，类 GPT-2 方式，从左到右预测</p>
-</li>
-<li><p>BERT-style式，就是像BERT一样将一部分给破坏掉，然后还原出来，其效果最好</p>
-</li>
-<li><p>Deshuffling（顺序还原）式，就是将文本打乱，然后还原出来</p>
-</li>
-</ol>
-<h2 id="掩码策略"><a href="#掩码策略" class="headerlink" title="掩码策略"></a>掩码策略</h2><ol>
-<li><p>Mask法，如现在大多模型的做法，将被破坏token换成特殊符如[M]</p>
-</li>
-<li><p>Replace span法，可以当作是把上面 Mask 法中相邻 [M] 都合成了一个特殊符，每一小段替换一个特殊符，提高计算效率，其效果最好</p>
-</li>
-<li><p>Drop法，没有替换操作，直接随机丢弃一些字符</p>
-</li>
-</ol>
-<h2 id="对文本进行多大程度的破坏"><a href="#对文本进行多大程度的破坏" class="headerlink" title="对文本进行多大程度的破坏"></a>对文本进行多大程度的破坏</h2><p>挑了 4 个值：10%，15%，25%，50%，最后发现 BERT 的 15%效果最好</p>
-<h2 id="Replace-Span"><a href="#Replace-Span" class="headerlink" title="Replace Span"></a>Replace Span</h2><p>需要决定对大概多长的小段进行破坏，于是对不同长度进行探索：2，3，5，10这四个值，最后发现3效果最好。</p>
-<h1 id="训练结论"><a href="#训练结论" class="headerlink" title="训练结论"></a>训练结论</h1><ul>
-<li>Architectures</li>
-</ul>
-<p>原始的Transformer结构表现最好</p>
-<p>encoder-decoder结构和BERT、GPT的计算量差不多</p>
-<p>共享encoder和decoder的参数没有使效果差太多</p>
-<ul>
-<li>Unsupervised objectives</li>
-</ul>
-<p>自编码和自回归的效果差不多</p>
-<p>推荐选择更短目标序列的目标函数，提高计算效率</p>
-<ul>
-<li>Datasets</li>
-</ul>
-<p>在领域内进行无监督训练可以提升一些任务的效果，但在一个小领域数据上重复训练会降低效果</p>
-<p>Large、diverse的数据集效果最好</p>
-<ul>
-<li>Training strategies</li>
-</ul>
-<p>精调时更新所有参数 &gt; 更新部分参数</p>
-<p>在多个任务上预训练之后微调 &#x3D; 无监督预训练</p>
-<ul>
-<li>Scaling</li>
-</ul>
-<p>在小模型上训练更多数据 &lt; 用少量步数训练更大的模型</p>
-<p>从一个预训练模型上微调多个模型后集成 &lt; 分开预训练+微调后集成</p>
-<h1 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h1><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs routeros">T5Block(<br>    (layer): ModuleList(<br>      (0): T5LayerSelfAttention(<br>        (SelfAttention): T5Attention(<br>          (q): Linear(<span class="hljs-attribute">in_features</span>=1024, <span class="hljs-attribute">out_features</span>=1024, <span class="hljs-attribute">bias</span>=<span class="hljs-literal">False</span>)<br>          (k): Linear(<span class="hljs-attribute">in_features</span>=1024, <span class="hljs-attribute">out_features</span>=1024, <span class="hljs-attribute">bias</span>=<span class="hljs-literal">False</span>)<br>          (v): Linear(<span class="hljs-attribute">in_features</span>=1024, <span class="hljs-attribute">out_features</span>=1024, <span class="hljs-attribute">bias</span>=<span class="hljs-literal">False</span>)<br>          (o): Linear(<span class="hljs-attribute">in_features</span>=1024, <span class="hljs-attribute">out_features</span>=1024, <span class="hljs-attribute">bias</span>=<span class="hljs-literal">False</span>)<br>        )<br>        (layer_norm): T5LayerNorm()<br>        (dropout): Dropout(<span class="hljs-attribute">p</span>=0.1, <span class="hljs-attribute">inplace</span>=<span class="hljs-literal">False</span>)<br>      )<br>      (1): T5LayerCrossAttention(<br>        (EncDecAttention): T5Attention(<br>          (q): Linear(<span class="hljs-attribute">in_features</span>=1024, <span class="hljs-attribute">out_features</span>=1024, <span class="hljs-attribute">bias</span>=<span class="hljs-literal">False</span>)<br>          (k): Linear(<span class="hljs-attribute">in_features</span>=1024, <span class="hljs-attribute">out_features</span>=1024, <span class="hljs-attribute">bias</span>=<span class="hljs-literal">False</span>)<br>          (v): Linear(<span class="hljs-attribute">in_features</span>=1024, <span class="hljs-attribute">out_features</span>=1024, <span class="hljs-attribute">bias</span>=<span class="hljs-literal">False</span>)<br>          (o): Linear(<span class="hljs-attribute">in_features</span>=1024, <span class="hljs-attribute">out_features</span>=1024, <span class="hljs-attribute">bias</span>=<span class="hljs-literal">False</span>)<br>        )<br>        (layer_norm): T5LayerNorm()<br>        (dropout): Dropout(<span class="hljs-attribute">p</span>=0.1, <span class="hljs-attribute">inplace</span>=<span class="hljs-literal">False</span>)<br>      )<br>      (2): T5LayerFF(<br>        (DenseReluDense): T5DenseReluDense(<br>          (wi): Linear(<span class="hljs-attribute">in_features</span>=1024, <span class="hljs-attribute">out_features</span>=4096, <span class="hljs-attribute">bias</span>=<span class="hljs-literal">False</span>)<br>          (wo): Linear(<span class="hljs-attribute">in_features</span>=4096, <span class="hljs-attribute">out_features</span>=1024, <span class="hljs-attribute">bias</span>=<span class="hljs-literal">False</span>)<br>          (dropout): Dropout(<span class="hljs-attribute">p</span>=0.1, <span class="hljs-attribute">inplace</span>=<span class="hljs-literal">False</span>)<br>          (relu_act): ReLU()<br>        )<br>        (layer_norm): T5LayerNorm()<br>        (dropout): Dropout(<span class="hljs-attribute">p</span>=0.1, <span class="hljs-attribute">inplace</span>=<span class="hljs-literal">False</span>)<br>      )<br>    )<br>)<br></code></pre></td></tr></table></figure>
-
-<hr>
-<p>参考：</p>
+                <h1 id="Graph"><a href="#Graph" class="headerlink" title="Graph"></a>Graph</h1><p>首先，我们来了解一下什么是<em>Graph</em>。一般而言，图由三部分组成：</p>
 <ol>
-<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/627d4643f7a7">https://www.jianshu.com/p/627d4643f7a7</a></li>
+<li><strong>V</strong>  Vertex(or node) attributes，节点</li>
 </ol>
+<p><img src="/Pictures/DL/GNN/Vertex.png" srcset="/img/loading.gif" lazyload alt="Vertex"></p>
+<p>子属性包括节点标识，节点邻居数</p>
+<ol start="2">
+<li><strong>E</strong> Edge(or link) attributes and directions，边</li>
+</ol>
+<p><img src="/Pictures/DL/GNN/Edge.png" srcset="/img/loading.gif" lazyload alt="Edge"></p>
+<p>子属性包括边标识，边权重。<br>边可以包括有向边和无向边，有向边表示信息单方向流入，即从源节点流向目标节点；而无向边可以看为两个有向边的叠加，表示信息双向流动。</p>
+<p><img src="/Pictures/DL/GNN/twoEdges.png" srcset="/img/loading.gif" lazyload alt="twoEdges"></p>
+<ol start="3">
+<li><strong>U</strong> Global(or masternode) attributes，全局信息</li>
+</ol>
+<p><img src="/Pictures/DL/GNN/Global.png" srcset="/img/loading.gif" lazyload alt="Global"></p>
+<p>子属性包括节点数，最长路径</p>
+<p>为了深入探究三者之间的关系，我们将每个节点信息、边信息和全局信息做Embedding，储存为向量形式。所以图神经网络的核心就是如何将我们想要的有效信息保存为向量以及如何建立神经网络从里面学习到有用的信息。</p>
+<p><img src="/Pictures/DL/GNN/Embedding.png" srcset="/img/loading.gif" lazyload alt="Embedding"></p>
+<h1 id="将数据转化为Graph"><a href="#将数据转化为Graph" class="headerlink" title="将数据转化为Graph"></a>将数据转化为Graph</h1><h2 id="Images-as-graphs"><a href="#Images-as-graphs" class="headerlink" title="Images as graphs"></a>Images as graphs</h2><p>我们通常将图像视为具有图像通道的矩形网格，将它们表示为数组（例如，244x244x3）。<br>在这里，我们将图像理解为一种具有规则结构的Graph：每一个像素为一个节点，储存着代表RGB值的三维向量，并通过边连接到其他的像素，所以每一个非边界像素正好有8个邻居。</p>
+<p><img src="/Pictures/DL/GNN/img2grp.png" srcset="/img/loading.gif" lazyload alt="img2grp"></p>
+<h2 id="Text-as-graphs"><a href="#Text-as-graphs" class="headerlink" title="Text as graphs"></a>Text as graphs</h2><p>我们可以通过将索引与每个字符、单词或标记相关联，并将文本表示为这些索引的序列来数字化文本，这将创建一个简单的有向图，其中每一个字符或索引都是一个系欸但，并通过边连接到其后面的节点。</p>
+<p><img src="/Pictures/DL.GNN/text.png" srcset="/img/loading.gif" lazyload alt="text"></p>
+<h2 id="Others"><a href="#Others" class="headerlink" title="Others"></a>Others</h2><p>除了上面提到的将图运用于CV和NLP领域的用法，我们还可以将图运用于其它各种数据内容中。<br>例如，我们可以将分子结构转换为图，其中每一个原子代表一个节点，每一个化学键代表一条边；<br>我们还可以将社交网络转换为图，每个人是一个节点，人与人之间的关系作为边；我们可以将论文的引文网络转换为图，将每篇论文看作一个节点，而一篇论文与另一篇论文之间的引用关系看作是一条有向边。</p>
+<h1 id="利用图进行预测"><a href="#利用图进行预测" class="headerlink" title="利用图进行预测"></a>利用图进行预测</h1><p>Graph的预测任务一般分为三种：graph-level, node-level, and edge-level.</p>
+<h2 id="Graph-level"><a href="#Graph-level" class="headerlink" title="Graph-level"></a>Graph-level</h2><p>在图级任务中，我们的目标是预测整个图的属性。例如，对于用图表表示的分子，我们可能想要预测该分子闻起来像什么，或者它是否会与与疾病有关的受体结合。</p>
+<p>我们输入不含标签的Graph，经过学习后，神经网络会输出一个带有特定标签的图。</p>
+<p><img src="/Pictures/DL.GNN/graph-level.png" srcset="/img/loading.gif" lazyload alt="graph-level"></p>
+<p>这类似于CIFAR的图片分类或者文本的标签分类问题。</p>
+<h2 id="Node-level-task"><a href="#Node-level-task" class="headerlink" title="Node-level task"></a>Node-level task</h2><p>同理，对节点的预测一般是预测节点自身的一些属性和特征。</p>
+<p>按照图像类比，节点级预测问题类似于图像分割，我们试图标记图像中每个像素的作用。对于文本，类似的任务是预测句子中每个单词的词性（例如名词、动词、副词等）。</p>
+<p><img src="/Pictures/DL.GNN/node.png" srcset="/img/loading.gif" lazyload alt="node-level"></p>
+<h2 id="Edge-level-task"><a href="#Edge-level-task" class="headerlink" title="Edge-level task"></a>Edge-level task</h2><p>对边的预测一般是预测边连接哪些节点以及信息的传递方式。</p>
+<p><img src="/Pictures/DL.GNN/edge-level.png" srcset="/img/loading.gif" lazyload alt="edge-level"></p>
+<h1 id="构建图神经网络"><a href="#构建图神经网络" class="headerlink" title="构建图神经网络"></a>构建图神经网络</h1><h2 id="图的数据结构"><a href="#图的数据结构" class="headerlink" title="图的数据结构"></a>图的数据结构</h2><p>在深度学习中，我们的数据一般以张量形式出现。对于图，最多包含四种类型的信息：节点、边、全局、连接性。</p>
+<p>前三个相对而言比较简单，例如对于每个节点，我们都可以为其分配一个索引 $i$ ，这样我们可以构建出一个特征矩阵 $N$ , $node_{n}$ 的特征就储存在矩阵 $N$ 中。</p>
+<p>困难的是如何表示图的连通性。一个直观的方式是使用邻接矩阵。</p>
+<div class="note note-info">
+            <p>邻接矩阵（Adjacency Matrix）是用来表示图的一种常见方法之一。它是一个二维矩阵，其中的行和列分别代表图中的节点，而矩阵的元素表示节点之间是否存在边。</p><p>对于一个有向图，邻接矩阵的元素 $A_{ij}$ 表示从节点 $i$ 到节点 $j$ 是否存在一条边。如果存在边，则 $A_{ij}$ 的值通常为 1 或者表示边的权重；如果不存在边，则 $A_{ij}$ 的值通常为 0 或者其他表示不存在的值。在无向图中，如果节点 $i$ 与节点 $j$ 之间有边相连，则 $A_{ij}$ 和 $A_{ji}$ 都被设为 1（或者边的权重），否则为 0。</p><p>举例来说，对于一个无向图，如果存在节点 1 和节点 2 之间的边，则对应的邻接矩阵中的元素 $A_{12}$ 和 $A_{21}$ 都会被设为 1。而如果节点 1 和节点 3 之间没有边，则对应的 $A_{13}$ 和 $A_{31}$ 元素都会被设为 0。</p>
+          </div>
+
+<p>邻接矩阵的优点是易于理解和实现，同时可以很方便地进行一些矩阵运算，比如矩阵乘法，从而在一些图算法中提供了便利。然而，对于大规模稀疏图来说，邻接矩阵会占用较多的内存空间，因为它会存储大量的零元素，因此在这种情况下，邻接表等其他数据结构可能更为高效。</p>
+<p><img src="/Pictures/DL.GNN/adjacency_matrix.png" srcset="/img/loading.gif" lazyload alt="adjacency_matrix"></p>
+<p>可以看见，表示四个节点之间的连接关系，我们就需要相当数量的矩阵来表示。</p>
+<p>另一种方式是使用邻接表。</p>
+<p><img src="/Pictures/DL.GNN/adjacency_list.png" srcset="/img/loading.gif" lazyload alt="adjacency_list"></p>
+<p>在表中，我们将每个node进行编码，然后使用一个tuple来储存两个node之间的连接关系。<br>上图中的节点、边和全局信息都可以用向量表示，而不一定只是标量。</p>
+<h2 id="图神经网络"><a href="#图神经网络" class="headerlink" title="图神经网络"></a>图神经网络</h2><p>图的描述是排列不变的矩阵格式，我们将描述使用图神经网络（GNN）来解决图预测任务。 GNN 是对图的所有属性（节点、边、全局上下文）的可优化变换，可保留图对称性（排列不变性）。</p>
+<p>GNN 采用“图输入、图输出”架构，这意味着这些模型类型接受图作为输入，将信息加载到其节点、边和全局上下文中，并逐步转换这些嵌入，而不改变输入的连接性图形。</p>
+<h3 id="The-simplest-GNN"><a href="#The-simplest-GNN" class="headerlink" title="The simplest GNN"></a>The simplest GNN</h3><p>我们利用简单的MLP来构建GNN Layer</p>
+<p><img src="/Pictures/DL.GNN/GNNlayer.png" srcset="/img/loading.gif" lazyload alt="GNNlayer"></p>
+<p>在经过多个全连接层的梯度下降和反向传播更新参数后，我们得到了一张不改变连接性但是改变节点和边、全局内容的图作为输出，我们可以使用与输入图相同的邻接表和相同数量的特征向量来描述 GNN 的输出图。</p>
+<p>与神经网络模块或层一样，我们可以将这些 GNN 层堆叠在一起，获得更好的拟合效果。</p>
+<div class="note note-info">
+            <p>多层感知机是一种常见的人工神经网络模型，由多个全连接层（Fully Connected Layer）组成，每个全连接层都包含多个神经元（或称为节点），相邻层之间的神经元之间全部连接。</p><p>在图神经网络中，MLP 通常被用作节点级别的特征转换器。具体来说，MLP 接收节点的特征作为输入，并通过多个全连接层来学习节点的新表示。这些新表示可以捕捉节点在图中的局部结构和全局信息，从而用于各种任务，如节点分类、节点预测等。</p><p>在 GNN 中，MLP 通常被应用在每个节点的特征更新过程中，以帮助节点表示学习更丰富的信息。例如，在图卷积网络（GCN）中，MLP 可以被用来对节点的邻居特征进行聚合和变换，以生成新的节点表示。在此过程中，MLP 的参数通常是可学习的，它们会通过反向传播算法来进行训练，以最大化模型的性能。</p>
+          </div>
+
+<h3 id="Pooling"><a href="#Pooling" class="headerlink" title="Pooling"></a>Pooling</h3><p>如果我们进行的只是简单的分类任务，我们只需要对每个节点的embedding（即对应的张量）应用一个线性分类器即可。</p>
+<p>但是这仅仅只利用了节点所储存的信息，并没有利用到边储存的信息和连接性。通过池化，我们可以收集边所储存的信息提供给节点进行预测。</p>
+<p>池化的过程分两步进行：</p>
+<ol>
+<li>对于要池化的每个项目，收集对应的张量并将它们连接成一个矩阵。</li>
+<li>通过求和运算来得到收集的信息张量。</li>
+</ol>
+<p><img src="/Pictures/DL.GNN/Pooling.png" srcset="/img/loading.gif" lazyload alt="Pooling"></p>
+<p>通过这种简单的叠加方式，我们可以将信息从节点传递到边或者从边传递到节点。</p>
+<p>如果我们只有节点级特征，并且需要预测全局属性，则需要将所有可用的节点信息收集在一起并聚合它们。这类似于 CNN 中的全局平均池层。对于边缘也可以进行同样的操作。</p>
+<h3 id="Passing-messages"><a href="#Passing-messages" class="headerlink" title="Passing messages"></a>Passing messages</h3><p>消息传递分三个步骤进行：</p>
+<ol>
+<li>对于每个节点，我们收集所有相邻节点的特征张量</li>
+<li>通过聚合函数（如简单的相加）聚合收集到的信息</li>
+<li>将聚合的信息通过更新函数传递</li>
+</ol>
+<p><img src="/Pictures/DL.GNN/passing.png" srcset="/img/loading.gif" lazyload alt="passing"></p>
 
                 
               </div>
@@ -417,8 +435,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>T5</div>
-      <div>https://fabulous1496.github.io/2024/03/19/T5/</div>
+      <div>GNN——图神经网络</div>
+      <div>https://fabulous1496.github.io/2024/03/20/GNN——图神经网络/</div>
     </div>
     <div class="license-meta">
       
@@ -430,7 +448,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年3月19日</div>
+          <div>2024年3月20日</div>
         </div>
       
       
@@ -474,18 +492,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/03/20/GNN%E2%80%94%E2%80%94%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" title="GNN——图神经网络">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">GNN——图神经网络</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/03/18/CNN/" title="CNN——卷积神经网络">
-                        <span class="hidden-mobile">CNN——卷积神经网络</span>
+                      <a href="/2024/03/19/T5/" title="T5">
+                        <span class="hidden-mobile">T5</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
