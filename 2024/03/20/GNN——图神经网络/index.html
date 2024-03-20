@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://fabulous1496.github.io/Pictures/DL/GNN/cover.jpg">
 <meta property="article:published_time" content="2024-03-20T12:12:21.000Z">
-<meta property="article:modified_time" content="2024-03-20T15:44:00.598Z">
+<meta property="article:modified_time" content="2024-03-20T15:47:58.523Z">
 <meta property="article:author" content="Fabulous">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://fabulous1496.github.io/Pictures/DL/GNN/cover.jpg">
@@ -356,7 +356,7 @@
 <p>按照图像类比，节点级预测问题类似于图像分割，我们试图标记图像中每个像素的作用。对于文本，类似的任务是预测句子中每个单词的词性（例如名词、动词、副词等）。</p>
 <p><img src="/Pictures/DL/GNN/node.png" srcset="/img/loading.gif" lazyload alt="node-level"></p>
 <h2 id="Edge-level-task"><a href="#Edge-level-task" class="headerlink" title="Edge-level task"></a>Edge-level task</h2><p>对边的预测一般是预测边连接哪些节点以及信息的传递方式。</p>
-<p><img src="/Pictures/DL/GNN/edge-level.png" srcset="/img/loading.gif" lazyload alt="edge-level"></p>
+<p><img src="/Pictures/DL/GNN/edge-leve.png" srcset="/img/loading.gif" lazyload alt="edge-level"></p>
 <h1 id="构建图神经网络"><a href="#构建图神经网络" class="headerlink" title="构建图神经网络"></a>构建图神经网络</h1><h2 id="图的数据结构"><a href="#图的数据结构" class="headerlink" title="图的数据结构"></a>图的数据结构</h2><p>在深度学习中，我们的数据一般以张量形式出现。对于图，最多包含四种类型的信息：节点、边、全局、连接性。</p>
 <p>前三个相对而言比较简单，例如对于每个节点，我们都可以为其分配一个索引 $i$ ，这样我们可以构建出一个特征矩阵 $N$ , $node_{n}$ 的特征就储存在矩阵 $N$ 中。</p>
 <p>困难的是如何表示图的连通性。一个直观的方式是使用邻接矩阵。</p>
