@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://fabulous1496.github.io/Pictures/CS61b/02/cover.jpg">
 <meta property="article:published_time" content="2024-02-29T11:11:27.000Z">
-<meta property="article:modified_time" content="2024-03-13T14:19:10.787Z">
+<meta property="article:modified_time" content="2024-03-25T14:13:27.499Z">
 <meta property="article:author" content="Fabulous">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://fabulous1496.github.io/Pictures/CS61b/02/cover.jpg">
@@ -262,7 +262,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          12k 字
+          14k 字
         
       </span>
     
@@ -273,7 +273,7 @@
         
         
         
-          98 分钟
+          114 分钟
         
       </span>
     
@@ -732,6 +732,36 @@
 <p>一个简单的实现：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">BST</span>&lt;Key&gt; &#123;<br>    <span class="hljs-keyword">private</span> Key key;<br>    <span class="hljs-keyword">private</span> BST left;<br>    <span class="hljs-keyword">private</span> BST right;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">BST</span><span class="hljs-params">(Key key, BST left, BST Right)</span> &#123;<br>        <span class="hljs-built_in">this</span>.key = key;<br>        <span class="hljs-built_in">this</span>.left = left;<br>        <span class="hljs-built_in">this</span>.right = right;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">BST</span><span class="hljs-params">(Key key)</span> &#123;<br>        <span class="hljs-built_in">this</span>.key = key;<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> BST <span class="hljs-title function_">find</span><span class="hljs-params">(BST T, Key key)</span> &#123;<br>        <span class="hljs-keyword">if</span>(T == <span class="hljs-literal">null</span>) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>        &#125;<br>        <span class="hljs-keyword">if</span>(T.key == key) &#123;<br>            <span class="hljs-keyword">return</span> T;<br>        &#125;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(T.key &lt; key) &#123;<br>            <span class="hljs-keyword">return</span> find(T.right, key);<br>        &#125;<br>        <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-keyword">return</span> find(T.left, key);<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> BST <span class="hljs-title function_">insert</span><span class="hljs-params">(BST T, Key ik)</span> &#123;<br>        <span class="hljs-keyword">if</span> (T == <span class="hljs-literal">null</span>) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">BST</span>(ik);<br>        &#125;<br>        <span class="hljs-keyword">if</span> (ik &lt; T.key) &#123;<br>            T.left = insert(T.left, ik);<br>        &#125;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (ik &gt; T.key) &#123;<br>            T.right = insert(T.right, ik);<br>        &#125;<br>        <span class="hljs-keyword">return</span> T;<br>    &#125;<br>    <span class="hljs-comment">// A possible version, has not been tested yet.</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> BST <span class="hljs-title function_">delete</span><span class="hljs-params">(BST T, Key dk)</span> &#123;<br>        <span class="hljs-keyword">if</span> (T == <span class="hljs-literal">null</span>) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>        &#125;<br>        <span class="hljs-keyword">if</span> (dk.equals(T.key)) &#123;<br>            <span class="hljs-comment">// Case 1: Node to be deleted has no children</span><br>            <span class="hljs-keyword">if</span> (T.left == <span class="hljs-literal">null</span> &amp;&amp; T.right == <span class="hljs-literal">null</span>) &#123;<br>                <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>            &#125;<br>            <span class="hljs-comment">// Case 2: Node to be deleted has only one child</span><br>            <span class="hljs-keyword">if</span> (T.left == <span class="hljs-literal">null</span>) &#123;<br>                <span class="hljs-keyword">return</span> T.right;<br>            &#125;<br>            <span class="hljs-keyword">if</span> (T.right == <span class="hljs-literal">null</span>) &#123;<br>                <span class="hljs-keyword">return</span> T.left;<br>            &#125;<br>            <span class="hljs-comment">// Case 3: Node to be deleted has two children</span><br>            <span class="hljs-type">Key</span> <span class="hljs-variable">minKey</span> <span class="hljs-operator">=</span> findMin(T.right);<br>            T.key = minKey;<br>            T.right = delete(T.right, minKey);<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (dk &lt; T.key) &#123;<br>            T.left = delete(T.left, dk);<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            T.right = delete(T.right, dk);<br>        &#125;<br>        <span class="hljs-keyword">return</span> T;<br>    &#125;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Key <span class="hljs-title function_">findMin</span><span class="hljs-params">(BST T)</span> &#123;<br>        <span class="hljs-keyword">while</span> (T.left != <span class="hljs-literal">null</span>) &#123;<br>            T = T.left;<br>        &#125;<br>        <span class="hljs-keyword">return</span> T.key;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
+<h2 id="Tree-traversal"><a href="#Tree-traversal" class="headerlink" title="Tree traversal"></a>Tree traversal</h2><p>对于树，我们有这样四种遍历的方式</p>
+<ol>
+<li>前序遍历（根优先遍历，即对于每个树和子树，按照根-左树-右树的顺序遍历）</li>
+<li>中序遍历（左树-根-右树）</li>
+<li>后序遍历（左树-右树-根）</li>
+<li>层次遍历（具有相同深度的称为一层）</li>
+</ol>
+<p>这里我们实现中序遍历:</p>
+<p>我们在迭代器中使用一个栈来辅助遍历。在将元素压入栈中的过程中，我们需要注意以下几点：</p>
+<ol>
+<li><p>找到左子树的最左节点：首先，我们需要找到当前节点的左子树的最左节点。这个节点是中序遍历中的第一个要访问的节点。</p>
+</li>
+<li><p>将节点压入栈中：一旦找到了左子树的最左节点，我们将该节点压入栈中。</p>
+</li>
+<li><p>更新当前节点：然后，我们将当前节点移动到其右子树。如果右子树不为空，我们继续重复步骤 1 和 2。</p>
+</li>
+<li><p>重复直到完成：我们重复执行上述步骤，直到栈为空。当栈为空时，说明 BST 中的所有节点都已经遍历完成。</p>
+</li>
+</ol>
+<p>下面是一个例子：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-code">    5</span><br><span class="hljs-code">   / \</span><br><span class="hljs-code">  3   8</span><br><span class="hljs-code"> / \ / \</span><br><span class="hljs-code">2  4 7  9</span><br></code></pre></td></tr></table></figure>
+<p>首先，我们将根节点 5 压入栈中，并且将根节点的左子树全部压入栈中，直到左子树的最左节点 2。此时，栈中的元素为 [2, 3, 5]。</p>
+<p>接着，我们开始执行迭代器的 next() 方法。在 next() 方法中，我们首先弹出栈顶节点 2，然后将其右子节点 null 压入栈中。此时，栈中的元素为 [3, 5]。</p>
+<p>继续执行 next() 方法，我们弹出栈顶节点 3，返回 3。然后，将其右子节点 4 压入栈中。此时，栈中的元素为 [4, 5]。</p>
+<p>再次执行 next() 方法，我们弹出栈顶节点 4，返回 4。此时，栈中的元素为 [5]。</p>
+<p>继续执行 next() 方法，我们弹出栈顶节点 5，返回 5。然后，将其右子节点 8 压入栈中，并将右子树的所有左子节点全部压入栈中，直到左子树的最左节点 7。此时，栈中的元素为 [7, 8]。</p>
+<p>继续执行 next() 方法，我们弹出栈顶节点 7，返回 7。然后，将其右子节点 null 压入栈中。此时，栈中的元素为 [8]。</p>
+<p>最后，我们弹出栈顶节点 8，返回 8。然后，将其右子节点 9 压入栈中，并且将右子节点的所有左子节点全部压入栈中，直到左子树的最左节点 9。此时，栈中的元素为 [9]。</p>
+<p>最终，我们执行 next() 方法，弹出栈顶节点 9，返回 9。此时，栈为空，遍历结束。</p>
+<p>通过这个过程，我们按照中序遍历的顺序遍历了二叉搜索树中的所有节点，迭代器的 next() 方法成功返回了所有节点的键值。</p>
 <h2 id="Tree-Height"><a href="#Tree-Height" class="headerlink" title="Tree Height"></a>Tree Height</h2><p>在最好情况下，search操作的时间为 $\Theta (\log{}{N})$ ，但最差情况下可以达到 $\Theta (n)$ 。</p>
 <ul>
 <li>depth: 节点与根之间的链接数</li>
@@ -834,7 +864,59 @@
 <p>为了跟踪哈希表的填充程度，我们定义了术语负载因子，它是插入的元素数量与数组总物理长度的比率。</p>
 <p>$$load \ factor&#x3D;\frac{size()}{array.length}$$</p>
 <p>对于我们的哈希表，我们将定义允许的最大负载因子。如果添加另一个键值对会导致负载因子超过指定的最大负载因子，则应调整哈希表的大小。这通常是通过将基础数组长度加倍来完成的。 Java 默认的最大负载因子是 0.75，它在合理大小的数组和减少冲突之间提供了良好的平衡。</p>
+<h1 id="Heaps-and-Priority-Queues"><a href="#Heaps-and-Priority-Queues" class="headerlink" title="Heaps and Priority Queues"></a>Heaps and Priority Queues</h1><p>在二叉搜索树BST中，我们能够高效地搜索到需要的元素，只需要 $\log{}{N}$ 的时间复杂度。如果我们更加关心快速找到最小或最大元素而不是快速搜索怎么办？</p>
+<h2 id="Priority-Queue"><a href="#Priority-Queue" class="headerlink" title="Priority Queue"></a>Priority Queue</h2><p>我们先来看优先队列的接口：在我们定义的最小优先队列中，我们只能与队列中的最小元素进行交互。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/** (Min) Priority Queue: Allowing tracking and removal of </span><br><span class="hljs-comment">  * the smallest item in a priority queue. */</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">MinPQ</span>&lt;Item&gt; &#123;<br>    <span class="hljs-comment">/** Adds the item to the priority queue. */</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">add</span><span class="hljs-params">(Item x)</span>;<br>    <span class="hljs-comment">/** Returns the smallest item in the priority queue. */</span><br>    <span class="hljs-keyword">public</span> Item <span class="hljs-title function_">getSmallest</span><span class="hljs-params">()</span>;<br>    <span class="hljs-comment">/** Removes the smallest item from the priority queue. */</span><br>    <span class="hljs-keyword">public</span> Item <span class="hljs-title function_">removeSmallest</span><span class="hljs-params">()</span>;<br>    <span class="hljs-comment">/** Returns the size of the priority queue. */</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">size</span><span class="hljs-params">()</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
+<p>我们考虑使用已经学习过的数据结构进行实现：</p>
+<ol>
+<li>Ordered Array 有序数组</li>
+<li>BST 二叉搜索树</li>
+<li>HashTable 哈希表</li>
+</ol>
+<h2 id="Heaps"><a href="#Heaps" class="headerlink" title="Heaps"></a>Heaps</h2><p>经过比较，我们发现BST具有已知的最佳运行效率。我们考虑在BST的基础上继续进行改进，可以进一步提高这些操作的运行时间效率。</p>
+<p>我们定义 Heap 的数据结构，这是一种<strong>完全二叉树</strong>，即具有：</p>
+<ol>
+<li>堆序性质（Heap Property）：在堆中，对于每个节点 i，父节点的键值小于或等于（小顶堆）或大于或等于（大顶堆）其子节点的键值。</li>
+<li>完全二叉树结构（Complete Binary Tree Structure）：堆是一种完全二叉树，即除了最底层节点，其他层的节点都是满的，最底层节点都尽可能地靠左排列。</li>
+</ol>
+<p>堆分为两种类型：最小堆和最大堆。在最小堆中，父节点的键值始终小于或等于其子节点的键值；而在最大堆中，父节点的键值始终大于或等于其子节点的键值。</p>
+<p>Java实现最小优先队列的示例代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.util.PriorityQueue;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MinPriorityQueue</span>&lt;T <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Comparable</span>&lt;T&gt;&gt; &#123;<br>    <span class="hljs-keyword">private</span> PriorityQueue&lt;T&gt; heap;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">MinPriorityQueue</span><span class="hljs-params">()</span> &#123;<br>        heap = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PriorityQueue</span>&lt;&gt;();<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">insert</span><span class="hljs-params">(T item)</span> &#123;<br>        heap.offer(item);<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> T <span class="hljs-title function_">extractMin</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> heap.poll();<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> T <span class="hljs-title function_">peekMin</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> heap.peek();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>如果不调用封装好的类，我们可以用计数器的思想实现优先级。即：计数器在每次插入项目时都会递增。最近插入的项目始终具有更高的优先级，因此它们将首先被删除。</p>
+<p>一个可能的示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.util.LinkedList;<br><span class="hljs-keyword">import</span> java.util.Queue;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">CountingPriorityQueue</span>&lt;T&gt; &#123;<br>    <span class="hljs-keyword">private</span> Queue&lt;Element&lt;T&gt;&gt; queue;<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> count;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">CountingPriorityQueue</span><span class="hljs-params">()</span> &#123;<br>        queue = <span class="hljs-keyword">new</span> <span class="hljs-title class_">LinkedList</span>&lt;&gt;();<br>        count = <span class="hljs-number">0</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">insert</span><span class="hljs-params">(T item, <span class="hljs-type">int</span> priority)</span> &#123;<br>        queue.offer(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Element</span>&lt;&gt;(item, priority, count++));<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> T <span class="hljs-title function_">extractMin</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">if</span> (queue.isEmpty())<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>        Element&lt;T&gt; minElement = queue.poll();<br>        <span class="hljs-keyword">return</span> minElement.item;<br>    &#125;<br><br>    <span class="hljs-comment">// 定义一个内部类来表示带有优先级和插入顺序的元素</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Element</span>&lt;E&gt; <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Comparable</span>&lt;Element&lt;E&gt;&gt; &#123;<br>        E item;<br>        <span class="hljs-type">int</span> priority;<br>        <span class="hljs-type">int</span> insertionOrder;<br><br>        Element(E item, <span class="hljs-type">int</span> priority, <span class="hljs-type">int</span> insertionOrder) &#123;<br>            <span class="hljs-built_in">this</span>.item = item;<br>            <span class="hljs-built_in">this</span>.priority = priority;<br>            <span class="hljs-built_in">this</span>.insertionOrder = insertionOrder;<br>        &#125;<br><br>        <span class="hljs-meta">@Override</span><br>        <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">compareTo</span><span class="hljs-params">(Element&lt;E&gt; other)</span> &#123;<br>            <span class="hljs-keyword">if</span> (<span class="hljs-built_in">this</span>.priority != other.priority) &#123;<br>                <span class="hljs-keyword">return</span> Integer.compare(<span class="hljs-built_in">this</span>.priority, other.priority);<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                <span class="hljs-keyword">return</span> Integer.compare(<span class="hljs-built_in">this</span>.insertionOrder, other.insertionOrder);<br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>一般而言，Heap有如下的性质使得它能很方便地实现优先队列的数据结构：</p>
+<ol>
+<li><p>高效的插入和删除操作：堆的插入和删除操作的时间复杂度为 $O(log n)$ ，其中n是堆中元素的数量。这使得堆非常适合用于实现优先队列，因为在优先队列中，我们经常需要插入和删除元素。</p>
+</li>
+<li><p>快速访问最小（或最大）元素：堆允许在常数时间内 $O(1)$ 访问堆顶元素，这是因为堆的根节点始终是最小（或最大）的元素。这对于优先队列来说非常重要，因为我们经常需要知道当前队列中优先级最高的元素。</p>
+</li>
+<li><p>自动维护顺序：堆具有自我调整的性质，即在插入或删除元素后，堆会自动调整其结构以保持堆的性质。这意味着我们不需要手动维护堆的顺序，从而简化了代码实现。</p>
+</li>
+<li><p>支持动态大小：堆可以动态地调整大小，因此可以容纳任意数量的元素。这使得堆非常适合用于实现优先队列，因为我们通常不知道在队列中需要存储多少元素。</p>
+</li>
+</ol>
+<p>一些有意思的点：<br>按降序排序的数组是最大堆（根是最大值，值按级别顺序递减）。</p>
+<h1 id="Graph"><a href="#Graph" class="headerlink" title="Graph"></a>Graph</h1><p>一般来说，图由两部分组成：</p>
+<ol>
+<li>一组节点</li>
+<li>一组边，有向或无向</li>
+</ol>
+<p>所有树也是图，但并非所有图都是树。</p>
+<p>对于图，我们一般考虑下列问题：</p>
+<ol>
+<li>路径：顶点 s 和 t 之间是否存在路径？</li>
+<li>连通性：图是否连通，即所有顶点之间是否存在路径？</li>
+<li>双连通性：是否存在删除某个顶点会断开图的连接？</li>
+<li>最短 s-t 路径：顶点 s 和 t 之间的最短路径是多少？</li>
+<li>环路检测：图表中是否存在环路？</li>
+<li>同构：两个图是否同构（同构图）？</li>
+</ol>
+<p>总体来说，最根本的还是一个问题：我们如何遍历图？</p>
+<h2 id="Graph-traversal"><a href="#Graph-traversal" class="headerlink" title="Graph traversal"></a>Graph traversal</h2>
                 
               </div>
             
