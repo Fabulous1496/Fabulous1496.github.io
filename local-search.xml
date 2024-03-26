@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>梯度下降与反向传播</title>
+    <link href="/2024/03/26/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E4%B8%8E%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD/"/>
+    <url>/2024/03/26/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E4%B8%8E%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD/</url>
+    
+    <content type="html"><![CDATA[<h1 id="数学背景"><a href="#数学背景" class="headerlink" title="数学背景"></a>数学背景</h1><h2 id="矩阵的导数运算"><a href="#矩阵的导数运算" class="headerlink" title="矩阵的导数运算"></a>矩阵的导数运算</h2><p>对于一个多元函数 $f(x_{1}, x_{2}, \ldots, x_{n})$ ，我们定义：<br>$$<br>\vec{x} &#x3D; \begin{bmatrix} x_{1}\\ x_{2} \\ \ldots \\ x_{n} \end{bmatrix} \qquad<br>\frac{\partial f(\vec{x})}{\partial \vec{x}} &#x3D;<br>\begin{bmatrix}<br>\frac{\partial f(\vec{x})}{x_{1}} \\<br>\frac{\partial f(\vec{x})}{x_{2}} \\<br>\ldots \\<br>\frac{\partial f(\vec{x})}{x_{n}}<br>\end{bmatrix}<br>$$</p><p>这种方式将偏导数的结果排列为 $n\times 1$ 的列向量，行数与分母相同，称为分母布局（Denominator Layout）。</p><p>同理，如果我们将结果排列为 $1 \times n$ 的行向量，行数与分子相同，则称为分子布局（Numerator Layout）。</p><p>$$<br>\frac{\partial f(\vec{x})}{\partial \vec{x}} &#x3D;<br>\begin{bmatrix}<br>\frac{\partial f(\vec{x})}{x_{1}} &amp;<br>\frac{\partial f(\vec{x})}{x_{2}} &amp;<br>\ldots &amp;<br>\frac{\partial f(\vec{x})}{x_{n}}<br>\end{bmatrix}<br>$$</p><h2 id="Jacobi-Matirx"><a href="#Jacobi-Matirx" class="headerlink" title="Jacobi Matirx"></a>Jacobi Matirx</h2><p>我们假设 $F&#x3D;F(f_{1}, f_{2}, \ldots, f_{m})$ ，其中 $f_{i}$ 是一个关于向量 $\vec{x} &#x3D; \begin{bmatrix} x_{1}\\ x_{2} \\ \ldots \\ x_{n} \end{bmatrix}$ 的多元函数。</p><p>我们记 $\vec{f}&#x3D; \begin{bmatrix} f_{1}\\ f_{2} \\ \ldots \\ f_{m} \end{bmatrix}$ ，那么偏导数可以记为：<br>$$<br>\frac{\partial F(\vec{f})}{\partial \vec{f}} &#x3D;<br>\begin{bmatrix}<br>\frac{\partial f_{1}(\vec{x})}{x_{1}} &amp;\frac{\partial f_{1}(\vec{x})}{x_{2}} &amp;\ldots &amp;\frac{\partial f_{1}(\vec{x})}{x_{n}}\\<br>\frac{\partial f_{2}(\vec{x})}{x_{1}} &amp;\frac{\partial f_{2}(\vec{x})}{x_{2}} &amp;\ldots &amp;\frac{\partial f_{2}(\vec{x})}{x_{n}}\\<br>\ldots &amp; &amp; &amp;\ldots \\<br>\frac{\partial f_{m}(\vec{x})}{x_{1}} &amp;\frac{\partial f_{m}(\vec{x})}{x_{2}} &amp;\ldots &amp;\frac{\partial f_{m}(\vec{x})}{x_{n}}\\<br>\end{bmatrix}<br>$$</p><p>这个矩阵就是我们所说的 Jacobi Matrix ， 记为 $J_{F}(x_{1},\ldots,x_{n})$ 或者 $\frac{\partial (f_{1},\ldots,f_{m})}{\partial (x_{1},\ldots,x_{n})}$</p><p>一般用于求向量值函数的导数。</p><h2 id="梯度"><a href="#梯度" class="headerlink" title="梯度"></a>梯度</h2><p>记相对于 $n\times 1$ 向量 $\vec{x}$ 的 Hamilton算子<br>$$<br>\nabla_{x}&#x3D;\frac{\partial}{\partial \vec{x}}&#x3D;\begin{bmatrix} \frac{\partial}{\partial x_{1}},&amp;\frac{\partial}{\partial x_{2}},&amp;\ldots,&amp;\frac{\partial}{\partial x_{n}} \end{bmatrix}^{T}<br>$$</p><p>因此， $n\times 1$ 实向量为变元的实标量函数 $f(\vec{x})$ 相对于 $\vec{x}$ 的梯度为一个 $n\times 1$ 的向量:<br>$$<br>\nabla_{x}f(\vec{x})&#x3D;\frac{\partial f(\vec{x})}{\partial \vec{x}}&#x3D;\begin{bmatrix} \frac{\partial f(\vec{x})}{\partial x_{1}},&amp;\frac{\partial f(\vec{x})}{\partial x_{2}},&amp;\ldots,&amp;\frac{\partial f(\vec{x})}{\partial x_{n}} \end{bmatrix}^{T}<br>$$</p><p>同理，对于一个 $1\times n$ 的行向量，我们得到的梯度矩阵也是一个 $1\times n$ 的行向量。</p><p>以此类推，我们得到对于一个 $m\times 1$ 的向量函数 $\mathbf{f} (\vec{x})&#x3D;y&#x3D;\begin{bmatrix} y_{1},&amp;y_{2},&amp;\ldots ,&amp;y_{m} \end{bmatrix}$ ，其中 $y_{1}$ 是关于向量 $\vec{x}$ 的标量函数，梯度矩阵便是 向量函数的Jacobi矩阵。</p><h2 id="常用结论"><a href="#常用结论" class="headerlink" title="常用结论"></a>常用结论</h2><ol><li>若 $\mathbf{f}(\mathbf{x})&#x3D;\begin{bmatrix} x_{1}, &amp;x_{2},&amp;\ldots,&amp;x_{n} \end{bmatrix}$  ,则： $\frac{\partial \mathbf{x^{T}}}{\partial \mathbf{x}}&#x3D;\mathbf{I}$ 。</li></ol><h1 id="梯度下降算法"><a href="#梯度下降算法" class="headerlink" title="梯度下降算法"></a>梯度下降算法</h1>]]></content>
+    
+    
+    <categories>
+      
+      <category>Deep Learning</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>GNN——图神经网络</title>
     <link href="/2024/03/20/GNN%E2%80%94%E2%80%94%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/"/>
     <url>/2024/03/20/GNN%E2%80%94%E2%80%94%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</url>
