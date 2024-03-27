@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://fabulous1496.github.io/Pictures/CS61b/02/cover.jpg">
 <meta property="article:published_time" content="2024-02-29T11:11:27.000Z">
-<meta property="article:modified_time" content="2024-03-26T08:44:28.964Z">
+<meta property="article:modified_time" content="2024-03-27T14:13:21.195Z">
 <meta property="article:author" content="Fabulous">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://fabulous1496.github.io/Pictures/CS61b/02/cover.jpg">
@@ -262,7 +262,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          14k 字
+          16k 字
         
       </span>
     
@@ -273,7 +273,7 @@
         
         
         
-          120 分钟
+          136 分钟
         
       </span>
     
@@ -941,6 +941,73 @@
 <h2 id="Graph-Representing"><a href="#Graph-Representing" class="headerlink" title="Graph Representing"></a>Graph Representing</h2><p>表示图的方式有很多，常见的是用邻接矩阵(Adjacency Matrix)和邻接表(Adjacency Lists)。</p>
 <h3 id="Adjacency-Matrix"><a href="#Adjacency-Matrix" class="headerlink" title="Adjacency Matrix"></a>Adjacency Matrix</h3><p>使用二维数组。有一条边将顶点 s 连接到 t ，前提是相应的单元格是 1 （表示 true ）。请注意，如果图是无向的，则邻接矩阵将在其对角线上（从左上角到右下角）对称。  </p>
 <h3 id="Adjacency-Lists"><a href="#Adjacency-Lists" class="headerlink" title="Adjacency Lists"></a>Adjacency Lists</h3><p>维护一个列表数组，按顶点号索引。如果存在从 s 到 t 的边，则数组索引 s 处的列表将包含 t 。</p>
+<h2 id="Shortest-Paths–Dijkstra’s-Algorithm"><a href="#Shortest-Paths–Dijkstra’s-Algorithm" class="headerlink" title="Shortest Paths–Dijkstra’s Algorithm"></a>Shortest Paths–Dijkstra’s Algorithm</h2><p>Dijkstra算法是计算机科学中的一种流行算法，用于在图中找到节点之间的最短路径，特别是在具有非负边权重的图中。<br>该算法通过迭代地选择从源节点开始的已知距离最小的节点，并在发现更短路径时更新其相邻节点的距离来运作。它通过维护一个优先队列（通常用最小堆实现）来高效地选择下一个要探索的节点。</p>
+<p>以下是Dijkstra算法的步骤概述：</p>
+<ol>
+<li><p>初始化： 将源节点的距离设置为0，将所有其他节点的距离设置为无穷大。初始化一个空的优先队列（或最小堆），用于按距离排序的节点。</p>
+</li>
+<li><p>选择下一个节点： 从优先队列中提取具有最小距离的节点。最初，这将是源节点。</p>
+</li>
+<li><p>更新相邻节点： 对于当前节点的每个相邻节点，计算通过当前节点到源节点的距离。如果此距离比先前已知的距离更短，则更新相邻节点的距离并更新其父节点（找到最短路径的节点）。将更新后的相邻节点插入优先队列。</p>
+</li>
+<li><p>重复： 重复步骤2和3，直到所有节点都被处理或达到目标节点。</p>
+</li>
+<li><p>最短路径重建： 一旦到达目标节点或所有节点都已处理，就可以通过在算法执行过程中存储的父指针回溯从目标节点到源节点，重建从源到目标的最短路径。</p>
+</li>
+</ol>
+<p>下面是一个可能的伪代码实现：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">Dijkstra</span>(<span class="hljs-params">graph, source</span>):<br>    dist[source] = <span class="hljs-number">0</span> // 到源节点的距离为<span class="hljs-number">0</span><br>    <span class="hljs-keyword">for</span> each vertex v <span class="hljs-keyword">in</span> graph:<br>        <span class="hljs-keyword">if</span> v ≠ source:<br>            dist[v] = ∞ // 到其他节点的距离初始化为无穷大<br>        add v to priority queue <span class="hljs-keyword">with</span> priority dist[v]<br>    <br>    <span class="hljs-keyword">while</span> priority queue <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> empty:<br>        u = remove vertex <span class="hljs-keyword">with</span> minimum dist[u] <span class="hljs-keyword">from</span> priority queue<br>        <span class="hljs-keyword">for</span> each neighbor v of u:<br>            alt = dist[u] + weight(u, v) // 计算通过u到达v的距离<br>            <span class="hljs-keyword">if</span> alt &lt; dist[v]: // 如果通过u到达v的距离更短<br>                dist[v] = alt // 更新到v的最短距离<br>                update priority queue <span class="hljs-keyword">with</span> new priority dist[v] // 更新优先队列中v的优先级<br></code></pre></td></tr></table></figure>
+
+<h1 id="Minimum-Spanning-Trees"><a href="#Minimum-Spanning-Trees" class="headerlink" title="Minimum Spanning Trees"></a>Minimum Spanning Trees</h1><p>最小生成树（Minimum Spanning Tree，MST）是一种在连通加权图中找到的特殊树形结构，它包含了图中的所有顶点，并且是一个树，没有环路，同时权重之和最小。</p>
+<p>割集（Cut Set）是指一个图中的边集合，当这些边被移除后，原本连通的图被分割成两个或多个不相连的子图。换句话说，割集是一组边，它们的移除会使得图中的顶点失去连接，导致图分裂成多个连通分量。</p>
+<p>连支（Connected Components）是指图中的一组顶点，它们之间有路径相连，并且没有其他的顶点与这些顶点相连。连支是由顶点组成的集合，用于描述图的连通性。</p>
+<p>寻找连通图的最小生成树，一般而言有两种算法，均基于贪心思想：</p>
+<ol>
+<li>Kruskal 算法</li>
+<li>Prim 算法</li>
+</ol>
+<p>时间复杂度均为 $O(E\log{}{V})$ 。</p>
+<h2 id="Prim’s-Algorithm"><a href="#Prim’s-Algorithm" class="headerlink" title="Prim’s Algorithm"></a>Prim’s Algorithm</h2><p>基本思想：<br>Prim 算法也是一种贪心策略，从一个初始顶点开始，逐步扩展最小生成树，每次选择与当前最小生成树相连的权重最小的边，并且不会形成环路。</p>
+<p>Prim 算法在稠密图中效果更好，适用于边的数量与顶点数量相当的情况。</p>
+<p>步骤：</p>
+<ol>
+<li>选择一个起始顶点作为初始树。</li>
+<li>将与初始树相连的边加入候选边集合中。</li>
+<li>从候选边集合中选择权重最小的边，将其加入最小生成树，并将其所连接的顶点加入最小生成树的顶点集合中。</li>
+<li>重复步骤3，直到最小生成树包含了图中的所有顶点。</li>
+</ol>
+<h2 id="Kruskal’s-Algorithm"><a href="#Kruskal’s-Algorithm" class="headerlink" title="Kruskal’s Algorithm"></a>Kruskal’s Algorithm</h2><p>基本思想：<br>Kruskal 算法基于贪心策略，每次选择权重最小的边，如果这条边不形成环路，则将其加入最小生成树。</p>
+<p>Kruskal 算法对于稀疏图效果较好，适用于边的数量远远大于顶点数量的情况。</p>
+<p>步骤：</p>
+<ol>
+<li>将图中的所有边按照权重从小到大排序。</li>
+<li>依次从排序后的边集合中选取边，如果选取的边不会形成环路（即加入这条边后不会出现环路），则将其加入最小生成树。</li>
+<li>重复步骤2，直到最小生成树中包含了图中的所有顶点为止。</li>
+</ol>
+<h1 id="Mutidimensional-Data"><a href="#Mutidimensional-Data" class="headerlink" title="Mutidimensional Data"></a>Mutidimensional Data</h1><p>对于一维数据的存储，我们有十分简便的比较大小的方式。但是对于二维乃至于多维的数据，如果我们想要分类，一个依据是每个维度进行大小的比较，这时候就需要增加树的节点个数来表示不同的区间。</p>
+<h2 id="Quadtree"><a href="#Quadtree" class="headerlink" title="Quadtree"></a>Quadtree</h2><p>四叉树（Quadtree）是一种用于表示二维空间的树形数据结构，它将二维空间递归地划分为四个象限，每个象限可以继续划分为四个子象限，以此类推。四叉树常用于表示和管理二维数据。</p>
+<ol>
+<li>空间划分：四叉树将二维空间划分为四个象限：左上、右上、左下、右下。每个象限可以继续划分为四个子象限，以此类推，直到达到某个终止条件。</li>
+<li>节点结构：四叉树的节点包含四个指针，分别指向其四个子节点。如果一个节点没有子节点，则称为叶子节点。叶子节点通常包含相应区域内的数据。</li>
+<li>查询操作：四叉树可以快速进行区域查询和范围查询。区域查询用于查找落在给定区域内的所有数据点，而范围查询用于查找与给定点距离不超过一定范围内的所有数据点。</li>
+<li>空间分析：四叉树可以用于进行空间分析，如判断两个区域是否相交、计算区域的面积、查找最近邻点等。</li>
+</ol>
+<h2 id="K-D-Trees"><a href="#K-D-Trees" class="headerlink" title="K-D Trees"></a>K-D Trees</h2><p>KD 树（K-Dimensional Tree）是一种二叉树数据结构，用于对 k 维空间中的数据进行分割和组织。KD 树常被用于对多维数据进行搜索、范围查询和最近邻搜索等操作。</p>
+<ol>
+<li>空间划分：KD 树通过递归地将 k 维空间划分为轴对齐的超矩形区域。每个节点代表一个超矩形区域，其子节点对应于该区域被分割后的子区域。</li>
+<li>轴选择：在构建 KD 树时，每次选择一个坐标轴作为切分的依据。通常，轴的选择是交替进行的，比如在二维空间中就是交替选择 x 轴和 y 轴。</li>
+<li>节点结构：KD 树的节点包含一个数据点以及指向左右子节点的指针。根据选择的切分轴，左子节点的数据点在该轴上小于当前节点的值，右子节点的数据点在该轴上大于当前节点的值。</li>
+<li>搜索操作：KD 树可以用于范围查询和最近邻搜索。范围查询用于查找落在给定超矩形区域内的所有数据点，最近邻搜索用于查找离给定点最近的数据点。</li>
+</ol>
+<p>构建 KD 树的步骤：</p>
+<ol>
+<li>选择初始轴（通常是坐标轴）。</li>
+<li>根据选定的轴，找到中位数，将数据集分为两部分。</li>
+<li>递归地构建左右子树，重复步骤 1 和步骤 2，直到每个区域只包含一个数据点为止。</li>
+</ol>
+<p>最近邻搜索算法（Nearest Neighbor Search）：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">def</span> <span class="hljs-title function_">NNS</span>(<span class="hljs-params">root, target</span>):<br>    best_node = <span class="hljs-literal">None</span><br>    best_distance = <span class="hljs-built_in">float</span>(<span class="hljs-string">&#x27;inf&#x27;</span>)<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">nearest</span>(<span class="hljs-params">node</span>):<br>        <span class="hljs-keyword">if</span> node = <span class="hljs-literal">None</span>:<br>            <span class="hljs-keyword">return</span><br>        axis = node.axis<br>        <span class="hljs-comment"># 这里的distance一般指欧氏距离</span><br>        current_distance = distance(node, target)<br>        <span class="hljs-keyword">if</span> current_distance &lt; best_distance:<br>            best_node = node<br>            best_distance = current_distance<br>        <span class="hljs-keyword">elif</span> target[axis] &lt; node[axis]:<br>            nearest(node.left)<br>            <span class="hljs-keyword">if</span> target[axis] + best_distance &gt;= node[axis]:<br>                nearest(node.right)<br>        <span class="hljs-keyword">else</span>:<br>            nearest(node.right)<br>            <span class="hljs-keyword">if</span> target[axis] - best_distance &lt;= node[axis]:<br>                nearest(node.left)<br></code></pre></td></tr></table></figure>
+
 
                 
               </div>
