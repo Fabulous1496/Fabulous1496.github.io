@@ -16,23 +16,23 @@
   <meta name="author" content="Fabulous">
   <meta name="keywords" content="">
   
-    <meta name="description" content="数学背景矩阵的导数运算对于一个多元函数 $f(x_{1}, x_{2}, \ldots, x_{n})$ ，我们定义：$$\vec{x} &#x3D; \begin{bmatrix} x_{1}\\ x_{2} \\ \ldots \\ x_{n} \end{bmatrix} \qquad\frac{\partial f(\vec{x})}{\partial \vec{x}} &#x3D;\beg">
+    <meta name="description" content="本篇主要记录在学习课程CMU15-213(version:sp23)以及配套教材CS:APP中的总结、梳理、拓展以及个人感想。lab的代码部分更新于Github。 Overview对应CS:APP第一章 让我们从详细理解一段代码的生命周期开始深入了解计算机在这一过程中完成了哪些操作。 1234567#include &lt;stdio.h&gt;int main() &#123;    print">
 <meta property="og:type" content="article">
-<meta property="og:title" content="梯度下降与反向传播">
-<meta property="og:url" content="https://fabulous1496.github.io/2024/03/26/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E4%B8%8E%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD/index.html">
+<meta property="og:title" content="CMU15-213">
+<meta property="og:url" content="https://fabulous1496.github.io/2024/06/25/CMU15-213/index.html">
 <meta property="og:site_name" content="Fabulous&#39;s little world">
-<meta property="og:description" content="数学背景矩阵的导数运算对于一个多元函数 $f(x_{1}, x_{2}, \ldots, x_{n})$ ，我们定义：$$\vec{x} &#x3D; \begin{bmatrix} x_{1}\\ x_{2} \\ \ldots \\ x_{n} \end{bmatrix} \qquad\frac{\partial f(\vec{x})}{\partial \vec{x}} &#x3D;\beg">
+<meta property="og:description" content="本篇主要记录在学习课程CMU15-213(version:sp23)以及配套教材CS:APP中的总结、梳理、拓展以及个人感想。lab的代码部分更新于Github。 Overview对应CS:APP第一章 让我们从详细理解一段代码的生命周期开始深入了解计算机在这一过程中完成了哪些操作。 1234567#include &lt;stdio.h&gt;int main() &#123;    print">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://fabulous1496.github.io/Pictures/DL/grad/cover.jpg">
-<meta property="article:published_time" content="2024-03-26T11:12:33.000Z">
-<meta property="article:modified_time" content="2024-03-26T12:54:09.506Z">
+<meta property="og:image" content="https://fabulous1496.github.io/Pictures/CMU15-213/cover.jpg">
+<meta property="article:published_time" content="2024-06-25T13:11:49.000Z">
+<meta property="article:modified_time" content="2024-06-27T15:05:01.979Z">
 <meta property="article:author" content="Fabulous">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://fabulous1496.github.io/Pictures/DL/grad/cover.jpg">
+<meta name="twitter:image" content="https://fabulous1496.github.io/Pictures/CMU15-213/cover.jpg">
   
   
   
-  <title>梯度下降与反向传播 - Fabulous&#39;s little world</title>
+  <title>CMU15-213 - Fabulous&#39;s little world</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -233,13 +233,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/Pictures/DL/grad/cover.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('/Pictures/CMU15-213/cover.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="梯度下降与反向传播"></span>
+            <span id="subtitle" data-typed-text="CMU15-213"></span>
           
         </div>
 
@@ -250,8 +250,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-03-26 19:12" pubdate>
-          2024年3月26日 晚上
+        <time datetime="2024-06-25 21:11" pubdate>
+          2024年6月25日 晚上
         </time>
       </span>
     
@@ -262,7 +262,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          655 字
+          1.3k 字
         
       </span>
     
@@ -273,7 +273,7 @@
         
         
         
-          6 分钟
+          12 分钟
         
       </span>
     
@@ -318,27 +318,60 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">梯度下降与反向传播</h1>
+            <h1 id="seo-header">CMU15-213</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="数学背景"><a href="#数学背景" class="headerlink" title="数学背景"></a>数学背景</h1><h2 id="矩阵的导数运算"><a href="#矩阵的导数运算" class="headerlink" title="矩阵的导数运算"></a>矩阵的导数运算</h2><p>对于一个多元函数 $f(x_{1}, x_{2}, \ldots, x_{n})$ ，我们定义：<br>$$<br>\vec{x} &#x3D; \begin{bmatrix} x_{1}\\ x_{2} \\ \ldots \\ x_{n} \end{bmatrix} \qquad<br>\frac{\partial f(\vec{x})}{\partial \vec{x}} &#x3D;<br>\begin{bmatrix}<br>\frac{\partial f(\vec{x})}{x_{1}} \\<br>\frac{\partial f(\vec{x})}{x_{2}} \\<br>\ldots \\<br>\frac{\partial f(\vec{x})}{x_{n}}<br>\end{bmatrix}<br>$$</p>
-<p>这种方式将偏导数的结果排列为 $n\times 1$ 的列向量，行数与分母相同，称为分母布局（Denominator Layout）。</p>
-<p>同理，如果我们将结果排列为 $1 \times n$ 的行向量，行数与分子相同，则称为分子布局（Numerator Layout）。</p>
-<p>$$<br>\frac{\partial f(\vec{x})}{\partial \vec{x}} &#x3D;<br>\begin{bmatrix}<br>\frac{\partial f(\vec{x})}{x_{1}} &amp;<br>\frac{\partial f(\vec{x})}{x_{2}} &amp;<br>\ldots &amp;<br>\frac{\partial f(\vec{x})}{x_{n}}<br>\end{bmatrix}<br>$$</p>
-<h2 id="Jacobi-Matirx"><a href="#Jacobi-Matirx" class="headerlink" title="Jacobi Matirx"></a>Jacobi Matirx</h2><p>我们假设 $F&#x3D;F(f_{1}, f_{2}, \ldots, f_{m})$ ，其中 $f_{i}$ 是一个关于向量 $\vec{x} &#x3D; \begin{bmatrix} x_{1}\\ x_{2} \\ \ldots \\ x_{n} \end{bmatrix}$ 的多元函数。</p>
-<p>我们记 $\vec{f}&#x3D; \begin{bmatrix} f_{1}\\ f_{2} \\ \ldots \\ f_{m} \end{bmatrix}$ ，那么偏导数可以记为：<br>$$<br>\frac{\partial F(\vec{f})}{\partial \vec{f}} &#x3D;<br>\begin{bmatrix}<br>\frac{\partial f_{1}(\vec{x})}{x_{1}} &amp;\frac{\partial f_{1}(\vec{x})}{x_{2}} &amp;\ldots &amp;\frac{\partial f_{1}(\vec{x})}{x_{n}}\\<br>\frac{\partial f_{2}(\vec{x})}{x_{1}} &amp;\frac{\partial f_{2}(\vec{x})}{x_{2}} &amp;\ldots &amp;\frac{\partial f_{2}(\vec{x})}{x_{n}}\\<br>\ldots &amp; &amp; &amp;\ldots \\<br>\frac{\partial f_{m}(\vec{x})}{x_{1}} &amp;\frac{\partial f_{m}(\vec{x})}{x_{2}} &amp;\ldots &amp;\frac{\partial f_{m}(\vec{x})}{x_{n}}\\<br>\end{bmatrix}<br>$$</p>
-<p>这个矩阵就是我们所说的 Jacobi Matrix ， 记为 $J_{F}(x_{1},\ldots,x_{n})$ 或者 $\frac{\partial (f_{1},\ldots,f_{m})}{\partial (x_{1},\ldots,x_{n})}$</p>
-<p>一般用于求向量值函数的导数。</p>
-<h2 id="梯度"><a href="#梯度" class="headerlink" title="梯度"></a>梯度</h2><p>记相对于 $n\times 1$ 向量 $\vec{x}$ 的 Hamilton算子<br>$$<br>\nabla_{x}&#x3D;\frac{\partial}{\partial \vec{x}}&#x3D;\begin{bmatrix} \frac{\partial}{\partial x_{1}},&amp;\frac{\partial}{\partial x_{2}},&amp;\ldots,&amp;\frac{\partial}{\partial x_{n}} \end{bmatrix}^{T}<br>$$</p>
-<p>因此， $n\times 1$ 实向量为变元的实标量函数 $f(\vec{x})$ 相对于 $\vec{x}$ 的梯度为一个 $n\times 1$ 的向量:<br>$$<br>\nabla_{x}f(\vec{x})&#x3D;\frac{\partial f(\vec{x})}{\partial \vec{x}}&#x3D;\begin{bmatrix} \frac{\partial f(\vec{x})}{\partial x_{1}},&amp;\frac{\partial f(\vec{x})}{\partial x_{2}},&amp;\ldots,&amp;\frac{\partial f(\vec{x})}{\partial x_{n}} \end{bmatrix}^{T}<br>$$</p>
-<p>同理，对于一个 $1\times n$ 的行向量，我们得到的梯度矩阵也是一个 $1\times n$ 的行向量。</p>
-<p>以此类推，我们得到对于一个 $m\times 1$ 的向量函数 $\mathbf{f} (\vec{x})&#x3D;y&#x3D;\begin{bmatrix} y_{1},&amp;y_{2},&amp;\ldots ,&amp;y_{m} \end{bmatrix}$ ，其中 $y_{1}$ 是关于向量 $\vec{x}$ 的标量函数，梯度矩阵便是 向量函数的Jacobi矩阵。</p>
-<h2 id="常用结论"><a href="#常用结论" class="headerlink" title="常用结论"></a>常用结论</h2><ol>
-<li>若 $\mathbf{f}(\mathbf{x})&#x3D;\begin{bmatrix} x_{1}, &amp;x_{2},&amp;\ldots,&amp;x_{n} \end{bmatrix}$  ,则： $\frac{\partial \mathbf{x^{T}}}{\partial \mathbf{x}}&#x3D;\mathbf{I}$ 。</li>
+                <p>本篇主要记录在学习课程CMU15-213(version:sp23)以及配套教材CS:APP中的总结、梳理、拓展以及个人感想。<br>lab的代码部分更新于Github。</p>
+<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><p><em>对应CS:APP第一章</em></p>
+<p>让我们从详细理解一段代码的生命周期开始深入了解计算机在这一过程中完成了哪些操作。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> <br>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;hello, world\n&quot;</span>);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>hello程序的生命周期是从一个高级的C语言程序开始的，但是在机器执行时需要将这些语句转化为一系列的低级<strong>机器语言</strong>指令。然后这些指令按照一种称为<strong>可执行目标程序</strong>的格式打包，并以二进制磁盘文件的形式存放起来。</p>
+<p>通过一条指令 <em>gcc -o hello hello.c</em> ，我们便可以将程序编译为可执行文件。具体而言，一般需要经历以下过程。</p>
+<p><img src="/Pictures/CMU15-213/%E7%BC%96%E8%AF%91%E7%B3%BB%E7%BB%9F.png" srcset="/img/loading.gif" lazyload alt="编译系统"></p>
+<ul>
+<li><strong>预处理阶段</strong>。预处理器（cpp）根据 # 开头的命令修改原始的C程序。在这里，include语句告诉预处理器将stdio.h文件中从内容插入程序文本中。经过这一步，我们实现了从 <em>hello.c</em>到<em>hello.i</em>的变化。</li>
+<li><strong>编译阶段</strong>。编译器（ccl）将文本文件 <em>hello.i</em> 翻译成 <em>hello.s</em> ，即翻译为汇编语言程序。</li>
+<li><strong>汇编阶段</strong>。汇编器（as）将 <em>hello.s</em> 翻译为机器语言指令并打包为<strong>可重定位目标程序</strong>的格式，并保存在二进制文件 <em>hello.o</em> 中。</li>
+<li><strong>链接阶段</strong>。在hello程序中调用了printf函数，该函数保存在<em>printf.o</em>文件中，链接过程就是将这些文件以某种方式进行合并。合并完成后我们得到<strong>可执行目标文件</strong> <em>hello</em>。</li>
+</ul>
+<p>在得到可执行目标文件后，我们可以将其输入到shell（命令行解释器）中。</p>
+<p>为了更深入的理解运行程序时计算机内部发生了什么，我们需要了解一个典型系统的硬件知识。</p>
+<p>![A typical system](D:\Personal website\blog\source\Pictures\CMU15-213\A typical system.png)</p>
+<ol>
+<li><p>总线</p>
+<p>总线携带信息字节并负责在各个部件之间进行传递。通常总线被设计为定长的字节块，也就是字（word）。32位指代4字节，而64位指代8字节。</p>
+</li>
+<li><p>I&#x2F;O设备</p>
+<p>输入输出设备时系统与外部世界进行联系的通道。常见的I&#x2F;O设备包括键鼠、显示器、磁盘等。每个设备都通过一个<strong>控制器</strong>或<strong>适配器</strong>与I&#x2F;O总线相连。</p>
+<p>控制器与适配器之间的区别在于封装方式。控制器通常是I&#x2F;O设备本身或者系统的主板上的芯片组，而适配器时插在主板上的卡。</p>
+</li>
+<li><p>主存</p>
+<p>主存是一个临时存储设备，用于存放程序和程序处理的数据。主存由一组<strong>动态随机存取存储器（DRAM）</strong>芯片组成。从逻辑上来说，存储器是一个线性的字节数组，每一个字节都有其唯一的地址（数组索引）。</p>
+</li>
+<li><p>处理器</p>
+<p>处理器（CPU）是解释（或执行）存储在主存中指令的引擎。处理器的核心是一个大小为一个字的存储设备（或寄存器），称为程序计数器（PC），在任何时刻，PC都指向主存中某条机器指令。</p>
+<p>指令集架构决定指令执行模型。</p>
+</li>
 </ol>
-<h1 id="梯度下降算法"><a href="#梯度下降算法" class="headerlink" title="梯度下降算法"></a>梯度下降算法</h1>
+<p>在运行代码的过程中，数据需要在内存、处理器、总线上来回搬运。因此要提高运行速度，就需要是这些复制搬运操作加快。我们可以通过在处理器和较大较慢的设备（例如主存）之间插入一个更小更快的存储设备（例如cache）来加速这个过程，于是便产生了一个<strong>存储器层次结构</strong>。</p>
+<p>![存储器层次结构](D:\Personal website\blog\source\Pictures\CMU15-213\存储器层次结构.png)</p>
+<p>为了防止硬件被失控的应用程序滥用以及提供一个简单一致的机制来控制复杂低级的硬件，我们使用操作系统来提供这些服务。操作系统提供了几个基本的抽象概念来实现基本功能。</p>
+<p>![操作系统](D:\Personal website\blog\source\Pictures\CMU15-213\操作系统.png)</p>
+<ul>
+<li><p>进程</p>
+<p>进程是操作系统对正在运行的程序的一种抽象。一个系统可以同时运行多个进程。在系统中，一个CPU通过在进程之间切换来实现交错执行的机制，称为<em>上下文切换</em>，也是CPU能进行并发执行的原因。在这里，上下文是一个抽象的概念，指操作系统保持跟踪进程运行所需的所有状态信息。上下文切换时，操作系统会保存当前状态的上下文，恢复新进程的上下文。新进程会从上次中断的地方开始。</p>
+</li>
+<li><p>线程</p>
+<p>一个进程可以由多个称为线程的执行单元组成。</p>
+</li>
+<li><p>虚拟内存</p>
+<p>虚拟内存为每一个进程提供了一个假象，即每个进程都在独占地使用主存。每个进程看到的内存是一致的，称为虚拟地址空间。</p>
+</li>
+</ul>
+
                 
               </div>
             
@@ -356,7 +389,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Deep-Learning/" class="category-chain-item">Deep Learning</a>
+  <a href="/categories/CMU5-213/" class="category-chain-item">CMU5-213</a>
   
   
 
@@ -376,8 +409,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>梯度下降与反向传播</div>
-      <div>https://fabulous1496.github.io/2024/03/26/梯度下降与反向传播/</div>
+      <div>CMU15-213</div>
+      <div>https://fabulous1496.github.io/2024/06/25/CMU15-213/</div>
     </div>
     <div class="license-meta">
       
@@ -389,7 +422,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年3月26日</div>
+          <div>2024年6月25日</div>
         </div>
       
       
@@ -433,18 +466,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/06/25/CMU15-213/" title="CMU15-213">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">CMU15-213</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/03/20/GNN%E2%80%94%E2%80%94%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" title="GNN——图神经网络">
-                        <span class="hidden-mobile">GNN——图神经网络</span>
+                      <a href="/2024/03/26/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E4%B8%8E%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD/" title="梯度下降与反向传播">
+                        <span class="hidden-mobile">梯度下降与反向传播</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
