@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://fabulous1496.github.io/Pictures/CMU15-213/cover.jpg">
 <meta property="article:published_time" content="2024-06-25T13:11:49.000Z">
-<meta property="article:modified_time" content="2024-06-29T13:36:35.328Z">
+<meta property="article:modified_time" content="2024-07-01T13:14:28.290Z">
 <meta property="article:author" content="Fabulous">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://fabulous1496.github.io/Pictures/CMU15-213/cover.jpg">
@@ -360,9 +360,9 @@
 </li>
 </ol>
 <p>在运行代码的过程中，数据需要在内存、处理器、总线上来回搬运。因此要提高运行速度，就需要是这些复制搬运操作加快。我们可以通过在处理器和较大较慢的设备（例如主存）之间插入一个更小更快的存储设备（例如cache）来加速这个过程，于是便产生了一个<strong>存储器层次结构</strong>。</p>
-<p><img src="/%5CPictures%5CCMU15-213%5C%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84.png" srcset="/img/loading.gif" lazyload alt="存储器层次结构"></p>
+<p><img src="/Pictures/CMU15-213/%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84.png" srcset="/img/loading.gif" lazyload alt="存储器层次结构"></p>
 <p>为了防止硬件被失控的应用程序滥用以及提供一个简单一致的机制来控制复杂低级的硬件，我们使用操作系统来提供这些服务。操作系统提供了几个基本的抽象概念来实现基本功能。</p>
-<p><img src="/%5CPictures%5CCMU15-213%5C%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F.png" srcset="/img/loading.gif" lazyload alt="操作系统"></p>
+<p><img src="/Pictures/CMU15-213/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F.png" srcset="/img/loading.gif" lazyload alt="操作系统"></p>
 <ul>
 <li><p>进程</p>
 <p>进程是操作系统对正在运行的程序的一种抽象。一个系统可以同时运行多个进程。在系统中，一个CPU通过在进程之间切换来实现交错执行的机制，称为<em>上下文切换</em>，也是CPU能进行并发执行的原因。在这里，上下文是一个抽象的概念，指操作系统保持跟踪进程运行所需的所有状态信息。上下文切换时，操作系统会保存当前状态的上下文，恢复新进程的上下文。新进程会从上次中断的地方开始。</p>
@@ -382,7 +382,7 @@
 </ul>
 </li>
 </ul>
-<p><img src="/%5CPictures%5CCMU15-213%5C%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4.png" srcset="/img/loading.gif" lazyload alt="虚拟地址空间"></p>
+<p><img src="/Pictures/CMU15-213/%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4.png" srcset="/img/loading.gif" lazyload alt="虚拟地址空间"></p>
 <p><strong>Amdahl定律</strong>：在对系统某个部分进行加速时，其对系统整体性能的影响取决于该部分的重要性和加速程度。假设执行某应用程序所需要的时间为$T_{old}$，某部分与执行时间总体的比例为$\alpha$，该部分提升性能比例为$k$，则有：<br>$$<br>T_{new}&#x3D;(1-\alpha)T_{old}+(\alpha T_{old})&#x2F;k&#x3D;T_{old}[(1-\alpha)+\alpha&#x2F;k]<br>$$<br>$$<br>S&#x3D;T_{old}&#x2F;T_{new}&#x3D; \frac{1}{(1-\alpha)+\alpha&#x2F;k}<br>$$</p>
 <p>$$<br>k\to\infty,\quad S_\infty&#x3D;\frac{1}{1-\alpha}<br>$$<br>最后，我们来了解并发与并行。一般来说，我们重点从三个抽象级层次来理解。</p>
 <ol>
@@ -535,7 +535,7 @@
 <li>n位的小数字段$frac&#x3D;f_{n-1}…f_1f_0$编码位数M</li>
 </ul>
 <p>单精度与双精度浮点数的存储：</p>
-<p><img src="/%5CPictures%5CCMU15-213%5Cfloat.png" srcset="/img/loading.gif" lazyload alt="float"></p>
+<p><img src="/Pictures/CMU15-213/float.png" srcset="/img/loading.gif" lazyload alt="float"></p>
 <p>根据不同的exp的取值，被编码的值可以分为三种不同的情况：</p>
 <ol>
 <li><p>规格化的，此时 $exp \ne 0 且\ne 255$，此时$E&#x3D;e-Bias$，其中$Bias&#x3D;2^{k-1}-1$，单精度为127，双精度为1023. 指数的范围为单精度$-126 \sim 127 $，双精度为$-1022 \sim 1023$。</p>
