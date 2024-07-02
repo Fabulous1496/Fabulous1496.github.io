@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://fabulous1496.github.io/Pictures/CMU15-213/cover.jpg">
 <meta property="article:published_time" content="2024-06-25T13:11:49.000Z">
-<meta property="article:modified_time" content="2024-07-01T14:46:07.460Z">
+<meta property="article:modified_time" content="2024-07-02T16:43:21.436Z">
 <meta property="article:author" content="Fabulous">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://fabulous1496.github.io/Pictures/CMU15-213/cover.jpg">
@@ -262,7 +262,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.2k 字
+          5.1k 字
         
       </span>
     
@@ -273,7 +273,7 @@
         
         
         
-          27 分钟
+          43 分钟
         
       </span>
     
@@ -598,6 +598,159 @@
 <p>我们将浮点值的计算定义为$x+y&#x3D;Round(x+y)$，只需要计算到一个可以得到正确舍入结果的答案即可。</p>
 <p>浮点加法不具有结合性。例如$3.14+1e10-1e10&#x3D;0$，这是因为计算前两项时由于舍入的原因值3.14会丢失。而计算$3.14+(1e10-1e10)&#x3D;3.14$。</p>
 <p>同时，这也导致了浮点乘法不具备分配性。</p>
+<h1 id="Machine-Level-Representation-of-Programs"><a href="#Machine-Level-Representation-of-Programs" class="headerlink" title="Machine-Level Representation of Programs"></a>Machine-Level Representation of Programs</h1><blockquote>
+<p>对应原书第三章内容</p>
+</blockquote>
+<h2 id="程序编码"><a href="#程序编码" class="headerlink" title="程序编码"></a>程序编码</h2><p>首先了解几个常见名词：</p>
+<ul>
+<li><p>Architecture（架构）：指指令集架构（ISA），是处理器设计的一部分，编写汇编&#x2F;机器代码的人需要了解这部分。</p>
+<p>例子：指令集规范，寄存器</p>
+</li>
+<li><p>Microarchitecture（微架构）：指架构的具体实现方式。</p>
+<p>例子：缓存大小和核心频率。</p>
+</li>
+<li><p>Code Forms（代码形式）：分为Machine Code（机器代码）和Assembly Code（汇编代码）。前者主要指处理器执行的字节级程序，后者主要指机器代码的文本表示形式。</p>
+</li>
+<li><p>ISAs（指令集架构）：x86-64，ARM，RISC V等。</p>
+</li>
+</ul>
+<p>下面通过一个例子来了解编程语言、汇编语言和机器码之间的转换：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">long</span> <span class="hljs-title function_">mult2</span><span class="hljs-params">(<span class="hljs-type">long</span>, <span class="hljs-type">long</span>)</span>;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">multstore</span><span class="hljs-params">(<span class="hljs-type">long</span> x, <span class="hljs-type">long</span> y, <span class="hljs-type">long</span> *dest)</span> &#123;<br>    <span class="hljs-type">long</span> t = mult2(x, y);<br>    *dest = t;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>将这段代码转换成汇编代码<code>gcc -Og -S mstore.c</code>，得到的结果如下（省略以“.”开头的行代表的伪指令）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs assembly">multstore:<br>	pushq  %rbx<br>	movq   %rdx, %rbx<br>	call   mult2<br>	movq   %rax, (%rbx)<br>	popq   %rbx<br>	ret<br></code></pre></td></tr></table></figure>
+
+<p>而再次将这段代码转为机器码<code>gcc -Og -c mstore.c</code>：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">53</span> <span class="hljs-number">48</span> <span class="hljs-number">89</span> d3 e8 <span class="hljs-number">00</span> <span class="hljs-number">00</span> <span class="hljs-number">00</span> <span class="hljs-number">00</span> <span class="hljs-number">48</span> <span class="hljs-number">89</span> <span class="hljs-number">03</span> <span class="hljs-number">5</span>b c3<br></code></pre></td></tr></table></figure>
+
+<p>利用反汇编器进行反汇编后<code>objdump -d mstore.o</code>：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">0000000000000000</span> &lt;multstore&gt;:<br>	<span class="hljs-attribute">0</span>:  <span class="hljs-number">53</span>                 push    %rbx<br>	<span class="hljs-attribute">1</span>:  <span class="hljs-number">48</span> <span class="hljs-number">89</span> d3           mov     %rdx,%rbx<br>	<span class="hljs-attribute">4</span>:  e8 <span class="hljs-number">00</span> <span class="hljs-number">00</span> <span class="hljs-number">00</span> <span class="hljs-number">00</span>     callq   <span class="hljs-number">9</span> &lt;multstore+<span class="hljs-number">0</span>x9&gt;<br>	<span class="hljs-attribute">9</span>:  <span class="hljs-number">48</span> <span class="hljs-number">89</span> <span class="hljs-number">03</span>           mov     %rax,(%rbx)<br>	<span class="hljs-attribute">c</span>:  <span class="hljs-number">5</span>b                 pop     %rbx<br>	<span class="hljs-attribute">d</span>:  c3                 retq<br></code></pre></td></tr></table></figure>
+
+<p>因此，机器执行的程序只是一个字节序列。利用反汇编器，我们可以得到原始的汇编代码。从这个例子中，我们可以总结出这样的规律：</p>
+<ul>
+<li>x86-64的指令长度从1到15个字节不等，常用的指令以及操作数较少的指令所需的字节数烧，而那些不太常用的或操作数较多的指令所需字节数较多。</li>
+<li>字节可以唯一地解码成机器指令。</li>
+<li>反汇编器只是基于机器代码文件中的字节序列来确定汇编代码。他不需要访问该程序的源代码或汇编代码。</li>
+</ul>
+<h2 id="数据格式"><a href="#数据格式" class="headerlink" title="数据格式"></a>数据格式</h2><p>Intel用术语“word”表示16为数据类型，因此称32位数为“double words”，64位数为“quad words”</p>
+<p>C语言类型数据在x86-64中的大小，在64为机器中，指针长8字节：</p>
+<table>
+<thead>
+<tr>
+<th>C声明</th>
+<th>Intel数据类型</th>
+<th>汇编代码后缀</th>
+<th>大小（字节）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>char</td>
+<td>字节</td>
+<td>b</td>
+<td>1</td>
+</tr>
+<tr>
+<td>short</td>
+<td>字</td>
+<td>w</td>
+<td>2</td>
+</tr>
+<tr>
+<td>int</td>
+<td>双字</td>
+<td>l</td>
+<td>4</td>
+</tr>
+<tr>
+<td>long</td>
+<td>四字</td>
+<td>q</td>
+<td>8</td>
+</tr>
+<tr>
+<td>char*</td>
+<td>四字</td>
+<td>q</td>
+<td>8</td>
+</tr>
+<tr>
+<td>float</td>
+<td>单精度</td>
+<td>s</td>
+<td>4</td>
+</tr>
+<tr>
+<td>double</td>
+<td>双精度</td>
+<td>l</td>
+<td>8</td>
+</tr>
+</tbody></table>
+<p>一个x86-64的中央处理单元（CPU）包含一个一组16个储存64位值的<em>通用目的寄存器</em>。这些寄存器用来存储正数数据和指针。他们的名字都以%r开头。</p>
+<p><img src="/Pictures/CMU15-213/registers.png" srcset="/img/loading.gif" lazyload alt="registers"></p>
+<h2 id="汇编基本指令"><a href="#汇编基本指令" class="headerlink" title="汇编基本指令"></a>汇编基本指令</h2><h3 id="基本操作数"><a href="#基本操作数" class="headerlink" title="基本操作数"></a>基本操作数</h3><p>各种操作数可以分为三种类型：</p>
+<ol>
+<li><p>立即数，用于表示常数值，书写方式为”$”后跟一个用C表示法表示的整数。</p>
+</li>
+<li><p>寄存器，表示某个寄存器的内容，16个寄存器的低位1、2、4、8字节中的一个作为操作数，对应8、16、32、64位。我们用$r_a$表示寄存器a，用$R[r_a]$来表示它的值。这表示将寄存器集合看成一个数组。</p>
+<p><strong>寄存器有一个特点：任何为寄存器生成32位值的指令都会把该寄存器的高位部分置为0.</strong></p>
+</li>
+<li><p>内存引用，根据据计算出来的有效地址访问某个内存位置。因为将内存看成一个很打动字节数组，我们用符号$M_b[Addr]$表述对存储在内存中从地址Addr开始的b个字节的引用。</p>
+<p>一种最常见的寻址模式：$Imm(r_b,r_i,s)$，包括四个组成部分，一个立即数偏移$Imm$,一个基址寄存器$r_b$，一个变址寄存器$r_i$，一个比例因子$s&#x3D;1，2，4，8$，有效地址的计算为$Imm+R[r_b]+R[r_i]\cdot s$</p>
+</li>
+</ol>
+<p><img src="/Pictures/CMU15-213/addrSearch.png" srcset="/img/loading.gif" lazyload alt="addrSearch"></p>
+<h3 id="数据复制"><a href="#数据复制" class="headerlink" title="数据复制"></a>数据复制</h3><p>数据传送指令——MOV类。这些指令把数据从源位置复制到目的位置，不做任何变化。</p>
+<p>MOV类指令由四条指令组成：movb,movw,movl,movq。这些指令操作的数据大小分别为1、2、4、8字节。源操作数指定的值是一个立即数，储存在寄存器中或者内存中。目的操作数指定一个位置，要么是一个寄存器或者是一个内存地址。</p>
+<p>源和目的的组合有五种：I2R，I2M，R2R，R2M，M2R。</p>
+<blockquote>
+<p>I–Imm    R–register    M–Memory</p>
+</blockquote>
+<p>常规的<code>movq</code>指令只能以表示为32位补码数字的立即数作为源操作数，然后把这个值符号拓展得到64位的值，放到目的位置。而<code>movabsq</code>指令能够以任意64位立即数值位源操作数，并且只能以<strong>寄存器</strong>作为目的。</p>
+<p>基于MOV类衍生出MOVZ类和MOVS类指令，用于将较小的源值复制到较大的目的时使用。所有这些指令的<strong>目的都为寄存器</strong>。MOVZ使用零扩展，而MOVS使用符号扩展。MOVS类中的cltq只用于将%eax符号扩展到%rax，效果与movslq %eax，%rax完全一致，不过编码更紧凑。</p>
+<p><strong>关于直接寻址和间接寻址</strong>：在学习时，笔者对直接寻址和间接寻址的概念比较模糊，在这里对于这两个概念进行总结，以一个例子入手。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs assembly">section .data<br>    value: dq 10          ; 定义一个数据段变量，初始值为 10<br><br>section .text<br>    global _start<br><br>_start:<br>    mov value, %rbx       ; 将变量 value 的地址移动到 rbx 寄存器中<br>    mov (%rbx), %rcx      ; 将 rbx 寄存器指向的内存地址处的值（10）移动到 rcx 寄存器中<br>    add $2, %rcx          ; 将立即数 2 加到 rcx 寄存器的当前值上（现在 rcx 中的值是 12）<br>    mov %rcx, (%rbx)      ; 将 rcx 寄存器中的值（12）移动回 rbx 指向的内存地址处（更新 value 的值为 12）<br></code></pre></td></tr></table></figure>
+
+<p>这里有两个关键易混淆的点要注意：</p>
+<ol>
+<li>在指令中，<code>value</code>并不是一个立即数，而是看做内存中的一个地址（假设为0x1000），在内存0x1000这个地址储存了整数10。因此，第一步操作<code>mov value, %rbx</code>代表将地址<code>0x1000</code>存入<code>rbx</code>寄存器中而不是将数值<code>10</code>存入<code>rbx</code>。</li>
+<li>第二步很好地说明了间接取址和直接取址之间的区别：<code>(%rbx)</code>代表的是内存中的一个地址，具体为<code>rbx</code>内储存的地址<code>0x1000</code>。而<code>%rcx</code>代表寄存器中的<code>rcx</code>。这步操作将 <code>rbx</code> 寄存器指向的内存地址 <code>0x1000</code> 处的值（即 <code>value</code> 的值，这里是 10）移动到 <code>rcx</code> 寄存器中。这里可以把内存和寄存器看为两个不同的数组M和R，<code>rbx</code>存放的是<code>0x1000=R[r_b]</code>，<code>rcx</code>存放的是数<code>10=R[r_c]</code>,<code>(%rbx)=M[R[r_b]]=M[0x1000]</code>存放的是value的值。</li>
+</ol>
+<h3 id="压栈-弹栈"><a href="#压栈-弹栈" class="headerlink" title="压栈&#x2F;弹栈"></a>压栈&#x2F;弹栈</h3><p>栈是满足先入后出的顺序结构，一般用push代表压栈，pop代表出栈。栈指针<code>%rsp</code>保存着栈顶元素的地址。</p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>效果</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>pushq    S</td>
+<td>R[%rsp]-8 $\to$ R[%rsp];S $\to$ M[R[%rsp]]</td>
+<td>将四字压入栈</td>
+</tr>
+<tr>
+<td>popq    D</td>
+<td>M[R[%rsp]] $\to$ D;R[%rsp]+8 $\to$ R[%rsp]</td>
+<td>将四字弹出栈</td>
+</tr>
+</tbody></table>
+<p>指令 <code>pushq %rbp</code>的行为等价于：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs assembly">subq  $8,%rsp<br>movq  %rbp,(%rsp)<br></code></pre></td></tr></table></figure>
+
+<p>同理，指令<code>popq  %rax</code>等价于：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs assembly">movq  (%rsp),%rax<br>addq  $8,%rsp<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="算术和逻辑操作"><a href="#算术和逻辑操作" class="headerlink" title="算术和逻辑操作"></a>算术和逻辑操作</h3><p>操作被分为四类：加载有效地址，一元操作，二元操作和移位。</p>
+<p><img src="/Pictures/CMU15-213/ops.png" srcset="/img/loading.gif" lazyload alt="ops"></p>
+<ol>
+<li><p>加载有效地址（load effective address）指令实际上是<code>movq</code>指令的变形。在形式上是从内存读取数据到寄存器，但实际上根本没有引用内存。第一个操作数看上去是一个内存引用，但实际上是将有效地址写入到目的操作数。</p>
+<p>例如：<code>leaq 7(%rdx, %rdx, 4), %rax</code>。我们假设rdx的值为$x$，那么rax的值为$5x+7$.</p>
+</li>
+</ol>
 
                 
               </div>
