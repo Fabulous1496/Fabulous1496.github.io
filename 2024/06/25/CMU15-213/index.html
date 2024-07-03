@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://fabulous1496.github.io/Pictures/CMU15-213/cover.jpg">
 <meta property="article:published_time" content="2024-06-25T13:11:49.000Z">
-<meta property="article:modified_time" content="2024-07-02T16:43:21.436Z">
+<meta property="article:modified_time" content="2024-07-03T16:33:50.056Z">
 <meta property="article:author" content="Fabulous">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://fabulous1496.github.io/Pictures/CMU15-213/cover.jpg">
@@ -262,7 +262,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          5.1k 字
+          6.7k 字
         
       </span>
     
@@ -273,7 +273,7 @@
         
         
         
-          43 分钟
+          56 分钟
         
       </span>
     
@@ -749,8 +749,94 @@
 <ol>
 <li><p>加载有效地址（load effective address）指令实际上是<code>movq</code>指令的变形。在形式上是从内存读取数据到寄存器，但实际上根本没有引用内存。第一个操作数看上去是一个内存引用，但实际上是将有效地址写入到目的操作数。</p>
 <p>例如：<code>leaq 7(%rdx, %rdx, 4), %rax</code>。我们假设rdx的值为$x$，那么rax的值为$5x+7$.</p>
+<p>所以，利用这条指令，我们可以实现简单的算术运算。</p>
+</li>
+<li><p>一元操作：具体涉及到四种操作，分别是加一、减一、取负、取补</p>
+</li>
+<li><p>二元操作：前面的操作数称为源S，第二个操作数称为目的D，结果被存储在目的D里面。</p>
+</li>
+<li><p>移位操作：注意逻辑右移和算数右移的区别，逻辑左移和算术左移没有区别。</p>
 </li>
 </ol>
+<p>除开上面讨论的几种操作之外，还有几类特殊的算术操作。两个64为有符号数或无符号数相乘需要128位来表示。在x86-64指令集中，对128位（16bytes）的操作提供一些有限的支持。这些特殊操作就是对16字进行操作。</p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>效果</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>imulq&#x2F;mulq    S</td>
+<td>R[%rdx];S*R[%rax] –&gt; R[%rax]</td>
+<td>有符号&#x2F;无符号全乘法</td>
+</tr>
+<tr>
+<td>clto    S</td>
+<td></td>
+<td>转换为8字</td>
+</tr>
+<tr>
+<td>idivq&#x2F;divq    S</td>
+<td></td>
+<td>有符号&#x2F;无符号除法</td>
+</tr>
+</tbody></table>
+<p>在执行两个64位数的128位乘积是，要求一个参数必须在寄存器%rax中，另一个作为指令的源操作数给出，然后将乘积存放在%rdx（高64位）和%rax（低64位）中。</p>
+<p>下面从C语言和汇编代码的角度进一步剖析这条指令：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;inttypes.h&gt;</span></span><br><span class="hljs-keyword">typedef</span> <span class="hljs-type">unsigned</span> __int128 <span class="hljs-type">unit128_t</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">store_uprod</span><span class="hljs-params">(<span class="hljs-type">uint128_t</span> *dest, <span class="hljs-type">uint64_t</span> x, <span class="hljs-type">uint64_t</span> y)</span> &#123;<br>    *dest = x * (<span class="hljs-type">uint128_t</span>)y;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>gcc生成的汇编代码如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs assembly">;dest in %rdi, x in %rsi, y in %rdx<br>store_uprod:<br>	movq	%rsi,%rax    ;Copy x to multiplicand<br>	mulq	%rdx         ;Multiply by y<br>	movq	%rax,(%rdi)  ;Store lower 8 bytes at dest<br>	movq	%rdx,8(%rdi) ;Store upper 8 bytes at dest+8<br>	ret<br></code></pre></td></tr></table></figure>
+
+<p>对于大多数64位除法应用来说，除数也常常是一个64位的值，这个值应该存放在%rax中，%rdx的位应该全设置为0或者符号位。后面这个操作可以用指令<code>cqto</code>来完成，它不需要操作数，会隐含读出%rax的符号位并复制到%rdx的所有位。</p>
+<p>从C语言和汇编代码的角度进行进一步解析：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">remdiv</span><span class="hljs-params">(<span class="hljs-type">long</span> x, <span class="hljs-type">long</span> y, <span class="hljs-type">long</span> *qp, <span class="hljs-type">long</span> *rp)</span> &#123;<br>    <span class="hljs-type">long</span> q = x/y;<br>    <span class="hljs-type">long</span> r = x%y;<br>    *qp = q;<br>    *rp = r;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>gcc生成的汇编代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs assembly">;x in %rdi, y in %rsi, qp in %rdx, rp in %rcx<br>remdiv:<br>	movq	%rdx,%r8		;Copy qp<br>	movq	%rdi,%rax		;move x to lower 8 bytes of dividend<br>	cqto					;Sign extend to upper 8 bytes<br>	idivq	%rsi			;Divide by y<br>	movq	%rax,(%r8)		;Store quotient at qp<br>	movq	%rdx,(%rcx)		;Store remainder at rp<br>	ret<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="条件码"><a href="#条件码" class="headerlink" title="条件码"></a>条件码</h3><p>除了整数寄存器，CPU还维护了一组单个位的条件码寄存器，描述了最近的算数或逻辑操作的属性，可以检测这些寄存器来执行条件分支指令。最常用的条件码包括：</p>
+<ul>
+<li>CF：进位标志。最近的操作数是最高位产生了进位，可以检测无符号操作的溢出。</li>
+<li>ZF：零标志。最近的操作得到的结果为0.</li>
+<li>SF：符号标志。最近的操作得到的结果为负数。</li>
+<li>OF：溢出标志。最近的操作导致一个补码溢出。</li>
+</ul>
+<p>leaq操作不改变任何条件码，除此之外其余指令都有可能改变条件码。对于<strong>逻辑操作</strong>，进位和溢出标志会被设为0.</p>
+<p>我们也可以使用一些指令来设置条件码：</p>
+<p>![Condition code](&#x2F;Pictures&#x2F;CMU15-213&#x2F;Condition code.png)</p>
+<p>其中，CMP指令根据两个操作数之差来设置条件码，TEST根据两个操作数的AND运算。典型用法是将两个操作数设置为一样的来检测正负，或者将一个设置为掩码来测试特定位。</p>
+<p>条件码一般有三种使用方式：</p>
+<ol>
+<li>根据条件码的某些组合，将一个字节设置为0或者1</li>
+<li>条件跳转到程序的某个部分</li>
+<li>有条件地传输数据</li>
+</ol>
+<p>实现条件码设置字节我们使用SET指令，在指令中，<strong>“设置”</strong>代表赋值为1。</p>
+<p><img src="/Pictures/CMU15-213/Set.png" srcset="/img/loading.gif" lazyload alt="Set"></p>
+<p>分析各函数的效果，我们发现有符号数的比较主要涉及<code>SF,OF,ZF</code>，而无符号数的比较涉及<code>CF,ZF</code>。</p>
+<p>下面是一个例子，实现比较两个数：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs assembly">;a in %rdi, b in %rsi<br>comp:<br>	cmpq	%rsi,%rdi		;Compare a:b<br>	setl	%al				;Set low-order byte of %eax to 0 or 1<br>	movzbl	%al, %eax		;Clear rest of %eax (and rest of %rax)<br>	ret<br></code></pre></td></tr></table></figure>
+
+<p>此处主要注意movzbl指令（1 to 4），该指令不仅会把%eax的高3个字节清零，还会把整个寄存器%rax的高四个字节都清零。</p>
+<p>我们假设此处<code>a&lt;b</code>，那么<code>cmpq</code>会将<code>SF、CF</code>置为1，而<code>ZF、OF</code>为0 。接下来<code>setl</code>指令会将<code>SF^OF</code>的值赋给<code>D</code>，因此在这里<code>%al</code>将被设置为1，最终函数返回结果为1.</p>
+<h3 id="跳转指令"><a href="#跳转指令" class="headerlink" title="跳转指令"></a>跳转指令</h3><p>jump指令会导致执行切换到程序中一个全新的位置。在程序中，一般会有一个Label来指明跳转的位置。</p>
+<p>跳转指令可以是<strong>直接跳转</strong>，即跳转目标是作为指令的一部分来编码的；也可以是<strong>间接跳转</strong>，即跳转目标是从寄存器或内存位置中读出的。直接跳转直接使用一个标号作为跳转目标，而间接跳转的写法是*<em>＋操作数指示符</em>。</p>
+<p>例如指令<code>jmp *%rax</code>用寄存器%rax中的值作为跳转目标，而指令<code>jmp *(%rax)</code>用%rax中的值读出地址，从内存中读出跳转目标。</p>
+<p><img src="/Pictures/CMU15-213/jump.png" srcset="/img/loading.gif" lazyload alt="jump"></p>
+<p>跳转指令的编码：在汇编代码中，跳转目标用符号标号书写。跳转指令有几种不同的编码，但常用的都是PC相对的。也就是会将目标指令的地址紧跟在跳转指令后面的那条指令的地址间的差值作为编码，可以是1、2、4字节。第二种方法是绝对地址编码，用四个 字节直接指定目标。</p>
+<p>下面看一个例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs assembly">movq	%rdi,%rax<br>jmp		.L2<br> .L3:<br> 	sarq	%rax<br> .L2:<br> 	testq	%rax,%rax<br> 	jg		.L3<br> 	rep,ret<br></code></pre></td></tr></table></figure>
+
+<p>对应的反汇编版本：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs assembly">0:	48 89 f8					mov		%rdi,%rax<br>3:	eb 03						jmp		8 &lt;loop+0x8&gt;<br>5:	48 d1 f8					sar		%rax<br>8:	48 85 c0					test	%rax,%rax<br>b:	7f f8						jg		5 &lt;loop+0x5&gt;<br>d:	f3 c3						repz retq<br></code></pre></td></tr></table></figure>
+
+<p>这里可以从反汇编器产生的注释明确读出.L2的跳转目标指明为0x8（test行），.L3为0x5 （sar行）。而观察字节编码，发现.L2的字节编码为03，而.L3的字节编码为f8 。这里就是利用PC相对的编码方式，目标指令（test行）为0x8，下一条指令（sar行）地址为0x5，故差值0x3为.L2编码。同理，目标指令（sar行）为0x5，下一条指令（rep行）为0xd，插指0xf8（十进制-8）为.L3编码。</p>
+<p>因此，三个地址之间我们可以做到知二求一。<strong>目标地址&#x3D;标志编码+下一行地址</strong></p>
 
                 
               </div>
