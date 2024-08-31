@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://fabulous1496.github.io/Pictures/CMU15-213/cover.jpg">
 <meta property="article:published_time" content="2024-06-25T13:11:49.000Z">
-<meta property="article:modified_time" content="2024-08-21T15:18:01.247Z">
+<meta property="article:modified_time" content="2024-08-31T13:20:45.078Z">
 <meta property="article:author" content="Fabulous">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://fabulous1496.github.io/Pictures/CMU15-213/cover.jpg">
@@ -262,7 +262,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          14k 字
+          16k 字
         
       </span>
     
@@ -273,7 +273,7 @@
         
         
         
-          118 分钟
+          134 分钟
         
       </span>
     
@@ -1405,8 +1405,66 @@
 </tbody></table>
 </li>
 </ol>
-<h3 id="性能分析"><a href="#性能分析" class="headerlink" title="性能分析"></a>性能分析</h3><p>引入CPI的概念，指一条指令执行所需要的时钟周期数。</p>
+<h2 id="性能分析"><a href="#性能分析" class="headerlink" title="性能分析"></a>性能分析</h2><p>引入CPI的概念，指一条指令执行所需要的时钟周期数。</p>
 <p>假设处理器在一段时间内处理了$C_i$条指令和$C_b$个气泡，那么大约一共需要$C_i+C_b$个时钟周期。我们得到CPI的计算公式：<br>$$<br>CPI&#x3D;\frac{C_i+C_b}{C_i}&#x3D;1.0+\frac{C_b}{C_i}<br>$$<br>后一项视为惩罚项，代表平均每条指令需要插入的气泡数。我们把这一项进一步分解：<br>$$<br>CPI&#x3D;1.0+lp+mp+rp<br>$$<br>其中lp代表由于加载&#x2F;使用冒险暂停时插入的气泡平均数，mp表示分支预测错误取消指令时插入的气泡平均数，rp表示返回指令暂停时插入的气泡平均数。</p>
+<h1 id="优化程序性能"><a href="#优化程序性能" class="headerlink" title="优化程序性能"></a>优化程序性能</h1><h2 id="程序性能表示"><a href="#程序性能表示" class="headerlink" title="程序性能表示"></a>程序性能表示</h2><p>我们引入度量标准：每元素的周期数（Cycles Per Element, CPE），作为一种 表示程序性能的指标。</p>
+<p>一般而言，CPE可以用下面的式子来表示：$\Large CPE&#x3D;\frac{程序运行的总CPU周期数}{处理的数据元素个数}$</p>
+<p>利用最小二乘法进行拟合，取元素个数为横轴，我们一般会得到形如$y&#x3D;kn+C$的表达式。其中，线性因子$k$就是我们的CPE。</p>
+<h2 id="优化性能的基本原则"><a href="#优化性能的基本原则" class="headerlink" title="优化性能的基本原则"></a>优化性能的基本原则</h2><p>在优化函数性能时，最常见的有几种情况：</p>
+<ol>
+<li><p>内存别名引用</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">twiddle1</span><span class="hljs-params">(<span class="hljs-type">long</span> *xp, <span class="hljs-type">long</span> *yp)</span><br>&#123;<br>    *xp += *yp;<br>    *xp += *yp;    <br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">twiddle2</span><span class="hljs-params">(<span class="hljs-type">long</span> *xp, <span class="hljs-type">long</span> *yp)</span><br>&#123;<br>    *xp += <span class="hljs-number">2</span> * (*yp);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>考虑上面的两个函数，在xp和yp指向不同地址的情况下，函数1需要进行6次内存访问，而函数2仅需要进行3次。但是如果xp和yp指向了同一内存地址，那么就不需要这么多次的内存访问操作。所以编译器在优化时，需要<strong>假设不同的指针会指向同一个内存位置</strong>。</p>
+</li>
+<li><p>函数调用</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">long</span> <span class="hljs-title function_">f</span><span class="hljs-params">()</span>;<br><span class="hljs-type">long</span> <span class="hljs-title function_">func1</span><span class="hljs-params">()</span><br>&#123;<br>    <span class="hljs-keyword">return</span> f()+f()+f()+f();<br>&#125;<br><span class="hljs-type">long</span> <span class="hljs-title function_">func2</span><span class="hljs-params">()</span><br>&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">4</span> * f();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>乍一看，func1可以被优化为func2的形式。但是考虑到我们下面这种情况：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">long</span> counter = <span class="hljs-number">0</span>;<br><br><span class="hljs-type">long</span> <span class="hljs-title function_">f</span><span class="hljs-params">()</span><br>&#123;<br>    <span class="hljs-keyword">return</span> counter++;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>调用函数f会导致全局变量的改变，而全局变量与函数的调用次数相关。在这种情况下，func1的结果是6，而func2的结果是0 。编译器首先会保证程序的正确性，因此在遇到这种情况时会保持所有的函数调用不变。</p>
+</li>
+</ol>
+<p>为了进一步进行说明，我们举一个具体的例子，来看看程序是如何被系统进行优化的。我们将使用一个向量数据结构来进行演示，该数据结构包括两个内存块——头部和数据结构，<code>data_t</code>表示存储的数据类型，<code>len</code>储存在头部，表示数组的长度。</p>
+<p>我们设定一个算法，用来将一个向量中的所有元素合并成一个值。接下来我们对该算法进行逐步的优化来体会程序是如何被优化的。其中含有两个方法函数<code>vec_length</code>和<code>get_vec_element</code>，这里不写出具体定义。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">conbine1</span><span class="hljs-params">(vec_ptr v, <span class="hljs-type">data_t</span> *dest)</span><br>&#123;<br>    <span class="hljs-type">long</span> i;<br>    *dest = IDENT;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; vec_length(v) ; i++)<br>    &#123;<br>        <span class="hljs-type">data_t</span> val;<br>        get_vec_element(v,i,&amp;val);<br>        *dest = *dest OP val;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>消除循环的低效率</p>
+<p>首先我们注意到for循环会调用函数<code>vec_length</code>，并且是每次循环调用一次。由于该函数的结果是一定的，所以我们可以先将结果保存下来在传入for循环内部：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">conbine2</span><span class="hljs-params">(vec_ptr v, <span class="hljs-type">data_t</span> *dest)</span><br>&#123;<br>    <span class="hljs-type">long</span> i;<br>    *dest = IDENT;<br>    <span class="hljs-type">long</span> length = vec_length(v);<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; length ; i++)<br>    &#123;<br>        <span class="hljs-type">data_t</span> val;<br>        get_vec_element(v,i,&amp;val);<br>        *dest = *dest OP val;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这个优化被称为<strong>代码移动</strong>，一般用于识别要执行多次但是计算结果不会改变的计算。对于一些会产生副作用的函数，程序员需要帮助编译器进行显式地代码移动。</p>
+</li>
+<li><p>减少过程调用</p>
+<p>我们继续看<code>combine2</code>的代码，发现每次循环均会调用函数<code>get_vec_element</code>。在实现这个函数的过程中，每次需要将向量索引i与边界进行比较。分析代码可知由于for循环限制了i的范围是0~len，这确保了不会造成越界，因此我们可以将<code>get_vec_element</code>中判断是否越界的代码删去。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">data_t</span> *<span class="hljs-title function_">get_vec_start</span><span class="hljs-params">(vev_ptr v)</span><br>&#123;<br>    <span class="hljs-keyword">return</span> v-&gt;data;<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">combine3</span><span class="hljs-params">(vec_ptr v, <span class="hljs-type">data_t</span> *dest)</span><br>&#123;<br>    <span class="hljs-type">long</span> i;<br>    <span class="hljs-type">long</span> length = vec_length(v);<br>    <span class="hljs-type">data_t</span> *data = get_vec_start(v);<br>    *dest = IDENT;<br>    <span class="hljs-keyword">for</span>(i = <span class="hljs-number">0</span> ; i &lt; length; i++)<br>    &#123;<br>        *dest = *dest OP data[i];<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>然而性能并没有明显提升，这显然是循环中的其它操作形成了瓶颈。我们继续来探究。</p>
+</li>
+<li><p>消除不必要的内存引用</p>
+<p>我们假定数据类型为double，运算为乘法，从combine3的汇编代码入手来检查：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs assembly"># dest in %rbx, data+i in %rdx, data+length in %rax<br>.L17:<br>	vmovsd	(%rbx), %xmm0<br>	vmulsd	(%rdx), %xmm0, %xmm0<br>	vmovsd	%xmm0, (%rbx)<br>	addq	$8, %rdx<br>	cmpq	%rax, %rdx<br>	jne 	.L17<br></code></pre></td></tr></table></figure>
+
+<p>我们可以发现，每次迭代时，<strong>积累变量的数值</strong>（此处为指针dest指向的地方，该数值的作用是计算出最终的结果）都要先从内存中读出再写入内存，这样的操作是不必要的，因为每次迭代开始时从指针dest读出的值就是上次迭代最后写入的值。所以我们可以先用一个变量专门储存<strong>积累变量的数值</strong>，而不是用指针<code>*dest</code>，因为指针必然会引起内存的读写。</p>
+<p>我们把<code>*dest</code>变为一个变量<code>acc</code>：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">combine4</span><span class="hljs-params">(vec_ptr v , <span class="hljs-type">data_t</span> *dest)</span><br>&#123;<br>    <span class="hljs-type">long</span> i;<br>    <span class="hljs-type">long</span> length = vec_length(v);<br>    <span class="hljs-type">data_t</span> *data = get_vec_start(v);<br>    <span class="hljs-type">data_t</span> acc = IDENT;<br>    <span class="hljs-keyword">for</span>(i = <span class="hljs-number">0</span>; i &lt; length; i++)<br>    &#123;<br>        acc = acc OP data[i];<br>    &#125;<br>    *dest = acc;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="循环展开"><a href="#循环展开" class="headerlink" title="循环展开"></a>循环展开</h2><p>循环展开是一种程序变换，通过增加每次迭代计算的元素的数量，减少循环的迭代次数。我们采用$2 \times 1$循环展开的方式改写代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">combine5</span><span class="hljs-params">(vec_ptr v , <span class="hljs-type">data_t</span> *dest)</span><br>&#123;<br>    <span class="hljs-type">long</span> i;<br>    <span class="hljs-type">long</span> length = vec_length(v);<br>    <span class="hljs-type">long</span> limit = length - <span class="hljs-number">1</span>;<br>    <span class="hljs-type">data_t</span> *data = get_vec_start(v);<br>    <span class="hljs-type">data_t</span> acc = IDENT;<br>    <br>    <span class="hljs-keyword">for</span>(i = <span class="hljs-number">0</span>; i &lt; limit; i += <span class="hljs-number">2</span>)<br>    &#123;<br>        acc = (acc OP data[i]) OP data[i+<span class="hljs-number">1</span>];<br>    &#125;<br>    <span class="hljs-comment">// 计算剩余部分</span><br>    <span class="hljs-keyword">for</span>(; i &lt; length; i++)<br>    &#123;<br>        acc = acc OP data[i];<br>    &#125;<br>    *dest = acc<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>我们把这个思想归纳为对一个循环按任意因子$k$展开，由此产生$k \times 1$循环展开。为此上限设置为$n-k+1$，再循环内对元素$i$到$i+k-1$应用合并运算，每次迭代循环索引$i \rightarrow i+k$。最后还剩余不足$k$次运算我们再用一个循环来进行合并。</p>
+<h2 id="提高并行性"><a href="#提高并行性" class="headerlink" title="提高并行性"></a>提高并行性</h2><p>对于之前的代码，我们将积累值存放在acc中，这意味着再前面的计算完成之前，都不能计算acc的新值。所以我们可以采取另外的方式来提高并行性。</p>
+<h3 id="多个积累变量"><a href="#多个积累变量" class="headerlink" title="多个积累变量"></a>多个积累变量</h3><p>对于一个可结合和可交换的合并运算，我们可以通过将一组合并运算分割成两个或更多的部分，最后合并结果来提高性能。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">combine6</span><span class="hljs-params">(vec_ptr v , <span class="hljs-type">data_t</span> *dest)</span><br>&#123;<br>    <span class="hljs-type">long</span> i;<br>    <span class="hljs-type">long</span> length = vec_length(v);<br>    <span class="hljs-type">long</span> limit = length - <span class="hljs-number">1</span>;<br>    <span class="hljs-type">data_t</span> *data = get_vec_start(v);<br>    <span class="hljs-type">data_t</span> acc0 = IDENT;<br>    <span class="hljs-type">data_t</span> acc1 = IDENT;<br>    <br>    <span class="hljs-keyword">for</span>(i = <span class="hljs-number">0</span>; i &lt; limit; i += <span class="hljs-number">2</span>)<br>    &#123;<br>        acc0 = acc0 OP data[i];<br>        acc1 = acc1 OP data[i];<br>    &#125;<br>    <span class="hljs-comment">// 计算剩余部分</span><br>    <span class="hljs-keyword">for</span>(; i &lt; length; i++)<br>    &#123;<br>        acc0 = acc0 OP data[i];<br>    &#125;<br>    *dest = acc0 OP acc1;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>像上面这种操作我们称为$2\times2$循环展开。同样的，我们可以引申出$k \times k$循环展开</p>
+<h3 id="重新结合变换"><a href="#重新结合变换" class="headerlink" title="重新结合变换"></a>重新结合变换</h3><p>我们看到combine5函数中并没改变合并向量元素形成和或者乘积中执行的操作，我们可以考虑从根本上改变合并执行的方式，来提高程序的性能。</p>
+<p>我们将combine5中执行合并的语句改为：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">acc = acc OP (data[i] OP data[i+<span class="hljs-number">1</span>]);<br></code></pre></td></tr></table></figure>
+
+<p>差别仅仅在于括号的放置位置。我们称为重新结合变换，这样产生了我们称为$2\times 1a$的循环展开方式。看上去这两个语句本质上没有差别，但实际上，如果我们先计算<code>acc OP data[i]</code>再计算一次乘法，需要等待前一次的迭代累计值计算完毕后才能执行下一次的乘法，而先计算<code>data[i] OP data[i+1]</code>则不需要等待。</p>
 
                 
               </div>

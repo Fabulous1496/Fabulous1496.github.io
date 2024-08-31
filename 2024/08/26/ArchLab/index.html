@@ -1,0 +1,954 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Fabulous">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="ArchLabLab概述：在本实验中，学生将学习设计和实现一个流水线化的 Y86-64 处理器，优化其在名为 ncopy.ys 的基准 Y86-64 数组复制程序上的性能。学生可以对基准程序进行任何语义保留的转换，或对流水线处理器进行增强，或同时进行两者。目标是最小化每个数组元素的时钟周期数 (CPE)。 该Lab分为三个部分。在 A 部分中，将编写一些简单的 Y86-64 程序并熟悉 Y86-6">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AttackLab">
+<meta property="og:url" content="https://fabulous1496.github.io/2024/08/26/ArchLab/index.html">
+<meta property="og:site_name" content="Fabulous&#39;s little world">
+<meta property="og:description" content="ArchLabLab概述：在本实验中，学生将学习设计和实现一个流水线化的 Y86-64 处理器，优化其在名为 ncopy.ys 的基准 Y86-64 数组复制程序上的性能。学生可以对基准程序进行任何语义保留的转换，或对流水线处理器进行增强，或同时进行两者。目标是最小化每个数组元素的时钟周期数 (CPE)。 该Lab分为三个部分。在 A 部分中，将编写一些简单的 Y86-64 程序并熟悉 Y86-6">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fabulous1496.github.io/Pictures/CMU15-213/ArchLab.jpg">
+<meta property="article:published_time" content="2024-08-26T07:11:49.000Z">
+<meta property="article:modified_time" content="2024-08-31T13:23:24.292Z">
+<meta property="article:author" content="Fabulous">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://fabulous1496.github.io/Pictures/CMU15-213/ArchLab.jpg">
+  
+  
+  
+  <title>AttackLab - Fabulous&#39;s little world</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"fabulous1496.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"CjZvdepCB7OjY30a6oge7W6x-gzGzoHsz","app_key":"ErsGn5pjObFn129dKnLC8esg","server_url":"https://cjzvdepc.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fabulous&#39;s little world</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/Pictures/CMU15-213/ArchLab.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="AttackLab"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-08-26 15:11" pubdate>
+          2024年8月26日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          25 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">AttackLab</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="ArchLab"><a href="#ArchLab" class="headerlink" title="ArchLab"></a>ArchLab</h1><h2 id="Lab概述："><a href="#Lab概述：" class="headerlink" title="Lab概述："></a>Lab概述：</h2><p>在本实验中，学生将学习设计和实现一个流水线化的 Y86-64 处理器，优化其在名为 ncopy.ys 的基准 Y86-64 数组复制程序上的性能。学生可以对基准程序进行任何语义保留的转换，或对流水线处理器进行增强，或同时进行两者。目标是最小化每个数组元素的时钟周期数 (CPE)。</p>
+<p>该Lab分为三个部分。在 A 部分中，将编写一些简单的 Y86-64 程序并熟悉 Y86-64 工具。在 B 部分中，使用新指令扩展 SEQ 模拟器。这两部分将为 C 部分做准备，我们将在其中优化 Y86-64 基准程序和处理器设计。</p>
+<h2 id="Part-A"><a href="#Part-A" class="headerlink" title="Part A"></a>Part A</h2><p>第一部分需要在目录<code>sim/misc</code>下进行。我们的任务是编写并模拟以下三个 Y86-64 程序，这些程序所需的行为由<code>examples.c</code> 中的示例C 函数定义。我们需要根据这三个C语言实例函数编写出对应的Y86-64汇编版本。</p>
+<p>在开始之前，我们需要在目录下执行下列指令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">make clean<br>make<br></code></pre></td></tr></table></figure>
+
+<p>可能会遇到下面的报错：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs swift"><span class="hljs-regexp">/usr/</span>bin<span class="hljs-regexp">/ld: yas.o:/</span>home<span class="hljs-regexp">/usr/</span><span class="hljs-type">CMU15</span><span class="hljs-operator">-</span><span class="hljs-number">213</span> labs<span class="hljs-regexp">/archlab-handout/</span>sim<span class="hljs-regexp">/misc/</span>yas.h:<span class="hljs-number">13</span>: multiple definition of `lineno&#x27;; yas<span class="hljs-operator">-</span>grammar.o:(.bss<span class="hljs-operator">+</span><span class="hljs-number">0x0</span>): first defined here<br>collect2: error: ld returned <span class="hljs-number">1</span> exit status<br>make: <span class="hljs-operator">***</span> [<span class="hljs-type">Makefile</span>:<span class="hljs-number">32</span>: yas] <span class="hljs-type">Error</span> <span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+
+<p>这会导致我们的<code>yas</code>无法运行，也就无法运行我们编写的汇编代码。笔者在 StackOverflow 上找到了如下的解决方案：</p>
+<p>I had the same problem, it is about gcc. gcc-10 changed default from “-fcommon” to “-fno-common”. You need to add “-fcommon” flag to Makefiles. For example,</p>
+<p>Old misc&#x2F;Makefile:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c">CFLAGS=-Wall -O1 -g<br>LCFLAGS=-O1<br></code></pre></td></tr></table></figure>
+
+<p>New misc&#x2F;Makefile:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c">CFLAGS=-Wall -O1 -g -fcommon<br>LCFLAGS=-O1 -fcommon<br></code></pre></td></tr></table></figure>
+
+<p>也就是gcc版本变化导致指令发生变化，我们只需要在<code>Makefile</code>文件中将开头的宏定义更改即可正常运行。</p>
+<p>对于汇编代码的书写规范，在<code>sim/y86-code</code>中向我们提供了一些实例代码，我们需要参照其中的格式和规范编写自己的代码，例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><code class="hljs assembly"># 这是一段计算数组元素绝对值之和的代码<br># 程序起始与设置<br>	.pos 0 					# 起始地址设为0<br>	irmovq stack, %rsp  	 # 设置栈的起始位置<br>	call main				# 调用主函数<br>	halt					# 终止<br><br># 定义数组<br>	.align 8 	<br>array:	<br>	.quad 0x0000000d000d000d<br>	.quad 0xffffff3fff3fff40  <br>	.quad 0x00000b000b000b00<br>	.quad 0xffff5fff5fff6000  <br><br># 定义主函数<br>main:<br>	irmovq array,%rdi	<br>	irmovq $4,%rsi<br>	call absSum		# absSum(array, 4)<br>	ret <br><br># long absSum(long *start, long count)<br># start in %rdi, count in %rsi<br>absSum:<br>	irmovq $8,%r8            # 表示每个数组元素占 8 字节<br>	irmovq $1,%r9	         # 用于递减计数器 count<br>	xorq %rax,%rax			# sum = 0<br>	andq %rsi,%rsi			# 设置条件码，以便跳转指令可以检查 count 是否为零<br>	jmp  test<br>/* $begin abs-sum-cmov-ys */<br>loop:<br>	mrmovq (%rdi),%r10	# x = *start<br>	xorq %r11,%r11          # Constant 0<br>	subq %r10,%r11			# -x<br>	cmovg %r11,%r10			# If -x &gt; 0 then x = -x<br>	addq %r10,%rax          # Add to sum<br>	addq %r8,%rdi           # start++<br>	subq %r9,%rsi           # count--<br>test:<br>	jne    loop             # Stop when 0<br>/* $end abs-sum-cmov-ys */<br>	ret<br><br># 栈定义，起始位置为0x200<br>	.pos 0x200		<br>stack:	 <br></code></pre></td></tr></table></figure>
+
+<h3 id="sum-ys：求和链表元素"><a href="#sum-ys：求和链表元素" class="headerlink" title="sum.ys：求和链表元素"></a>sum.ys：求和链表元素</h3><p>先给出<code>examples.c</code>中对应的C语言版本，包含了对链表的定义：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">ELE</span> &#123;</span><br>    <span class="hljs-type">long</span> val;<br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">ELE</span> *<span class="hljs-title">next</span>;</span><br>&#125; *list_ptr;<br><br><span class="hljs-comment">/* sum_list - Sum the elements of a linked list */</span><br><span class="hljs-type">long</span> <span class="hljs-title function_">sum_list</span><span class="hljs-params">(list_ptr ls)</span><br>&#123;<br>    <span class="hljs-type">long</span> val = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">while</span> (ls) &#123;<br>	val += ls-&gt;val;<br>	ls = ls-&gt;next;<br>    &#125;<br>    <span class="hljs-keyword">return</span> val;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>题目要求我们使用如下的测试样例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs assembly">.align 8<br>ele1:<br>	.quad 0x00a<br>	.quad ele2<br>ele2:<br>	.quad 0x0b0<br>	.quad ele3<br>ele3:<br>	.quad 0xc00<br>	.quad 0<br></code></pre></td></tr></table></figure>
+
+<p>观察源代码，我们发现其逻辑只是一个简单的while循环迭代累加，所以编写汇编语言时重点在于如何处理while循环。回忆我们在第二章内学到的知识，有两种方式来进行，一种是先进行条件判断再进行循环：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs assembly">	goto test;<br>loop:<br>	body-statement<br>test:<br>	t = test-expr;<br>	if(t)<br>        goto loop;<br></code></pre></td></tr></table></figure>
+
+<p>另一种是将while转变为do-while。在这里，笔者采用第一种方式。</p>
+<p>对应的代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs assembly"># 程序初始化<br>.pos 0 					<br>	irmovq stack, %rsp  	<br>	call main			<br>	halt	<br>	<br># 定义链表<br>.align 8<br>ele1:<br>	.quad 0x00a<br>	.quad ele2<br>ele2:<br>	.quad 0x0b0<br>	.quad ele3<br>ele3:<br>	.quad 0xc00<br>	.quad 0<br><br># 主函数部分<br>main:<br>	irmovq	ele1,%rdi<br>	call	sum		#sum(list_ptr ls)<br>	ret<br>sum:<br>	xorq	%rax,%rax<br>	jmp		test<br>	<br>loop:<br>	mrmovq	(%rdi),%rbx<br>	addq	%rbx,%rax<br>	mrmovq	8(%rdi),%rdi<br>	<br>test:<br>	andq	%rdi,%rdi<br>	jne		loop<br>	ret<br><br>	.pos 0x200<br>stack:<br><br></code></pre></td></tr></table></figure>
+
+<p>编译并运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">./yas sum.ys &amp;&amp; ./yis sum.yo<br></code></pre></td></tr></table></figure>
+
+<p>结果：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash">Stopped <span class="hljs-keyword">in</span> 26 steps at PC = 0x13.  Status <span class="hljs-string">&#x27;HLT&#x27;</span>, CC Z=1 S=0 O=0<br>Changes to registers:<br>%rax:   0x0000000000000000      0x0000000000000cba<br>%rbx:   0x0000000000000000      0x0000000000000c00<br>%rsp:   0x0000000000000000      0x0000000000000200<br><br>Changes to memory:<br>0x01f0: 0x0000000000000000      0x000000000000005b<br>0x01f8: 0x0000000000000000      0x0000000000000013<br></code></pre></td></tr></table></figure>
+
+<p>可以看到<code>%rax</code>的值已经变成了<code>0xcba</code>，这是正确的结果。</p>
+<h3 id="rsum-ys：递归求和链表元素"><a href="#rsum-ys：递归求和链表元素" class="headerlink" title="rsum.ys：递归求和链表元素"></a>rsum.ys：递归求和链表元素</h3><p>与上一题一样，我们这次采取递归的方法。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* rsum_list - Recursive version of sum_list */</span><br><span class="hljs-type">long</span> <span class="hljs-title function_">rsum_list</span><span class="hljs-params">(list_ptr ls)</span><br>&#123;<br>    <span class="hljs-keyword">if</span> (!ls)<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">else</span> &#123;<br>	<span class="hljs-type">long</span> val = ls-&gt;val;<br>	<span class="hljs-type">long</span> rest = rsum_list(ls-&gt;next);<br>	<span class="hljs-keyword">return</span> val + rest;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这次需要处理条件判断if-else语句。我们可以用跳转指令进行代替。递归需要用栈保存之前的变量，因此涉及到push&#x2F;pop操作。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs assembly"># 程序初始化<br>.pos 0 					<br>	irmovq stack, %rsp  	<br>	call main			<br>	halt	<br>	<br># 定义链表<br>.align 8<br>ele1:<br>	.quad 0x00a<br>	.quad ele2<br>ele2:<br>	.quad 0x0b0<br>	.quad ele3<br>ele3:<br>	.quad 0xc00<br>	.quad 0<br>	<br># 主函数<br>main:<br>	irmovq	ele1,%rdi<br>	call	rsum_list<br>	ret<br>	<br>rsum_list:<br>	andq	%rdi,%rdi<br>	je		done<br>	mrmovq	(%rdi),%rdx<br>	pushq	%rdx<br>	mrmovq	8(%rdi),%rdi<br>	call	rsum_list<br>	popq	%rdx<br>	addq	%rdx,%rax<br>	ret<br>	<br>done:<br>	xorq	%rax,%rax<br>	ret<br>	<br>	.pos 0x200<br>stack:<br>	<br></code></pre></td></tr></table></figure>
+
+<p>运行检测：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash">Changes to registers:<br>%rax:   0x0000000000000000      0x0000000000000cba<br>%rdx:   0x0000000000000000      0x000000000000000a<br>%rsp:   0x0000000000000000      0x0000000000000200<br><br>Changes to memory:<br>0x01c0: 0x0000000000000000      0x0000000000000086<br>0x01c8: 0x0000000000000000      0x0000000000000c00<br>0x01d0: 0x0000000000000000      0x0000000000000086<br>0x01d8: 0x0000000000000000      0x00000000000000b0<br>0x01e0: 0x0000000000000000      0x0000000000000086<br>0x01e8: 0x0000000000000000      0x000000000000000a<br>0x01f0: 0x0000000000000000      0x000000000000005b<br>0x01f8: 0x0000000000000000      0x0000000000000013<br></code></pre></td></tr></table></figure>
+
+<h3 id="copy-ys：复制数据并执行XOR操作"><a href="#copy-ys：复制数据并执行XOR操作" class="headerlink" title="copy.ys：复制数据并执行XOR操作"></a>copy.ys：复制数据并执行XOR操作</h3><p>将一个字块从内存的一个部分复制到内存的另一个（非重叠区域）区域，计算所有复制的字的校验和 (Xor)。</p>
+<p>原始代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* copy_block - Copy src to dest and return xor checksum of src */</span><br><span class="hljs-type">long</span> <span class="hljs-title function_">copy_block</span><span class="hljs-params">(<span class="hljs-type">long</span> *src, <span class="hljs-type">long</span> *dest, <span class="hljs-type">long</span> len)</span><br>&#123;<br>    <span class="hljs-type">long</span> result = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">while</span> (len &gt; <span class="hljs-number">0</span>) &#123;<br>	<span class="hljs-type">long</span> val = *src++;<br>	*dest++ = val;<br>	result ^= val;<br>	len--;<br>    &#125;<br>    <span class="hljs-keyword">return</span> result;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>依旧是处理while循环，这一次需要传递三个参数，我们回忆一下传递参数的寄存器：<code>%rdi，%rsi，%rdx</code>。</p>
+<p>代码如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs assembly"># 程序初始化<br>.pos 0 					<br>	irmovq stack, %rsp  	<br>	call main			<br>	halt	<br><br># 定义数据块<br>.align 8<br>src:<br>	.quad 0x00a<br>	.quad 0x0b0<br>	.quad 0xc00<br>dest:<br>	.quad 0x111<br>	.quad 0x222<br>	.quad 0x333<br>	<br>main:<br>	irmovq	src,%rdi<br>	irmovq	dest,%rsi<br>	irmovq	$3,%rdx<br>	call	copy<br>	ret<br>	<br>copy:<br>	irmovq	$8,%r8<br>	irmovq	$1,%r9<br>	xorq	%rax,%rax<br>	jmp		test<br>	<br>loop:<br>	mrmovq	(%rdi),%rbx<br>	addq	%r8,%rdi<br>	rmmovq	%rbx,(%rsi)<br>	addq	%r8,%rsi<br>	xorq	%rbx,%rax<br>	subq	%r9,%rdx<br><br>test:<br>	andq	%rdx,%rdx<br>	jne 	loop<br>	ret<br>	<br>	.pos 0x200<br>stack:<br><br></code></pre></td></tr></table></figure>
+
+<p>运行得到：</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs dns">Stopped in <span class="hljs-number">39</span> steps at PC = <span class="hljs-number">0</span>x13.  Status &#x27;HLT&#x27;, CC Z=<span class="hljs-number">1</span> S=<span class="hljs-number">0</span> O=<span class="hljs-number">0</span><br>Changes to registers:<br>%rax:   <span class="hljs-number">0</span>x00000<span class="hljs-number">00000000000</span>      <span class="hljs-number">0</span>x0000000000000cba<br>%rbx:   <span class="hljs-number">0</span>x00000<span class="hljs-number">00000000000</span>      <span class="hljs-number">0</span>x00000<span class="hljs-number">00000000c00</span><br>%rsp:   <span class="hljs-number">0</span>x00000<span class="hljs-number">00000000000</span>      <span class="hljs-number">0</span>x0000<span class="hljs-number">000000000200</span><br>%rsi:   <span class="hljs-number">0</span>x00000<span class="hljs-number">00000000000</span>      <span class="hljs-number">0</span>x00000<span class="hljs-number">00000000048</span><br>%rdi:   <span class="hljs-number">0</span>x00000<span class="hljs-number">00000000000</span>      <span class="hljs-number">0</span>x00000<span class="hljs-number">00000000030</span><br>%r8:    <span class="hljs-number">0</span>x00000<span class="hljs-number">00000000000</span>      <span class="hljs-number">0</span>x00000<span class="hljs-number">00000000008</span><br>%r9:    <span class="hljs-number">0</span>x00000<span class="hljs-number">00000000000</span>      <span class="hljs-number">0</span>x00000<span class="hljs-number">00000000001</span><br><br>Changes to memory:<br><span class="hljs-number">0</span>x0030: <span class="hljs-number">0</span>x0000<span class="hljs-number">000000000111</span>      <span class="hljs-number">0</span>x000000000000000a<br><span class="hljs-number">0</span>x0038: <span class="hljs-number">0</span>x0000<span class="hljs-number">000000000222</span>      <span class="hljs-number">0</span>x000000<span class="hljs-number">00000000b0</span><br><span class="hljs-number">0</span>x0040: <span class="hljs-number">0</span>x00000<span class="hljs-number">00000000333</span>      <span class="hljs-number">0</span>x00000<span class="hljs-number">00000000c00</span><br><span class="hljs-number">0</span>x01f0: <span class="hljs-number">0</span>x00000<span class="hljs-number">00000000000</span>      <span class="hljs-number">0</span>x000000000000006f<br><span class="hljs-number">0</span>x01f8: <span class="hljs-number">0</span>x00000<span class="hljs-number">00000000000</span>      <span class="hljs-number">0</span>x00000<span class="hljs-number">00000000013</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="Part-B"><a href="#Part-B" class="headerlink" title="Part B"></a>Part B</h2><p>在这一部分中，我们需要扩展 SEQ 处理器以支持 <code>iaddq</code> 指令，要添加此指令，需要修改文件 <code>seq-full.hcl</code>。</p>
+<p>我们首先将<code>iaddq</code>指令按照FDEMW几个阶段进行区分，根据教材例子依葫芦画瓢即可：</p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th><code>iaddq	V,rB</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Fetch</td>
+<td>icode:ifun$\leftarrow$$M_1$[PC], rB$\leftarrow M_1$[PC+1]</td>
+</tr>
+<tr>
+<td></td>
+<td>valC$\leftarrow M_8$[PC+2], valP$\leftarrow$PC+10</td>
+</tr>
+<tr>
+<td>Decode</td>
+<td>valA$\leftarrow R$[rB]</td>
+</tr>
+<tr>
+<td>Execute</td>
+<td>valE$\leftarrow$valA+valC</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td></td>
+</tr>
+<tr>
+<td>Write</td>
+<td>R[rB]$\leftarrow$valE</td>
+</tr>
+<tr>
+<td>Update PC</td>
+<td>PC$\leftarrow$valP</td>
+</tr>
+</tbody></table>
+<p>之后再根据HCL语言进行描述即可，这里笔者详细说明一下步骤：</p>
+<ol>
+<li><p>在指令集中添加指令，在这里已经为我们添加好了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs assembly">wordsig IIADDQ	&#x27;I_IADDQ&#x27;<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>取指阶段中，在流水线信号<code>instr_valid</code>，<code>need_valC</code>和<code>need_regids</code>中添加指令。</p>
+<p>这三条指令分别表示当前指令是否有效、当前指令是否需要立即数常数（即valC）、当前指令是否需要使用寄存器。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs assembly">bool instr_valid = icode in <br>	&#123; INOP, IHALT, IRRMOVQ, IIRMOVQ, IRMMOVQ, IMRMOVQ,<br>	       IOPQ, IJXX, ICALL, IRET, IPUSHQ, IPOPQ, IIADDQ &#125;;<br>	       <br>bool need_regids =<br>	icode in &#123; IRRMOVQ, IOPQ, IPUSHQ, IPOPQ, <br>		     IIRMOVQ, IRMMOVQ, IMRMOVQ, IIADDQ &#125;;<br><br>bool need_valC =<br>	icode in &#123; IIRMOVQ, IRMMOVQ, IMRMOVQ, IJXX, ICALL, IIADDQ &#125;;<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>译码阶段中，修改<code>srcA</code>，<code>dstE</code>，<code>aluA</code>，<code>aluB</code>，<code>set_cc</code>。</p>
+<p>这一段是说明指令需要从一个寄存器中取出数据，由于我们只使用了一个寄存器，用<code>srcA</code>即可，即使我们用的寄存器代号为rB。<code>dstE</code>是保存结果的寄存器，这里我们加到rB的那一行中。<code>aluA</code>和<code>aluB</code>是执行操作的两个数，分别是我们的valA和valC，这里交换顺序也行。最后要记得我们的操作会改变条件码，所以需要<code>set_cc</code>信号。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs assembly">word srcA = [<br>	icode in &#123; IRRMOVQ, IRMMOVQ, IOPQ, IPUSHQ  &#125; : rA;<br>	icode in &#123; IIADDQ &#125; : rB;<br>	icode in &#123; IPOPQ, IRET &#125; : RRSP;<br>	1 : RNONE; # Don&#x27;t need register<br>];<br><br>word dstE = [<br>	icode in &#123; IRRMOVQ &#125; &amp;&amp; Cnd : rB;<br>	icode in &#123; IIRMOVQ, IOPQ, IIADDQ &#125; : rB;<br>	icode in &#123; IPUSHQ, IPOPQ, ICALL, IRET &#125; : RRSP;<br>	1 : RNONE;  # Don&#x27;t write any register<br>];<br><br>## Select input A to ALU<br>word aluA = [<br>	icode in &#123; IRRMOVQ, IOPQ &#125; : valA;<br>	icode in &#123; IIRMOVQ, IRMMOVQ, IMRMOVQ, IIADDQ &#125; : valC;<br>	icode in &#123; ICALL, IPUSHQ &#125; : -8;<br>	icode in &#123; IRET, IPOPQ &#125; : 8;<br>	# Other instructions don&#x27;t need ALU<br>];<br><br>## Select input B to ALU<br>word aluB = [<br>	icode in &#123; IRMMOVQ, IMRMOVQ, IOPQ, ICALL, <br>		      IPUSHQ, IRET, IPOPQ &#125; : valB;<br>	icode in &#123; IRRMOVQ, IIRMOVQ &#125; : 0;<br>	icode in &#123; IIADDQ &#125; : valA;<br>	# Other instructions don&#x27;t need ALU<br>];<br><br>bool set_cc = icode in &#123; IOPQ, IIADDQ &#125;;<br></code></pre></td></tr></table></figure></li>
+</ol>
+<p>测试方法：</p>
+<p>首先我们需要编译模拟工具<code>ssim</code>，可以直接使用<code>make VERSION=full</code>指令。注意，在运行中可能会遇到如下错误：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">/usr/bin/ld: /tmp/cck5qU0f.o:(.data.rel+0x0): undefined reference to `matherr<span class="hljs-string">&#x27;</span><br><span class="hljs-string">collect2: error: ld returned 1 exit status</span><br><span class="hljs-string">make: *** [Makefile:44: ssim] Error 1</span><br></code></pre></td></tr></table></figure>
+
+<p>出现这种情况说明<code>ssim.c</code>文件中<code>matherr</code>变量有一些问题，猜测可能和图形界面GUI相关。由于笔者并没有使用相关程序，直接在<code>ssim.c</code>文件中将与其相关的代码注释掉即可。</p>
+<p>成功编译后，我们可以进行测试，进入<code>ptest</code>目录下，运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> ../ptest; make SIM=../seq/ssim <span class="hljs-comment">#测试除了iaddq以外的所有指令</span><br><span class="hljs-built_in">cd</span> ../ptest; make SIM=../seq/ssim TFLAGS=-i  <span class="hljs-comment">#测试我们实现的iaddq指令</span><br></code></pre></td></tr></table></figure>
+
+<p>若结果正确应如下所示，提示succeed：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs bash">usr@Fabulous:~/CMU15-213 labs/archlab-handout/sim/seq$ <span class="hljs-built_in">cd</span> ../ptest; make SIM=../seq/ssim TFLAGS=-i<br>./optest.pl -s ../seq/ssim -i<br>Simulating with ../seq/ssim<br>  All 58 ISA Checks Succeed<br>./jtest.pl -s ../seq/ssim -i<br>Simulating with ../seq/ssim<br>  All 96 ISA Checks Succeed<br>./ctest.pl -s ../seq/ssim -i<br>Simulating with ../seq/ssim<br>  All 22 ISA Checks Succeed<br>./htest.pl -s ../seq/ssim -i<br>Simulating with ../seq/ssim<br>  All 756 ISA Checks Succeed<br><br>usr@Fabulous:~/CMU15-213 labs/archlab-handout/sim/ptest$ <span class="hljs-built_in">cd</span> ../ptest; make SIM=../seq/ssim<br>./optest.pl -s ../seq/ssim<br>Simulating with ../seq/ssim<br>  All 49 ISA Checks Succeed<br>./jtest.pl -s ../seq/ssim<br>Simulating with ../seq/ssim<br>  All 64 ISA Checks Succeed<br>./ctest.pl -s ../seq/ssim<br>Simulating with ../seq/ssim<br>  All 22 ISA Checks Succeed<br>./htest.pl -s ../seq/ssim<br>Simulating with ../seq/ssim<br>  All 600 ISA Checks Succeed<br></code></pre></td></tr></table></figure>
+
+<h2 id="Part-C"><a href="#Part-C" class="headerlink" title="Part C"></a>Part C</h2><p>在这一阶段，我们要修改的文件是<code>pipe-full.hcl</code>和<code>ncopy.ys</code>。我们需要做的是优化<code>ncopy</code>的代码以及整个系统的底层逻辑，尽可能优化代码的性能。</p>
+<p>在编译时会遇到如下问题：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">/usr/bin/ld: /tmp/cc9YqZcG.o:(.bss+0x0): multiple definition of `mem_wb_state<span class="hljs-string">&#x27;; /tmp/ccUxUYEs.o:(.bss+0x120): first defined here</span><br><span class="hljs-string">/usr/bin/ld: /tmp/cc9YqZcG.o:(.bss+0x8): multiple definition of `ex_mem_state&#x27;</span>; /tmp/ccUxUYEs.o:(.bss+0x128): first defined here<br>/usr/bin/ld: /tmp/cc9YqZcG.o:(.bss+0x10): multiple definition of `id_ex_state<span class="hljs-string">&#x27;; /tmp/ccUxUYEs.o:(.bss+0x130): first defined here</span><br><span class="hljs-string">/usr/bin/ld: /tmp/cc9YqZcG.o:(.bss+0x18): multiple definition of `if_id_state&#x27;</span>; /tmp/ccUxUYEs.o:(.bss+0x138): first defined here<br>/usr/bin/ld: /tmp/cc9YqZcG.o:(.bss+0x20): multiple definition of `pc_state<span class="hljs-string">&#x27;; /tmp/ccUxUYEs.o:(.bss+0x140): first defined here</span><br><span class="hljs-string">collect2: error: ld returned 1 exit status</span><br><span class="hljs-string">make: *** [Makefile:44: psim] Error 1</span><br></code></pre></td></tr></table></figure>
+
+<p>这也是gcc版本导致的问题，加上-fcommon即可。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs makefile">CFLAGS=-Wall -O2 -g -fcommon<br></code></pre></td></tr></table></figure>
+
+<p>测试过程中会用上的指令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">../misc/yas ncopy.ys &amp;&amp; ./check-len.pl &lt; ncopy.yo    <span class="hljs-comment">#检查代码长度是否超出1000Byte</span><br>./correctness.pl	<span class="hljs-comment">#检查正确性</span><br>make drivers &amp;&amp; ./benchmark.pl	<span class="hljs-comment">#运行测试评分</span><br></code></pre></td></tr></table></figure>
+
+<p>我们首先跑一遍原始代码看看情况如何：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">Average CPE     15.18<br>Score   0.0/60.0<br></code></pre></td></tr></table></figure>
+
+<p>噫，非常好的分数！<del>（迫真）</del></p>
+<p>于是我们开始着手优化。由于评分标准为CPE，所以执行的指令越少效率越高。优化的思路大致可以从两方面入手：优化函数的汇编代码和优化底层逻辑。</p>
+<h3 id="优化汇编代码"><a href="#优化汇编代码" class="headerlink" title="优化汇编代码"></a>优化汇编代码</h3><p>官方为我们提供了翻译为C语言和汇编代码的原始版本：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">word_t</span> <span class="hljs-title function_">ncopy</span><span class="hljs-params">(<span class="hljs-type">word_t</span> *src, <span class="hljs-type">word_t</span> *dst, <span class="hljs-type">word_t</span> len)</span><br>&#123;<br>    <span class="hljs-type">word_t</span> count = <span class="hljs-number">0</span>;<br>    <span class="hljs-type">word_t</span> val;<br><br>    <span class="hljs-keyword">while</span> (len &gt; <span class="hljs-number">0</span>) &#123;<br>	    val = *src++;<br>	    *dst++ = val;<br>	    <span class="hljs-keyword">if</span> (val &gt; <span class="hljs-number">0</span>)<br>	        count++;<br>	    len--;<br>    &#125;<br>    <span class="hljs-keyword">return</span> count;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs assembly">ncopy:<br>	xorq %rax,%rax		# count = 0;<br>	andq %rdx,%rdx		# len &lt;= 0?<br>	jle Done		# if so, goto Done:<br><br>Loop:	<br>	mrmovq (%rdi), %r10	# read val from src...<br>	rmmovq %r10, (%rsi)	# ...and store it to dst<br>	andq %r10, %r10		# val &lt;= 0?<br>	jle Npos		# if so, goto Npos:<br>	irmovq $1, %r10<br>	addq %r10, %rax		# count++<br>	<br>Npos:	<br>	irmovq $1, %r10<br>	subq %r10, %rdx		# len--<br>	irmovq $8, %r10<br>	addq %r10, %rdi		# src++<br>	addq %r10, %rsi		# dst++<br>	andq %rdx,%rdx		# len &gt; 0?<br>	jg Loop			# if so, goto Loop:<br><br># Do not modify the following section of code<br># Function epilogue.<br>Done:<br>	ret<br># Keep the following label at the end of your function<br>End:<br></code></pre></td></tr></table></figure>
+
+<p>可以看到是使用while循环迭代实现的。所以我们第一个思路就是从while循环入手进行优化,也就是减少loop内部的指令数量。</p>
+<p>第一眼我就发现了<code>irmovq $1, %r10 ; addq %r10, %rax	</code>这段代码，这说明每进行一次循环都要重新将<code>%r10</code>赋值再相加，这赋值的操作显然是多余的。有没有一种办法能省略这一步直接相加呢？欸☝🤓，还记得我们之前写的<code>iaddq</code>吗？这里正好可以进行一步优化。</p>
+<p>于是我们用<code>iaddq</code>进行替换（注意在pipe-full里面是没有进行实现的，我们需要先进行实现），包括下面的<code>Npos</code>内部的代码也可进行替换，运行看看结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs assembly">ncopy:<br>	xorq %rax,%rax		# count = 0;<br>	andq %rdx,%rdx		# len &lt;= 0?<br>	jle Done		# if so, goto Done:<br><br>Loop:	<br>	mrmovq (%rdi), %r10	# read val from src...<br>	rmmovq %r10, (%rsi)	# ...and store it to dst<br>	andq %r10, %r10		# val &lt;= 0?<br>	jle Npos		# if so, goto Npos:<br>	iaddq $1, %rax		# count++<br>	<br>Npos:	<br>	iaddq $-1, %rdx		# len--<br>	iaddq $8, %rdi		# src++<br>	iaddq $8, %rsi		# dst++<br>	andq %rdx,%rdx		# len &gt; 0?<br>	jg Loop			# if so, goto Loop:<br><br>Done:<br>	ret<br>End:<br><br></code></pre></td></tr></table></figure>
+
+<p>测试结果：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">68/68 pass correctness <span class="hljs-built_in">test</span><br>ncopy length = 96 bytes<br>Average CPE     12.70<br>Score   0.0/60.0<br></code></pre></td></tr></table></figure>
+
+<p>可以看到稍有进步，但还是很完美的分数。所以接下来我们考虑使用另外的优化方法。</p>
+<p>由于笔者刚看完第四章就开始写lab，所以对于优化性能还处于一无所知的状态。故在读完第五章之后，补全没完成的部分：</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/CMU15-213/" class="category-chain-item">CMU15-213</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>AttackLab</div>
+      <div>https://fabulous1496.github.io/2024/08/26/ArchLab/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Fabulous</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年8月26日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/08/16/AttackLab/" title="AttackLab">
+                        <span class="hidden-mobile">AttackLab</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"CjZvdepCB7OjY30a6oge7W6x-gzGzoHsz","appKey":"ErsGn5pjObFn129dKnLC8esg","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
