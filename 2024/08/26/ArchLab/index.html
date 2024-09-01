@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://fabulous1496.github.io/Pictures/CMU15-213/ArchLab.jpg">
 <meta property="article:published_time" content="2024-08-26T07:11:49.000Z">
-<meta property="article:modified_time" content="2024-08-31T13:28:21.171Z">
+<meta property="article:modified_time" content="2024-09-01T12:00:11.971Z">
 <meta property="article:author" content="Fabulous">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://fabulous1496.github.io/Pictures/CMU15-213/ArchLab.jpg">
@@ -262,7 +262,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.9k 字
+          3.3k 字
         
       </span>
     
@@ -273,7 +273,7 @@
         
         
         
-          25 分钟
+          28 分钟
         
       </span>
     
@@ -476,6 +476,30 @@
 
 <p>可以看到稍有进步，但还是很完美的分数。所以接下来我们考虑使用另外的优化方法。</p>
 <p>由于笔者刚看完第四章就开始写lab，所以对于优化性能还处于一无所知的状态。故在读完第五章之后，补全没完成的部分：</p>
+<h3 id="循环展开"><a href="#循环展开" class="headerlink" title="循环展开"></a>循环展开</h3><p>在第五章中，书中重点介绍了有关循环展开的思想。在这里，笔者尝试了多种循环展开的方式，最终采取$8\times1$循环展开的方式来进行优化：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs assembly">loop_8_way:	<br>	mrmovq (%rdi), %r8<br>    mrmovq 8(%rdi), %r9<br>    mrmovq 16(%rdi), %r10<br>    mrmovq 24(%rdi), %r11<br>    mrmovq 32(%rdi), %r12<br>    mrmovq 40(%rdi), %r13<br>    mrmovq 48(%rdi), %r14<br>    mrmovq 56(%rdi), %rcx<br>write_1st:<br>	andq	%r8,%r8<br>	rmmovq	%r8,(%rsi)<br>	jle		write_2nd<br>	iaddq	$1,%rax<br>write_2nd:<br>	......<br></code></pre></td></tr></table></figure>
+
+<p>像这样利用8个寄存器存放更新的参数，在每次循环中同时更新8个参数，可以达到减少a循环次数从而优化程序性能的效果。最后剩下的部分我们进行余数处理即可。</p>
+<p>在这里还对跳转指令进行了优化，即为了避免各种冒险（即暂停）所加入的气泡周期中为一条并不相关的有效指令，从而避免了气泡带来的等待开销，提高流水线的效率。</p>
+<p>仔细观察代码中的语序，我们将原本位于后面的 <code>rmmovq</code> 指令插入到了 <code>andq</code> 设置条件码语句与 <code>jle</code> 判断语句之间，从而使得 <code>jle</code> 到达 Decode 解码阶段时，各指令阶段如下：</p>
+<ul>
+<li><code>andq</code> Memory 访存阶段</li>
+<li><code>rmovq</code> Execute 执行阶段</li>
+<li><code>jle</code> Decode 解码阶段</li>
+</ul>
+<p>此时，<code>jle</code> 可以立即使用正确的 <code>M_Cnd</code>，避免控制冒险，即在 Decode 解码阶段就可以知道是否需要跳转，避免了预测失败时的 2 个气泡周期的惩罚。</p>
+<p>最终结果：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">Average CPE     8.35<br>Score   43/60.0<br></code></pre></td></tr></table></figure>
+
+<p>进一步的优化笔者在这里就不多补充了，有兴趣的读者可以参考下面这几篇blog：</p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://arthals.ink/posts/experience/arch-lab">更适合北大宝宝体质的 Arch Lab 踩坑记 - Arthals’ ink</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://littlecsd.net/2019/01/18/csapp-Archlab/">csapp-Archlab | Little csd’s blog</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/33751460">csapp archlab Part C - 知乎 (zhihu.com)</a></p>
+</li>
+</ul>
 
                 
               </div>
