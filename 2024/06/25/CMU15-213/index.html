@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://fabulous1496.github.io/Pictures/CMU15-213/cover.jpg">
 <meta property="article:published_time" content="2024-06-25T13:11:49.000Z">
-<meta property="article:modified_time" content="2024-09-01T13:32:23.359Z">
+<meta property="article:modified_time" content="2024-09-09T08:39:00.029Z">
 <meta property="article:author" content="Fabulous">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://fabulous1496.github.io/Pictures/CMU15-213/cover.jpg">
@@ -262,7 +262,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          17k 字
+          20k 字
         
       </span>
     
@@ -273,7 +273,7 @@
         
         
         
-          143 分钟
+          171 分钟
         
       </span>
     
@@ -1505,9 +1505,117 @@
 <li><p>磁盘构造</p>
 <p><img src="/Pictures/CMU15-213/cipan.png" srcset="/img/loading.gif" lazyload></p>
 <p>磁盘由盘片构成，每个盘片由两面或称为表面构成，表面覆盖磁性记录材料。盘片中间有一个可以旋转的主轴，它使盘片以固定的旋转速率旋转。</p>
-<p>每个表面由一组称为磁道的同心圆组成，每个磁道被划分为一组扇区，每个扇区包含等数量的数据位（通常是512字节）。扇区间由一些间隙隔开</p>
+<p>每个表面由一组称为磁道的同心圆组成，每个磁道被划分为一组扇区，每个扇区包含等数量的数据位（通常是512字节）。扇区间由一些间隙隔开。</p>
+</li>
+<li><p>磁盘容量</p>
+<p>一个磁盘上可以记录的最大位数称为它的最大容量，由以下几个因素决定：记录密度、磁道密度、面密度。线代的磁盘使用多区记录的技术，将柱面的集合分割成不相交的子集合，称为记录区，每个区包含一组连续的柱面，每个柱面的每条磁道含有相同数量的扇区。<br>$$<br>磁盘容量&#x3D;\frac{字节数}{扇区}\times \frac{平均扇区数}{磁道}\times \frac{磁道数}{表面}\times \frac{表面数}{盘片} \times \frac{盘片数}{磁盘}<br>$$<br>对于一个5个盘片、每个扇区512字节、每个面20000条磁道，每条磁道平均300个扇区的磁盘，容量为：<br>$$<br>Volume&#x3D;\frac{512字节}{扇区}\times \frac{300扇区}{磁道}\times \frac{20000磁道}{表面}\times \frac{2表面}{盘片}\times \frac{5盘片}{磁盘}&#x3D;30.72GB<br>$$<br>其中，单位的换算关系为：$1GB&#x3D;10^9\quad bytes,1TB&#x3D;10^{12} \quad bytes$</p>
+</li>
+<li><p>磁盘操作</p>
+<p>磁盘用读&#x2F;写头来读写存储在磁性表面的位，而读写头连接到一个传动臂一端，可以将其定位到磁道上，这称为<strong>寻道</strong>。读取速度取决于寻道时间、旋转时间、传送时间。</p>
+</li>
+<li><p>逻辑磁盘块</p>
+<p>现代磁盘将它们的构造呈现为一个简单的视图，一个B个扇区大小的逻辑块的序列，编号从0到B-1.磁盘中封装了一个磁盘控制器，维护逻辑块合物理磁盘扇区之间的映射关系。</p>
+<p>当操作系统需要进行一个I&#x2F;O操作时，操作系统将命令发送到磁盘控制器，控制器将逻辑块号翻译成一个（盘面，磁道，扇区）的三元组。</p>
 </li>
 </ol>
+<h2 id="局部性"><a href="#局部性" class="headerlink" title="局部性"></a>局部性</h2><p>局部性指程序倾向于引用邻近于其它最近引用过的数据项的数据项或数据项本身。这可以作为衡量程序性能的一项重要指标。</p>
+<p>局部性通常分为时间局部性合空间局部性。我们从程序数据引用为例来简单了解一下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">sumvec</span><span class="hljs-params">(<span class="hljs-type">int</span> v[N])</span><br>&#123;<br>    <span class="hljs-type">int</span> i , sum = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span>(i = <span class="hljs-number">0</span>; i &lt; N; i++)<br>    &#123;<br>        sum += v[i];<br>    &#125;<br>    <span class="hljs-keyword">return</span> sum;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>对于变量sum而言，在每次循环中杯引用一次，具有时间局部性。另一方面对向量v而言，其中的元素是按顺序读取的，所以具有良好的空间局部性。特别地，对于像这样顺序访问一个向量的每个元素的函数，我们称其具有<strong>步长为1的引用模式</strong>，也叫<strong>顺序引用模式</strong>。同理，我们延申出<strong>步长为k的引用模式</strong>。</p>
+<p>因此，我们可以得出一般性的结论：重复引用相同变量的函数具有良好的时间局部性，同时引用步长越小，程序的空间局部性越强。</p>
+<h2 id="多级存储结构"><a href="#多级存储结构" class="headerlink" title="多级存储结构"></a>多级存储结构</h2><p>现代计算机中，存储器按照一定的层次结构进行组织。</p>
+<p><img src="/Pictures/CMU15-213/%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84.png" srcset="/img/loading.gif" lazyload alt="存储器层次结构"></p>
+<p>存储器层次结构的中心思想是，对于每个k，位于k层的更快更小的存储设备作为位于k+1层更大更慢的存储设备的缓存。换句话说，层次结构中的每一层都缓存来自较低一层的数据对象。</p>
+<h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><p>我们可以看到，在层次结构中有许多“缓存结构”。一般而言，高速缓存（cache）是一个小而快速的存储设备，它作为存储在更大、更慢的设备中的数据对象的缓冲区域，使用高速缓存的过程称为缓存（caching）。</p>
+<p><img src="/Pictures/CMU15-213/caching.png" srcset="/img/loading.gif" lazyload alt="caching"></p>
+<p>每一层的存储器被划分为固定大小或可变大小的数据块，而数据总是以块为大小在层之间来回复制。一般相邻的层之间块的大小是固定的，而其它的层次对之间可以有不同的块的大小。</p>
+<ul>
+<li><p>缓存命中&#x2F;不命中</p>
+<p>当程序需要第k+1层的数据对象d时，它首先在当前存储在第k层的一个块中查找d。若d恰好在第k层，我们称为缓存命中，这时程序直接从第k层读取速度更快。另一方面，若缓存不命中，第k层的缓存会从第k+1的缓存中取出包含d的块，覆盖掉现存的块，这称为<strong>替换</strong>或<strong>驱逐</strong>。</p>
+<p>缓存不命中分为多种情况，其中特别的，若第k层是空的，我们称之为冷缓存，此类不命中称为<strong>强制性不命中或冷不命中</strong>。</p>
+<p>只要发生了不命中，第k层的缓存就需要采取某个放置策略来确定k+1层取出的块放在哪里。一般而言，硬件缓存采取严格的放置策略，即将k+1层的某个块限制放置在第k层块的一个小子集中。这种策略会引起一种不命中，称为<strong>冲突不命中</strong>。例如，我同时需要第k+1层两个块的两个数据，但是这两个数据按照策略被保存在第k层同一个块，这样会导致一直循环，对这两个块的每次引用都不会命中。</p>
+<p>另一种是<strong>容量不命中</strong>，即第k层的块的数量不足以处理所有的数据，也就是缓存太小了。</p>
+</li>
+</ul>
+<h3 id="高速缓存存储器"><a href="#高速缓存存储器" class="headerlink" title="高速缓存存储器"></a>高速缓存存储器</h3><p>考虑一个计算机系统，其中每个存储器地址有m位，形成$M&#x3D;2^m$个不同的地址。这样的一个机器的高速缓存被组织成一个有$S&#x3D;2^s$个高速缓存组的数组。每个组包含E个高速缓存行。每个行有一个$B&#x3D;2^b$字节的数据块组成的，还有1个有效位和$t&#x3D;m-(b+s)$个标记位，它们唯一地表示存储在这个高速缓存行中的块。</p>
+<p>一般而言，高速缓存的结构可以用元组（S，E，B，m）来描述。高速缓存的大小C指所有块的大小和。标记位和有效位不包括在内，因此$C&#x3D;S\times E\times B$。</p>
+<p>参数S和B将m个地址分为了三个字段：t个标记位，s位组索引，b位块偏移。组索引被解释为一个无符号整数，它告诉我们这个字必须存储在哪个组中。一旦我们知道了这个字存放的组，t个标记位就告诉我们组的哪一行包含这个字，确定行后b个块偏移位给出了在B个字节的数据块中的子偏移。</p>
+<p><img src="/Pictures/CMU15-213/Hcache.png" srcset="/img/loading.gif" lazyload alt="High-spped-cache"></p>
+<h3 id="直接映射高速缓存"><a href="#直接映射高速缓存" class="headerlink" title="直接映射高速缓存"></a>直接映射高速缓存</h3><p>根据每个组的高速缓存行数，高速缓存被分为不同的类。每个组只有一行（E&#x3D;1）的高速缓存称为<strong>直接映射高速缓存</strong>。这是最容易理解和实现的一种高速缓存。</p>
+<p>假设我们有这样一个系统，由一个CPU，一个Register，一个L1高速缓存和一个主存组成。当CPU执行一条读内存$\omega$的指令，它向L1请求这个字。如果缓存命中，L1会很快抽取出并返回给CPU。若不命中，L1向主存申请一个包含$\omega$块的副本，再返回给CPU。像这样的过程我们可以抽象为三步：1）组选择；2）行匹配；3）字抽取。</p>
+<ol>
+<li><p>组选择</p>
+<p>在这一步中，高速缓存从$\omega$的地址中间抽取出s个索引位，并解释为一个无符号整数。</p>
+<p><img src="/Pictures/CMU15-213/GroupSelect.png" srcset="/img/loading.gif" lazyload alt="GroupSelect"></p>
+</li>
+<li><p>行匹配</p>
+<p>在组选择后，我们需要确定是否有$\omega$的一个副本存储在该组包含的一个高速缓存行中。这一步通过匹配高速缓存行中的标记与$\omega$的地址中的标记来实现。如果匹配成功，则缓存命中。若不成功，则为缓存不命中，此时进行行替换很简单，由于每组只有一行，所以直接用新取出的行来替换当前行。</p>
+<p><img src="/Pictures/CMU15-213/LineMatching.png" srcset="/img/loading.gif" lazyload alt="LineMatching"></p>
+</li>
+<li><p>字选择</p>
+<p>最后一步需要确定所需要的字在块中从哪里开始，这是由块偏移量b所确定的。</p>
+</li>
+</ol>
+<p>我们以一个直接映射高速缓存来具体进行学习：假设我们有一个这样的高速缓存<br>$$<br>(S,E,B,m)&#x3D;(4,1,2,4)<br>$$<br>也就是高速缓存有4组，每组1行，每个块2个字节，地址是4位的。地址和其对应的关系如图：</p>
+<p><img src="/Pictures/CMU15-213/SEBm=4124.png" srcset="/img/loading.gif" lazyload alt="SEBm=4124"></p>
+<p>我们注意到：</p>
+<ul>
+<li>标记位和索引位连起来唯一地标识了内存中的每个块。例如块0由地址0和1组成。</li>
+<li>多个块会映射到同一个组（即组索引相同）。例如，图中块0和块4都映射到组0。</li>
+<li>映射到同一个高速缓存组的块应由标记位唯一标识。例如块0的标记位为0，块4的为1，即使组索引位相同。</li>
+</ul>
+<p>接下来我们模拟一下CPU是如何从内存中读取内容的，我们假设CPU读取一字节的字。初始时，高速缓存是空的，即有效位均为0：</p>
+<p><img src="/Pictures/CMU15-213/Emptycache.png" srcset="/img/loading.gif" lazyload alt="Emptycache"></p>
+<ul>
+<li><p>读取地址0的字（0000）</p>
+<p>首先进行组选择，中间两位是我们的索引位（00），所以选择组0 。进行行匹配时，由于有效位为0，缓存不命中，从内存取出块0并存放到高速缓存的组0。之后进行字选择，由于偏移量为0，所以选择m[0]返回。</p>
+<p><img src="/Pictures/CMU15-213/read0000.png" srcset="/img/loading.gif" lazyload alt="read0000"></p>
+</li>
+<li><p>读取地址1111：这是缓存命中，直接返回。</p>
+</li>
+<li><p>读取地址1101</p>
+<p>由于缓存不命中，高速缓存把块6（110）加载到组2，返回m[13]。</p>
+</li>
+<li><p>读取地址1000：</p>
+<p>组0的标记此时为0，与1不匹配，因此缓存不命中。高速缓存将块4加载到组0，然后返回m[8]。</p>
+<p><img src="/Pictures/CMU15-213/read1000.png" srcset="/img/loading.gif" lazyload alt="read1000"></p>
+</li>
+</ul>
+<p>​		</p>
+<h3 id="组相联高速缓存"><a href="#组相联高速缓存" class="headerlink" title="组相联高速缓存"></a>组相联高速缓存</h3><p>相对的，组相联高速缓存的每一组都有多行。一个$1&lt;E&lt;C&#x2F;B$的高速缓存通常被称为E路组相联高速缓存。对应的，CPU从内存中读取数据时也可以分为三步：组选择、行匹配、字选择。</p>
+<p><img src="/Pictures/CMU15-213/Linematching&Byteselecting.png" srcset="/img/loading.gif" lazyload alt="Linematching&amp;Byteselecting"></p>
+<h3 id="全相联高速缓存"><a href="#全相联高速缓存" class="headerlink" title="全相联高速缓存"></a>全相联高速缓存</h3><p>全相联高速缓存是由一个包含所有高速缓存行的组（E&#x3D;C&#x2F;B）。也就是整个高速缓存只有一个组0.所以这时便不需要组选择，地址只有标记位和块偏移。</p>
+<p><img src="/Pictures/CMU15-213/fullyAssociaative.png" srcset="/img/loading.gif" lazyload alt="fullyAssociaative"></p>
+<div class="note note-info">
+            <p><strong>为什么用中间位作为索引位</strong></p><p>我们假设地址为4位，索引位为中间2位，那么中间位索引和高位索引的区别可以由下图所示：</p><img src="/Pictures/CMU15-213/whymid.png" srcset="/img/loading.gif" lazyload width="90%" height="90%"><p>可以看到，相比于高位索引，使用中间位索引能够将相邻的块映射到不同的高速缓存行，这样在顺序读取时能够极大提高效率。</p>
+          </div>
+
+
+
+<h2 id="编写高速缓存友好的代码"><a href="#编写高速缓存友好的代码" class="headerlink" title="编写高速缓存友好的代码"></a>编写高速缓存友好的代码</h2><p>在之前的学习中，我们了解到了局部性的思想。结合高速缓存的存储原理，我们可以发现，局部性比较好的程序更容易有较低的不命中率，而这导致程序的性能更优。为了写出高速缓存友好的代码，我们需要遵循以下的一些基本原则：</p>
+<ol>
+<li>让最常见的情况运行得快。程序通常把大部分时间花在少量的核心函数上，而这些函数通常把大部分时间都花在了少量循环上。因此我们需要将注意力集中在核心函数里的循环上，而忽略其他部分。</li>
+<li>尽量减少每个循环内部的缓存不命中数量。</li>
+</ol>
+<p>我们将之前的函数拿出来作为例子来说明：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">sumvec</span><span class="hljs-params">(<span class="hljs-type">int</span> v[N])</span><br>&#123;<br>    <span class="hljs-type">int</span> i,sum = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span>(i = <span class="hljs-number">0</span>; i &lt; N; i++)<br>    &#123;<br>        sum += v[i];<br>    &#125;<br>    <span class="hljs-keyword">return</span> sum;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>首先对于局部变量i和sum，具有良好的时间局部性。事实上，由于它们是局部变量，编译器会将它们缓存在寄存器文件中。之后考虑对向量v的步长为1的引用。一般而言，对于步长为k的引用模式，平均每次循环会有$min(1,(wordsize\times k)&#x2F;B)$次缓存不命中。当k&#x3D;1时，取最小值，因此对于v的步长为1的引用是高速缓存友好的。</p>
+<p>因此编写高速缓存友好的代码需要注意：</p>
+<ul>
+<li>对局部变量的反复引用是好的，因为编译器能将它们缓存在寄存器文件中（时间局部性）</li>
+<li>步长为一的引用模式是好的，因为所有层次的缓存都是将数据存储为连续的块。</li>
+</ul>
+<p>我们再来考虑一个二维数组的例子：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">sumarrayrows</span><span class="hljs-params">(<span class="hljs-type">int</span> a[M][N])</span><br>&#123;<br>    <span class="hljs-type">int</span> i, j, sum = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span>(i = <span class="hljs-number">0</span>; i &lt; M; i++)<br>        <span class="hljs-keyword">for</span>(j = <span class="hljs-number">0</span>; j &lt; N; j++)<br>            sum += a[i][j];<br>    <br>    <span class="hljs-keyword">return</span> sum;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>由于C语言以行优先顺序存储数组，因此我们会有和步长为1的引用模式相同的命中模式：每4次访问一次不命中，不命中率为25%。</p>
+<p>但是假设我们交换行列循环的次序：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">sumarraycols</span><span class="hljs-params">(<span class="hljs-type">int</span> a[M][N])</span><br>&#123;<br>    <span class="hljs-type">int</span> i, j, sum = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span>(j = <span class="hljs-number">0</span>; i &lt; N; i++)<br>        <span class="hljs-keyword">for</span>(i = <span class="hljs-number">0</span>; j &lt; M; j++)<br>            sum += a[i][j];<br>    <br>    <span class="hljs-keyword">return</span> sum;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>在这种情况下，最好的是我们的整个数组都保存在高速缓存中，这样会有相同的不命中率25%。如果数组大于高速缓存，我们对$a[i][j]$的每次访问都不会命中！</p>
+<p><img src="/Pictures/CMU15-213/sumarraycols.png" srcset="/img/loading.gif" lazyload alt="sumarraycols"></p>
 
                 
               </div>
