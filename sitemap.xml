@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://fabulous1496.github.io/2024/06/25/CMU15-213/</loc>
+    
+    <lastmod>2024-09-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://fabulous1496.github.io/2024/08/26/ArchLab/</loc>
     
     <lastmod>2024-09-11</lastmod>
@@ -14,15 +23,6 @@
     <loc>https://fabulous1496.github.io/2024/09/10/CacheLab/</loc>
     
     <lastmod>2024-09-11</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://fabulous1496.github.io/2024/06/25/CMU15-213/</loc>
-    
-    <lastmod>2024-09-09</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -274,7 +274,7 @@
 
   <url>
     <loc>https://fabulous1496.github.io/</loc>
-    <lastmod>2024-09-12</lastmod>
+    <lastmod>2024-09-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -282,70 +282,70 @@
   
   <url>
     <loc>https://fabulous1496.github.io/tags/MCM/</loc>
-    <lastmod>2024-09-12</lastmod>
+    <lastmod>2024-09-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fabulous1496.github.io/tags/BP%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</loc>
-    <lastmod>2024-09-12</lastmod>
+    <lastmod>2024-09-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fabulous1496.github.io/tags/CA/</loc>
-    <lastmod>2024-09-12</lastmod>
+    <lastmod>2024-09-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fabulous1496.github.io/tags/GRA/</loc>
-    <lastmod>2024-09-12</lastmod>
+    <lastmod>2024-09-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fabulous1496.github.io/tags/PCA/</loc>
-    <lastmod>2024-09-12</lastmod>
+    <lastmod>2024-09-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fabulous1496.github.io/tags/RA/</loc>
-    <lastmod>2024-09-12</lastmod>
+    <lastmod>2024-09-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fabulous1496.github.io/tags/TOPSIS/</loc>
-    <lastmod>2024-09-12</lastmod>
+    <lastmod>2024-09-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fabulous1496.github.io/tags/AHP/</loc>
-    <lastmod>2024-09-12</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://fabulous1496.github.io/tags/datas/</loc>
-    <lastmod>2024-09-12</lastmod>
+    <lastmod>2024-09-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fabulous1496.github.io/tags/Interpolation/</loc>
-    <lastmod>2024-09-12</lastmod>
+    <lastmod>2024-09-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://fabulous1496.github.io/tags/datas/</loc>
+    <lastmod>2024-09-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -354,28 +354,28 @@
   
   <url>
     <loc>https://fabulous1496.github.io/categories/Deep-Learning/</loc>
-    <lastmod>2024-09-12</lastmod>
+    <lastmod>2024-09-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fabulous1496.github.io/categories/CMU15-213/</loc>
-    <lastmod>2024-09-12</lastmod>
+    <lastmod>2024-09-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fabulous1496.github.io/categories/MCM/</loc>
-    <lastmod>2024-09-12</lastmod>
+    <lastmod>2024-09-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://fabulous1496.github.io/categories/CS61b/</loc>
-    <lastmod>2024-09-12</lastmod>
+    <lastmod>2024-09-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
