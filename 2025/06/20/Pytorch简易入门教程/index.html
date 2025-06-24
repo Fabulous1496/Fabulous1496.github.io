@@ -16,23 +16,23 @@
   <meta name="author" content="Fabulous">
   <meta name="keywords" content="">
   
-    <meta name="description" content="BERT简述BERT的全程为 Bidirectional Encoder Representation from Transformers ，是一个基于 Transformer 模型的预训练语言表征模型。 BERT强调不再采用传统的单向语言模型或者把两个单向语言模型进行浅层拼接的方法进行预训练，而是采用新的 masked language model(MLM) 以生成深度的双向语言表征。 BERT">
+    <meta name="description" content="Pytorch简易入门教程 声明：本教程依照Bilibili Up主我是土堆出品系列视频编撰，有兴趣的读者可以去原视频进行详细学习。  1. 环境配置使用Anaconda作为包管理工具，创建初始环境、安装torch，cuda和cudnn。 推荐安装Jupyter notebook解锁新天地。 使用代码检测环境是否配置成功： 12345678import torchprint(&quot;Pytor">
 <meta property="og:type" content="article">
-<meta property="og:title" content="BERT">
-<meta property="og:url" content="https://fabulous1496.github.io/2024/03/18/BERT/index.html">
+<meta property="og:title" content="Pytorch简易入门教程">
+<meta property="og:url" content="https://fabulous1496.github.io/2025/06/20/Pytorch%E7%AE%80%E6%98%93%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/index.html">
 <meta property="og:site_name" content="Fabulous&#39;s little world">
-<meta property="og:description" content="BERT简述BERT的全程为 Bidirectional Encoder Representation from Transformers ，是一个基于 Transformer 模型的预训练语言表征模型。 BERT强调不再采用传统的单向语言模型或者把两个单向语言模型进行浅层拼接的方法进行预训练，而是采用新的 masked language model(MLM) 以生成深度的双向语言表征。 BERT">
+<meta property="og:description" content="Pytorch简易入门教程 声明：本教程依照Bilibili Up主我是土堆出品系列视频编撰，有兴趣的读者可以去原视频进行详细学习。  1. 环境配置使用Anaconda作为包管理工具，创建初始环境、安装torch，cuda和cudnn。 推荐安装Jupyter notebook解锁新天地。 使用代码检测环境是否配置成功： 12345678import torchprint(&quot;Pytor">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://fabulous1496.github.io/Pictures/DL/BERT/cover.jpg">
-<meta property="article:published_time" content="2024-03-18T13:03:28.000Z">
-<meta property="article:modified_time" content="2024-03-19T12:29:35.536Z">
+<meta property="og:image" content="https://fabulous1496.github.io/Pictures/torch_basic/banner.jpg">
+<meta property="article:published_time" content="2025-06-19T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-06-24T06:32:45.019Z">
 <meta property="article:author" content="Fabulous">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://fabulous1496.github.io/Pictures/DL/BERT/cover.jpg">
+<meta name="twitter:image" content="https://fabulous1496.github.io/Pictures/torch_basic/banner.jpg">
   
   
   
-  <title>BERT - Fabulous&#39;s little world</title>
+  <title>Pytorch简易入门教程 - Fabulous&#39;s little world</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -233,13 +233,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/Pictures/DL/BERT/cover.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('/Pictures/torch_basic/banner.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="BERT"></span>
+            <span id="subtitle" data-typed-text="Pytorch简易入门教程"></span>
           
         </div>
 
@@ -250,8 +250,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-03-18 21:03" pubdate>
-          2024年3月18日 晚上
+        <time datetime="2025-06-20 00:00" pubdate>
+          2025年6月20日 凌晨
         </time>
       </span>
     
@@ -262,7 +262,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.1k 字
+          839 字
         
       </span>
     
@@ -273,7 +273,7 @@
         
         
         
-          27 分钟
+          7 分钟
         
       </span>
     
@@ -318,135 +318,40 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">BERT</h1>
+            <h1 id="seo-header">Pytorch简易入门教程</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="BERT简述"><a href="#BERT简述" class="headerlink" title="BERT简述"></a>BERT简述</h1><p>BERT的全程为 <em>Bidirectional Encoder Representation from Transformers</em> ，是一个基于 Transformer 模型的预训练语言表征模型。</p>
-<p>BERT强调不再采用传统的单向语言模型或者把两个单向语言模型进行浅层拼接的方法进行预训练，而是采用新的 <em>masked language model(MLM)</em> 以生成深度的双向语言表征。</p>
-<h1 id="BERT的结构"><a href="#BERT的结构" class="headerlink" title="BERT的结构"></a>BERT的结构</h1><p>以往的预训练模型的结构会受到单向语言模型（从左到右或者从右到左）的限制，因而也限制了模型的表征能力，使其只能获取单方向的上下文信息。</p>
-<p>而BERT利用MLM进行预训练并且采用深层的双向Transformer组件来构建整个模型，最终能够生成融合左右上下文信息的深层双向语言表征。</p>
-<p><img src="/Pictures/DL/BERT/BERT.png" srcset="/img/loading.gif" lazyload alt="BERT"></p>
-<h2 id="输入结构"><a href="#输入结构" class="headerlink" title="输入结构"></a>输入结构</h2><p><img src="/Pictures/DL/BERT/input.png" srcset="/img/loading.gif" lazyload alt="input"></p>
-<p>BERT的输入为每一个token对应的表征（图中的粉红色块就是token，黄色块就是token对应的表征），并且单词字典是采用 <strong>WordPiece</strong> 算法来进行构建的。</p>
-<p>为了完成具体的分类任务，除了单词的token之外，作者还在输入的每一个序列开头都插入特定的分类token（[CLS]），该分类token对应的最后一个Transformer层输出被用来起到聚集整个序列表征信息的作用。</p>
-<p>分辨哪个范围是属于句子A，哪个范围是属于句子B呢？BERT采用了两种方法去解决：</p>
-<ol>
-<li><p>在序列tokens中把分割token（[SEP]）插入到每个句子后，以分开不同的句子tokens。</p>
-</li>
-<li><p>为每一个token表征都添加一个可学习的分割embedding来指示其属于句子A还是句子B。</p>
-</li>
-</ol>
-<div class="note note-info">
-            <p>[CLS] token：<br>CLS token 是 “Classification” token 的缩写，它位于每个输入句子的开头。这个 token 的主要作用是为句子的分类任务提供一个整体的句子表示。在训练过程中，通常会将这个 token 的输出作为整个句子的表示，然后将它输入到分类器中进行分类。</p><p>[SEP] token：<br>SEP token 是 “Separation” token 的缩写，它用于分隔两个句子或者文本片段。在输入句子或文本片段之间需要插入一个 SEP token，以帮助模型更好地理解它们之间的关系。这对于BERT的双句子任务（如句对分类、问答等）是非常重要的。</p>
-          </div>
+                <h1 id="Pytorch简易入门教程"><a href="#Pytorch简易入门教程" class="headerlink" title="Pytorch简易入门教程"></a>Pytorch简易入门教程</h1><blockquote>
+<p>声明：本教程依照Bilibili Up主我是土堆出品系列视频编撰，有兴趣的读者可以去原视频进行详细学习。</p>
+</blockquote>
+<h2 id="1-环境配置"><a href="#1-环境配置" class="headerlink" title="1. 环境配置"></a>1. 环境配置</h2><p>使用Anaconda作为包管理工具，创建初始环境、安装torch，cuda和cudnn。</p>
+<p>推荐安装Jupyter notebook解锁新天地。</p>
+<p>使用代码检测环境是否配置成功：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Pytorch version：&quot;</span>)<br><span class="hljs-built_in">print</span>(torch.__version__)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;CUDA Version: &quot;</span>)<br><span class="hljs-built_in">print</span>(torch.version.cuda)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;cuDNN version is :&quot;</span>)<br><span class="hljs-built_in">print</span>(torch.backends.cudnn.version())<br><span class="hljs-built_in">print</span>(torch.cuda.is_available())<br></code></pre></td></tr></table></figure>
 
-<p>对于每个Token对应的表征，我们将其分为三部分，分别是对应的Token，分割和Position Embeddings</p>
-<p><img src="/Pictures/DL/BERT/features.png" srcset="/img/loading.gif" lazyload alt="features"></p>
-<p>此处的position embedding和Transformer模型中的一致，由公式给出：</p>
-<p>$$ PE_{(pos,2i)} &#x3D; sin(pos &#x2F; 10000^{2i &#x2F; d})$$<br>$$ PE_{(pos,2i+1)} &#x3D; cos(pos &#x2F; 10000^{2i &#x2F; d})$$</p>
-<p>在BERT模型中，位置嵌入是通过以下步骤生成的：</p>
-<ol>
-<li><p>位置编码矩阵生成<br>首先，BERT模型学习一个位置编码矩阵，其维度为 $\text{max_seq_length} \times \text{embedding_size}$ ，其中 $\text{max_seq_length}$ 是输入序列的最大长度， $\text{embedding_size}$ 是词嵌入的维度。</p>
-</li>
-<li><p>位置编码计算<br>对于输入序列中的每个位置 $pos$ 和每个维度 $i$，位置嵌入 $PE(pos, i)$ 计算如下：<br>$$<br>  [<br>  PE(pos, 2i) &#x3D; \sin\left(\frac{pos}{10000^{2i &#x2F; d_{\text{model}}}}\right)<br>  ]<br>  [<br>  PE(pos, 2i+1) &#x3D; \cos\left(\frac{pos}{10000^{2i &#x2F; d_{\text{model}}}}\right)<br>  ]<br>$$<br>  其中，$pos$ 是位置，$i$ 是维度， $d_{\text{model}}$ 是词嵌入的维度。</p>
-</li>
-<li><p>位置嵌入向量获取<br>对于输入序列中的每个词（或子词），通过位置编码矩阵中对应位置的值来获取位置嵌入向量。</p>
-</li>
-<li><p>位置嵌入与词嵌入相加<br>将位置嵌入向量与词嵌入向量相加，得到最终的输入向量。</p>
-</li>
-</ol>
-<h2 id="Encoder"><a href="#Encoder" class="headerlink" title="Encoder"></a>Encoder</h2><p>从图中我们可以看出，BERT采用双向Encoder进行连接，舍弃了Decoder部分。</p>
-<p><img src="/Pictures/DL/BERT/encoder.png" srcset="/img/loading.gif" lazyload alt="encoder"></p>
-<p>最后呈现的输出为：</p>
-<p><img src="/Pictures/DL/BERT/output.png" srcset="/img/loading.gif" lazyload alt="output"></p>
-<p>$C$ 为分类token（[CLS]）对应最后一个Transformer的输出， $T_{i}$ 则代表其他token对应最后一个Transformer的输出。对于一些token级别的任务（如，序列标注和问答任务），就 $T_{i}$ 把输入到额外的输出层中进行预测。对于一些句子级别的任务（如，自然语言推断和情感分类任务），就把 $C$ 输入到额外的输出层中，这里也就解释了为什么要在每一个token序列前都要插入特定的分类token。</p>
-<h1 id="BERT的预训练任务"><a href="#BERT的预训练任务" class="headerlink" title="BERT的预训练任务"></a>BERT的预训练任务</h1><p>BERT构建了两个预训练任务，分别是 <em>Masked Language Model</em> 和 <em>Next Sentence Prediction</em></p>
-<h2 id="Masked-Language-Model-MLM"><a href="#Masked-Language-Model-MLM" class="headerlink" title="Masked Language Model(MLM)"></a>Masked Language Model(MLM)</h2><p>MLM是BERT能够不受单向语言模型所限制的原因。简单来说就是以15%的概率用mask token （[MASK]）随机地对每一个训练序列中的token进行替换，然后预测出[MASK]位置原有的单词。然而，由于[MASK]并不会出现在下游任务的微调（fine-tuning）阶段，因此预训练阶段和微调阶段之间产生了不匹配（这里很好解释，就是预训练的目标会令产生的语言表征对[MASK]敏感，但是却对其他token不敏感）。因此BERT采用了以下策略来解决这个问题：</p>
-<p>首先在每一个训练序列中以15%的概率随机地选中某个token位置用于预测，假如是第i个token被选中，则会被替换成以下三个token之一</p>
-<ol>
-<li><p>80%的时候是[MASK]。如，my dog is hairy——&gt;my dog is [MASK]</p>
-</li>
-<li><p>10%的时候是随机的其他token。如，my dog is hairy——&gt;my dog is apple</p>
-</li>
-<li><p>10%的时候是原来的token（保持不变）。如，my dog is hairy——&gt;my dog is hairy</p>
-</li>
-</ol>
-<p>再用该位置对应的 $T_{i}$ 去预测出原来的token（输入到全连接，然后用softmax输出每个token的概率，最后用交叉熵计算loss）。</p>
-<h2 id="Next-Sentence-Prediction"><a href="#Next-Sentence-Prediction" class="headerlink" title="Next Sentence Prediction"></a>Next Sentence Prediction</h2><p>在NLP中有一类重要的问题比如QA(Quention-Answer), NLI(Natural Language Inference), 需要模型能够很好的理解两个句子之间的关系, 从而需要在模型的训练中引入对应的任务. 在BERT中引入的就是Next Sentence Prediction任务。采用的方式是输入句子对(A, B), 模型来预测句子B是不是句子A的真实的下一句话。</p>
-<p>所有参与任务训练的语句都被选中作为句子A。</p>
-<ol>
-<li><p>其中50%的B是原始文本中真实跟随A的下一句话. (标记为IsNext, 代表正样本)</p>
-</li>
-<li><p>其中50%的B是原始文本中随机抽取的一句话. (标记为NotNext, 代表负样本)</p>
-</li>
-</ol>
-<p>在任务二中, BERT模型可以在测试集上取得97%-98%的准确率。</p>
-<h1 id="补充：NLP三大Subword模型"><a href="#补充：NLP三大Subword模型" class="headerlink" title="补充：NLP三大Subword模型"></a>补充：NLP三大Subword模型</h1><p>在NLP任务中，神经网络模型的训练和预测都需要借助词表来对句子进行表示。传统构造词表的方法，是先对各个句子进行分词，然后再统计并选出频数最高的前N个词组成词表。<br>这种方法构造的词表存在着如下的问题：</p>
-<ul>
-<li><p>实际应用中，模型预测的词汇是开放的，对于未在词表中出现的词(Out Of Vocabulary, OOV)，模型将无法处理及生成</p>
-</li>
-<li><p>词表中的低频词&#x2F;稀疏词在模型训练过程中无法得到充分训练，进而模型不能充分理解这些词的语义</p>
-</li>
-<li><p>一个单词因为不同的形态会产生不同的词，如由”look”衍生出的”looks”, “looking”, “looked”，显然这些词具有相近的意思，但是在词表中这些词会被当作不同的词处理，一方面增加了训练冗余，另一方面也造成了大词汇量问题</p>
-</li>
-</ul>
-<h2 id="Byte-Pair-Encoding-BPE"><a href="#Byte-Pair-Encoding-BPE" class="headerlink" title="Byte Pair Encoding (BPE)"></a>Byte Pair Encoding (BPE)</h2><p>BPE获得Subword的步骤如下：</p>
-<ol>
-<li>准备足够大的训练语料，并确定期望的Subword词表大小；</li>
-<li>将单词拆分为成最小单元。比如英文中26个字母加上各种符号，这些作为初始词表；</li>
-<li>在语料上统计单词内相邻单元对的频数，选取频数最高的单元对合并成新的Subword单元；</li>
-<li>重复第3步直到达到第1步设定的Subword词表大小或下一个最高频数为1.</li>
-</ol>
-<p>下面以例子说明。假设我们有这样一个语料：{‘low’:5,’lower’:2,’newest’:6,’widest’:3}<br>其中数字代表对应单词的出现频数。</p>
-<ol>
-<li>拆分单词成最小单元，并初始化词表。这里，最小单元为字符，因而，可得到</li>
-</ol>
-<p><img src="/Pictures/DL/BERT/step1.png" srcset="/img/loading.gif" lazyload alt="step1"></p>
-<p>需要注意的是，在将单词拆分成最小单元时，要在单词序列后加上“</w>”(具体实现上可以使用其它符号)来表示中止符。在子词解码时，中止符可以区分单词边界。</p>
-<ol start="2">
-<li>在语料上统计相邻单元的频数。这里，最高频连续子词对”e”和”s”出现了6+3&#x3D;9次，将其合并成”es”，有</li>
-</ol>
-<p><img src="/Pictures/DL/BERT/step2.png" srcset="/img/loading.gif" lazyload alt="step2"></p>
-<p>由于语料中不存在’s’子词了，因此将其从词表中删除。同时加入新的子词’es’。一增一减，词表大小保持不变。</p>
-<ol start="3">
-<li>继续统计相邻子词的频数。此时，最高频连续子词对”es”和”t”出现了6+3&#x3D;9次, 将其合并成”est”，有</li>
-</ol>
-<p><img src="/Pictures/DL/BERT/step3.png" srcset="/img/loading.gif" lazyload alt="step3"></p>
-<ol start="4">
-<li>继续上述迭代直到达到预设的Subword词表大小或下一个最高频的字节对出现频率为1</li>
-</ol>
-<p>从上面的示例可以知道，每次合并后词表大小可能出现3种变化：</p>
-<ul>
-<li>+1，表明加入合并后的新子词，同时原来的2个子词还保留（2个字词分开出现在语料中）。</li>
-<li>+0，表明加入合并后的新子词，同时原来的2个子词中一个保留，一个被消解（一个子词完全随着另一个子词的出现而紧跟着出现）。</li>
-<li>-1，表明加入合并后的新子词，同时原来的2个子词都被消解（2个字词同时连续出现）。</li>
-</ul>
-<p>在得到Subword词表后，针对每一个单词，我们可以采用如下的方式来进行编码：</p>
-<ol>
-<li>将词典中的所有子词按照长度由大到小进行排序；</li>
-<li>对于单词w，依次遍历排好序的词典。查看当前子词是否是该单词的子字符串，如果是，则输出当前子词，并对剩余单词字符串继续匹配。</li>
-<li>如果遍历完字典后，仍然有子字符串没有匹配，则将剩余字符串替换为特殊符号输出，如”<unk>”。</li>
-<li>单词的表示即为上述所有输出子词。</li>
-</ol>
-<p>解码过程比较简单，如果相邻子词间没有中止符，则将两子词直接拼接，否则两子词之间添加分隔符。</p>
-<h2 id="WordPiece"><a href="#WordPiece" class="headerlink" title="WordPiece"></a>WordPiece</h2><p>与BPE算法类似，WordPiece算法也是每次从词表中选出两个子词合并成新的子词。与BPE的最大区别在于，如何选择两个子词进行合并：BPE选择频数最高的相邻子词合并，而WordPiece选择能够提升语言模型概率最大的相邻子词加入词表。</p>
-<p>我们假设句子 $S&#x3D;(t_{1}, t_{2}, \ldots , t_{n})$ 由 $n$ 个子词组成，各子词独立存在，则句子 $S$ 的语言模型似然值等价于所有子词概率的乘积：<br>$$\log{}{P}(S)&#x3D;\sum_{i&#x3D;1}^{n}\log{}{P}(t_{i})$$</p>
-<p>假设把相邻位置的 $x$ 和 $y$ 两个子词进行合并，产生子词 $z$ ，那么此时句子 $S$ 的似然值可以表示为：<br>$$\log{}{P}(t_{z})-(\log{}{P}(t_{x})+\log{}{P}(t_{y}))&#x3D;\log{}{\frac{P(t_{z})}{P(t_{x}P(t_{y}))}}$$</p>
-<p>似然值的变化就是两个子词之间的互信息。WordPiece每次选择合并的两个子词，他们具有最大的互信息值，也就是两子词在语言模型上具有较强的关联性，它们经常在语料中以相邻方式同时出现。</p>
-<div class="note note-info">
-            <p>互信息（Mutual Information）是一种用于衡量两个事件之间相关性的统计指标，它可以用来衡量两个随机变量之间的信息共享程度。在WordPiece算法中，可以使用互信息来衡量两个相邻的子词单元之间的关联程度，以帮助决定是否将它们合并。</p><p>互信息的计算公式如下：<br>$$I(X;Y) &#x3D; \sum_{x \in X} \sum_{y \in Y} p(x,y) \log \left( \frac{p(x,y)}{p(x)p(y)} \right)$$</p>
-          </div>
+<p>笔者配置的环境如下：</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs tex">Pytorch version：<br>2.5.1<br>CUDA Version: <br>12.4<br>cuDNN version is :<br>90100<br>True<br></code></pre></td></tr></table></figure>
 
-<h2 id="Unigram-Language-Model-ULM"><a href="#Unigram-Language-Model-ULM" class="headerlink" title="Unigram Language Model (ULM)"></a>Unigram Language Model (ULM)</h2><p>Unigram Language Model则是减量法,即先初始化一个大词表，根据评估准则不断丢弃词表，直到满足限定条件。ULM算法考虑了句子的不同分词可能，因而能够输出带概率的多个子词分段。</p>
-<hr>
-<p>参考：</p>
-<ol>
-<li><a target="_blank" rel="noopener" href="http://121.199.45.168:13008/06_mkdocs_pretrained_model/1%20BERT%E6%A8%A1%E5%9E%8B%E4%BB%8B%E7%BB%8D.html">http://121.199.45.168:13008/06_mkdocs_pretrained_model/1%20BERT%E6%A8%A1%E5%9E%8B%E4%BB%8B%E7%BB%8D.html</a></li>
-<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/98855346">https://zhuanlan.zhihu.com/p/98855346</a></li>
-<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/191648421">https://zhuanlan.zhihu.com/p/191648421</a></li>
-</ol>
+<p>在学习过程中，我们遇到问题往往会有多种信息来源进行参考，那么这时我们就会面临一个信息的筛选。建议在学习时依照官方文档进行对照，常用的函数为<code>dir()</code>以及<code>help()</code>，后者在例如Pycharm、Visuial Studio Code等编辑器中可以用快捷键<code>Ctrl+左键</code>进行替代。</p>
+<h2 id="2-PyTorch数据加载初认识"><a href="#2-PyTorch数据加载初认识" class="headerlink" title="2. PyTorch数据加载初认识"></a>2. PyTorch数据加载初认识</h2><p>在PyTorch中，读取数据主要涉及两种方式：<strong>Dataset</strong>以及<strong>Dataloader</strong>。</p>
+<p>对于Dataset，它是对于数据集的抽象，定义了数据的类型、来源和格式，并且进行编号。通常Dataset只处理单条数据。</p>
+<p>而对于Dataloader，它是一个数据加载器，用于控制数据的加载方式，主要负责将Dataset中的数据批量（batch）加载出来，同时提供了例如<code>shuffle</code>、<code>batch_size</code>等基本功能，返回一个可迭代对象，每次迭代返回一个<code>batch</code>。</p>
+<p>这里我们以一个蚂蚁蜜蜂图片数据集为例（<a target="_blank" rel="noopener" href="https://download.pytorch.org/tutorial/hymenoptera_data.zip">下载链接</a>）进行具体的学习。</p>
+<p>数据集的基本结构如下：</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs Tex">hymenoptera<span class="hljs-built_in">_</span>data/<br>|--train/<br>	|--ants/<br>	└--bees/<br>└--val/<br>	|--ants/<br>	└--bees/<br></code></pre></td></tr></table></figure>
+
+<p>其中，<code>ants</code>和<code>bees</code>目录下存放对应的图片。</p>
+<p>下面我们来具体构造一个Dataset。构造一个Dataset一般只需要重写torch提供的类的三个函数：<code>__init__</code>，<code>__getitem__</code>和<code>__len__</code>，分别执行初始化、获得数据与标签、获取数据集长度的功能。</p>
+<p>对于我们本案例中的数据集，将相同标签的所有数据条目放在同一目录下，因此文件夹名<code>ants</code>和<code>bees</code>为我们的二分类标签。在另一种数据集的组织方式中，每一条数据会有对应的同名txt文件，里面存放相关的标签信息。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 导入必要的库</span><br><span class="hljs-keyword">from</span> torch.utils.data <span class="hljs-keyword">import</span> Dataset<br><span class="hljs-keyword">from</span> PIL <span class="hljs-keyword">import</span> Image<br><span class="hljs-keyword">import</span> os<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 创建Dataset类</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">MyDataset</span>(<span class="hljs-title class_ inherited__">Dataset</span>):<br>    <span class="hljs-comment"># 初始化方法，接收根目录和标签目录</span><br>    <span class="hljs-comment"># root_dir: 数据集根目录</span><br>    <span class="hljs-comment"># label_dir: 标签目录（子目录名）</span><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self,root_dir,label_dir</span>):<br>        self.root_dir = root_dir<br>        self.label_dir = label_dir<br>        self.path = os.path.join(self.root_dir, self.label_dir)<br>        self.image_list = os.listdir(self.path)<br><br>    <span class="hljs-comment"># getitem需要获得索引对应的图像和标签</span><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__getitem__</span>(<span class="hljs-params">self, index</span>):<br>        image_name = self.image_list[index]<br>        image_path = os.path.join(self.path, image_name)<br>        image = Image.<span class="hljs-built_in">open</span>(image_path)<br>        label = self.label_dir<br>        <span class="hljs-keyword">return</span> image, label<br>    <br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__len__</span>(<span class="hljs-params">self</span>):<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">len</span>(self.image_list)<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 创建一个测试用实例</span><br>root_dir = <span class="hljs-string">&#x27;hymenoptera_data/train&#x27;</span><br>label_dir = <span class="hljs-string">&#x27;ants&#x27;</span><br>ants_dataset = MyDataset(root_dir, label_dir)<br>image, label = ants_dataset[<span class="hljs-number">1</span>]<br><span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Image: <span class="hljs-subst">&#123;image&#125;</span>, Label: <span class="hljs-subst">&#123;label&#125;</span>&quot;</span>)<br>image.show()  <br><br>root_dir = <span class="hljs-string">&#x27;hymenoptera_data/train&#x27;</span><br>label_dir = <span class="hljs-string">&#x27;bees&#x27;</span><br>bees_dataset = MyDataset(root_dir, label_dir)<br>image, label = bees_dataset[<span class="hljs-number">5</span>]<br><span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Image: <span class="hljs-subst">&#123;image&#125;</span>, Label: <span class="hljs-subst">&#123;label&#125;</span>&quot;</span>)<br>image.show()<br><br>train_dataset = ants_dataset + bees_dataset<br></code></pre></td></tr></table></figure>
+
+<p>这样，我们就完成了一个基本数据集的加载。总而言之，加载数据集最为核心的部分便是分辨不同数据的格式（图片、语音、文本等），利用不同的工具进行加载，并同时加载对应的<code>label</code>信息。</p>
 
                 
               </div>
@@ -485,8 +390,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>BERT</div>
-      <div>https://fabulous1496.github.io/2024/03/18/BERT/</div>
+      <div>Pytorch简易入门教程</div>
+      <div>https://fabulous1496.github.io/2025/06/20/Pytorch简易入门教程/</div>
     </div>
     <div class="license-meta">
       
@@ -498,7 +403,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年3月18日</div>
+          <div>2025年6月20日</div>
         </div>
       
       
@@ -542,18 +447,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/03/19/T5/" title="T5">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">T5</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/03/06/Attention-is-all-you-need/" title="Attention is all you need">
-                        <span class="hidden-mobile">Attention is all you need</span>
+                      <a href="/2025/03/25/CNN/" title="CNN——卷积神经网络">
+                        <span class="hidden-mobile">CNN——卷积神经网络</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

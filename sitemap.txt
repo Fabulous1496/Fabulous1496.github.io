@@ -1,3 +1,4 @@
+https://fabulous1496.github.io/2025/06/20/Pytorch%E7%AE%80%E6%98%93%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/
 https://fabulous1496.github.io/2024/06/25/CMU15-213/
 https://fabulous1496.github.io/2024/08/26/ArchLab/
 https://fabulous1496.github.io/2024/09/10/CacheLab/
@@ -23,7 +24,7 @@ https://fabulous1496.github.io/2024/01/30/PCA/
 https://fabulous1496.github.io/2024/02/24/NLP%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/
 https://fabulous1496.github.io/2024/01/26/MCM%E6%A8%A1%E5%9E%8B%E4%B8%8E%E7%AE%97%E6%B3%95/
 https://fabulous1496.github.io/2024/01/29/GRA/
-https://fabulous1496.github.io/2024/03/18/CNN/
+https://fabulous1496.github.io/2025/03/25/CNN/
 https://fabulous1496.github.io/2024/01/28/CA/
 https://fabulous1496.github.io/2024/01/31/BP/
 https://fabulous1496.github.io/2024/02/11/Autograd/
@@ -35,11 +36,11 @@ https://fabulous1496.github.io/tags/CA/
 https://fabulous1496.github.io/tags/GRA/
 https://fabulous1496.github.io/tags/PCA/
 https://fabulous1496.github.io/tags/RA/
-https://fabulous1496.github.io/tags/TOPSIS/
 https://fabulous1496.github.io/tags/AHP/
-https://fabulous1496.github.io/tags/datas/
+https://fabulous1496.github.io/tags/TOPSIS/
 https://fabulous1496.github.io/tags/Interpolation/
-https://fabulous1496.github.io/categories/Deep-Learning/
+https://fabulous1496.github.io/tags/datas/
 https://fabulous1496.github.io/categories/CMU15-213/
+https://fabulous1496.github.io/categories/Deep-Learning/
 https://fabulous1496.github.io/categories/MCM/
 https://fabulous1496.github.io/categories/CS61b/
