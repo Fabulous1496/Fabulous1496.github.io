@@ -36,8 +36,8 @@ https://fabulous1496.github.io/tags/CA/
 https://fabulous1496.github.io/tags/GRA/
 https://fabulous1496.github.io/tags/PCA/
 https://fabulous1496.github.io/tags/RA/
-https://fabulous1496.github.io/tags/AHP/
 https://fabulous1496.github.io/tags/TOPSIS/
+https://fabulous1496.github.io/tags/AHP/
 https://fabulous1496.github.io/tags/Interpolation/
 https://fabulous1496.github.io/tags/datas/
 https://fabulous1496.github.io/categories/CMU15-213/
